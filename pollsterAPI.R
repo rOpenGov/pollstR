@@ -1,7 +1,7 @@
 ## 
 ## Drew Linzer
 ## dlinzer@gmail.com
-## July 6, 2012
+## July 11, 2012
 ## 
 ## pollsterAPI.R
 ## 
@@ -15,36 +15,56 @@ pollstR <- function(chart="2012-general-election-romney-vs-obama",pages=1) {
     # requires library(XML) and library(reshape)
     # chart: 2012-general-election-romney-vs-obama, us-right-direction-wrong-track, obama-favorable-rating,
     #        mitt-romney-favorability, obama-job-approval, obama-job-approval-economy, obama-job-approval-health,
-    #        congress-job-approval, 2012-national-house-race
+    #        congress-job-approval, 2012-national-house-race, etc.
     # pages: number of pages of poll results to read. 10 polls per page, default is 1 most recent page.
+    #        if pages="all", reads in all polls for specified chart.
     dat <- data.frame()
-    for (pnum in 1:pages) {
+    if (pages=="all") { pages <- Inf }
+    fin <- FALSE
+    pnum <- 1
+    while ((pnum <= pages) & !fin) {
         fname <- paste("http://elections.huffingtonpost.com/pollster/api/polls.xml",
                        "?chart=",chart,"&page=",pnum,sep="")
-        r <- xmlRoot(xmlTreeParse(fname))
-        for (i in 1:length(r)) {
-            poll <- as.data.frame(t(xmlSApply(r[[i]], xmlValue)))[-c(6:7)]
-            nq <- length(names(r[[i]][['questions']]))
-            if (nq==1) {
-                res <- xmlSApply(r[[i]][['questions']][['question']][['responses']], function(x) xmlSApply(x, xmlValue))
+        xmltree <- tryCatch(xmlTreeParse(fname,error=NULL),XMLError=function(e) {NULL} )
+        if (is.null(xmltree)) {
+            cat("Alert: Chart [",chart,"] does not exist.\n")
+            dat <- NULL
+            fin <- TRUE
+        } else {
+            r <- xmlRoot(xmltree)
+            if (r$name=="nil_classes") {
+                fin <- TRUE
+                if (pages != Inf) { cat("Alert: Page",pnum,"contained zero polls, stopping.\n") }
             } else {
-                qvec <- NULL
-                for (j in 1:length(r[[i]][['questions']])) {
-                    qvec <- c(qvec,ifelse(is.null(r[[i]][['questions']][[j]][['chart']][['text']]$value),
-                                          NA,r[[i]][['questions']][[j]][['chart']][['text']]$value))
+                for (i in 1:length(r)) {
+                    poll <- as.data.frame(t(xmlSApply(r[[i]], xmlValue)))[-c(6:7)]
+                    nq <- length(r[[i]][['questions']])
+                    if (nq>1) {
+                        qvec <- NULL
+                        for (j in 1:length(r[[i]][['questions']])) {
+                            qvec <- c(qvec,ifelse(is.null(r[[i]][['questions']][[j]][['chart']][['text']]$value),
+                                                  NA,r[[i]][['questions']][[j]][['chart']][['text']]$value))
+                        }
+                        qindex <- which(qvec %in% chart)
+                    } else {
+                        qindex <- 1
+                    }
+                    sp <- r[[i]][['questions']][[qindex]][['subpopulations']][[1]]
+                    qinfo <- xmlSApply(sp,function(x) xmlSApply(x, xmlValue))
+                    poll$subpop <- qinfo$name
+                    poll$N <- ifelse(is.list(qinfo$observations),NA,as.numeric(qinfo$observations))
+                    res <- xmlSApply(sp[['responses']],function(x) xmlSApply(x, xmlValue))
+                    resvals <- data.frame(matrix(as.numeric(c(as.character(poll$id),res[2,])),nrow=1))
+                    names(resvals) <- c("id",res[1,])
+                    poll <- merge(poll,resvals)
+                    dat <- rbind.fill(dat,poll)
                 }
-                res <- xmlSApply(r[[i]][['questions']][[which(qvec %in% chart)]][['responses']], function(x) xmlSApply(x, xmlValue))
+                dat$start_date <- as.Date(dat$start_date)
+                dat$end_date <- as.Date(dat$end_date)
+                pnum <- pnum+1
             }
-            poll$subpop <- res[3,1]
-            poll$N <- as.numeric(res[4,1])
-            resvals <- data.frame(matrix(as.numeric(c(as.character(poll$id),res[2,])),nrow=1))
-            names(resvals) <- c("id",res[1,])
-            poll <- merge(poll,resvals)
-            dat <- rbind.fill(dat,poll)
         }
     }
-    dat$start_date <- as.Date(dat$start_date)
-    dat$end_date <- as.Date(dat$end_date)
     return(dat)
 }
 
@@ -55,6 +75,10 @@ library(reshape)
 
 dat <- pollstR()
 
-dat.ca <- pollstR(chart="2012-california-president-romney-vs-obama")
+dat <- pollstR(chart="2012-virginia-senate-allen-vs-kaine",pages=5)
+
+dat <- pollstR(chart="2012-california-president-romney-vs-obama",pages="all")
+
+
 
 # end of file
