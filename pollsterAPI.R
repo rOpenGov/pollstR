@@ -1,7 +1,7 @@
 ## 
 ## Drew Linzer
 ## dlinzer@gmail.com
-## July 11, 2012
+## August 9, 2012
 ## 
 ## pollsterAPI.R
 ## 
@@ -37,7 +37,9 @@ pollstR <- function(chart="2012-general-election-romney-vs-obama",pages=1) {
                 if (pages != Inf) { cat("Alert: Page",pnum,"contained zero polls, stopping.\n") }
             } else {
                 for (i in 1:length(r)) {
-                    poll <- as.data.frame(t(xmlSApply(r[[i]], xmlValue)))[-c(6:7)]
+                    poll.raw <- as.list(xmlSApply(r[[i]], xmlValue))
+                    poll <- data.frame(id=as.numeric(poll.raw$id),pollster=poll.raw$pollster,start.date=poll.raw$start_date,
+                                       end.date=poll.raw$end_date,method=poll.raw$method)
                     nq <- length(r[[i]][['questions']])
                     if (nq>1) {
                         qvec <- NULL
@@ -59,8 +61,8 @@ pollstR <- function(chart="2012-general-election-romney-vs-obama",pages=1) {
                     poll <- merge(poll,resvals)
                     dat <- rbind.fill(dat,poll)
                 }
-                dat$start_date <- as.Date(dat$start_date)
-                dat$end_date <- as.Date(dat$end_date)
+                dat$start.date <- as.Date(dat$start.date)
+                dat$end.date <- as.Date(dat$end.date)
                 pnum <- pnum+1
             }
         }
