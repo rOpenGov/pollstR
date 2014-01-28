@@ -1,0 +1,12 @@
+Package: pollstR
+Type: Package
+Title: R client for Pollster API
+Version: 0.1
+Date: 2014-01-28
+Author: Authors@R: c(person("Thomas J.", "Leeper", role = c("aut", "cre"),
+                            email = "thosjleeper@gmail.com"),
+                     person("Drew", "Linzer", role = "ctb"))
+Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
+Imports: RCurl, XML, RJSONIO
+Description: Extract polling information and charts from Huffington Post's Pollster API.
+License: GPL-2

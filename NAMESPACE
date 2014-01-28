@@ -1,0 +1,4 @@
+exportPattern("^[[:alpha:]]+")
+importsFrom(RCurl, curlPerform, basicTextGatherer)
+importsFrom(RJSONIO, toJSON, fromJSON)
+importsFrom(XML, xmlParse)
