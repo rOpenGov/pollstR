@@ -48,35 +48,43 @@ To obtain a particular chart and its associated poll results, use the `getchart`
 
 ```
 > getchart('2012-general-election-romney-vs-obama', fmt='xml')
-$title
-[1] "2012 General Election: Romney vs. Obama"
-
-$slug
-[1] "2012-general-election-romney-vs-obama"
-
-$topic
-[1] "2012-president"
-
-$state
-[1] "US"
-
-$short_title
-[1] "Romney vs. Obama"
-
-$poll_count
-[1] "589"
-
-$last_updated
-[1] "2012-11-26T15:31:23Z"
-
-$url
-[1] "http://elections.huffingtonpost.com/pollster/2012-general-election-romney-vs-obama"
-
-$estimates
+Title:       2012 General Election: Romney vs. Obama 
+Chart Slug:  2012-general-election-romney-vs-obama 
+Topic:       2012-president 
+State:       US 
+Polls:       589 
+Updated:     2012-11-26T15:31:23Z 
+URL:         http://elections.huffingtonpost.com/pollster/2012-general-election-romney-vs-obama 
+Estimates:
   choice value lead_confidence first_name last_name party incumbent
 1  Obama  48.2            true     Barack     Obama   Dem      true
 2 Romney  46.7            true       Mitt    Romney   Rep     false
+
+
+> getchart('2012-general-election-romney-vs-obama', fmt='json')
+Title:       2012 General Election: Romney vs. Obama 
+Chart Slug:  2012-general-election-romney-vs-obama 
+Topic:       2012-president 
+State:       US 
+Polls:       589 
+Updated:     2012-11-26T15:31:23Z 
+URL:         http://elections.huffingtonpost.com/pollster/2012-general-election-romney-vs-obama 
+Estimates:
+  choice value lead_confidence first_name last_name party incumbent
+1  Obama  48.2            NULL     Barack     Obama   Dem      TRUE
+2 Romney  46.7            NULL       Mitt    Romney   Rep     FALSE
+
+First 6 (of 309) estimates by date:
+        date Obama Romney Other
+1 2012-11-04  48.2   46.7   5.1
+2 2012-11-03  48.2   46.7   5.1
+3 2012-11-02  48.2   46.6   5.2
+4 2012-11-01  48.1   46.6   5.3
+5 2012-10-31  48.0   46.7   5.3
+6 2012-10-30  47.8   46.8   5.4
 ```
+
+Note: Requesting `fmt='xml'` only returns overall estimates, whereas requestion `fmt='json'` returns daily estimates, if available.
 
 ### getpolls ###
 
