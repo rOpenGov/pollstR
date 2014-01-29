@@ -1,5 +1,6 @@
 \name{getpolls}
 \alias{getpolls}
+\alias{print.pollsterpolls}
 \title{Available Pollster polls}
 \description{Pull available Pollster polls}
 \usage{

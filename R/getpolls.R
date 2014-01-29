@@ -128,3 +128,8 @@ getpolls <- function(chart=NULL, topic=NULL, state=NULL,
     class(out) <- c('pollsterpolls', class(out))
     return(out)
 }
+
+print.pollsterpolls <- function(x,...){
+    return(x)
+    #return(invisible(x))
+}
