@@ -24,20 +24,9 @@ To obtain a dataframe of available charts (and associated metadata), use the `ch
 
 ```
 > chartlist(state='WY')
-$charts
-                                    title                                   slug              topic state                  short_title poll_count
-2             Wyoming: Obama Job Approval             wyoming-obama-job-approval obama-job-approval    WY       WY: Obama Job Approval          2
-21 2014 Wyoming Senate Republican Primary 2014-wyoming-senate-republican-primary        2014-senate    WY WY Senate Republican Primary          2
-           last_updated                                                                                 url
-2  2013-07-23T17:17:57Z             http://elections.huffingtonpost.com/pollster/wyoming-obama-job-approval
-21 2013-07-23T17:17:57Z http://elections.huffingtonpost.com/pollster/2014-wyoming-senate-republican-primary
-
-$estimates
-$estimates$`wyoming-obama-job-approval`
-data frame with 0 columns and 0 rows
-
-$estimates$`2014-wyoming-senate-republican-primary`
-data frame with 0 columns and 0 rows
+  title                                  slug                                   state poll_count last_updated         estimates
+1 Wyoming: Obama Job Approval            wyoming-obama-job-approval             WY    2          2013-07-23T17:17:57Z FALSE    
+2 2014 Wyoming Senate Republican Primary 2014-wyoming-senate-republican-primary WY    2          2013-07-23T17:17:57Z FALSE
 ```
 
 In the above example, Wyoming has no state-level estimates associated with either available chart due to a lack of available polling data.
@@ -74,7 +63,7 @@ Estimates:
 1  Obama  48.2            NULL     Barack     Obama   Dem      TRUE
 2 Romney  46.7            NULL       Mitt    Romney   Rep     FALSE
 
-First 6 (of 309) estimates by date:
+First 6 (of 309) daily estimates:
         date Obama Romney Other
 1 2012-11-04  48.2   46.7   5.1
 2 2012-11-03  48.2   46.7   5.1

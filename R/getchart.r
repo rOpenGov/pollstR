@@ -45,10 +45,10 @@ print.pollsterchart <- function(x,...){
         if(nrow(x$estimates_by_date)>6){
             cat('First 6 (of ',
                 nrow(x$estimates_by_date),
-                ') estimates by date:\n', sep='')
+                ') daily estimates:\n', sep='')
             print(head(x$estimates_by_date))
         } else {
-            cat('All estimates by date:\n')
+            cat('All daily estimates:\n')
             print(x$estimates_by_date)
         }
     }
