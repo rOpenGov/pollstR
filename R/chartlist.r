@@ -42,5 +42,17 @@ chartlist <- function(topic=NULL, state=NULL, topic_check=TRUE, fmt='json', ...)
         names(estout) <- out$slug
     } else
         stop("'fmt' must be 'xml' or 'json'")
-    return(list(charts=out, estimates=estout))
+    row.names(out) <- 1:nrow(out)
+    out$estimates <- estout
+    class(out) <- c('pollsterchartlist',class(out))
+    return(out)
+}
+
+print.pollsterchartlist <- function(x,...){
+    ests <- sapply(x$estimates, function(z){
+        if(is.null(z)) FALSE else nrow(z) > 0
+    })
+    print(cbind.data.frame(x[,c('title','slug','state','poll_count','last_updated')],
+          estimates=ests), right=FALSE)
+    return(invisible(x))
 }

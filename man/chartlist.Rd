@@ -1,5 +1,6 @@
 \name{chartlist}
 \alias{chartlist}
+\alias{print.pollsterchartlist}
 \title{Available Pollster charts}
 \description{Pull list of available Pollster Charts}
 \usage{
@@ -12,7 +13,7 @@ chartlist(topic=NULL, state=NULL, topic_check=TRUE, fmt='json', \dots)
     \item{fmt}{A character string specifying the structure of the API response. Allowed values are \dQuote{json} (the default) and \dQuote{xml}. Though similar, the return values for different formats contain slightly varying content and produce slightly different resulting objects (mostly in the classes of returned variables).}
     \item{\dots}{Ignored.}
 }
-\value{A two-item list containing \code{charts}, a dataframe of all available charts, and \code{estimates}, a named list of estimates for those charts. }
+\value{A dataframe of class \code{pollsterchartlist}, describing all available charts. One column of the dataframe is, a possibly empty, \code{estimates} variable, which is itself a list of named dataframes, each of which (possibly) contains aggregated poll estimates for each charts.}
 \author{
 Thomas J. Leeper.
 
