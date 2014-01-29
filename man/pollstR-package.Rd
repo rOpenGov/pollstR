@@ -5,7 +5,7 @@
 \title{R client for Pollster API}
 \description{Extract polling information and charts from Huffington Post's Pollster API.}
 \author{
-Thomas J. Leeper, based on some initial work by Drew Linzer.
+Thomas J. Leeper, based on initial work by Drew Linzer.
 
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 }
