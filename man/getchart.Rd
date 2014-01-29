@@ -21,6 +21,6 @@ Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
 \keyword{ package }
 \seealso{\code{\link{chartlist}}}
 \examples{
-chart1 <- getchart(chart='2012-virginia-senate-allen-vs-kaine', fmt='xml')
+chart1 <- getchart(chart='2012-virginia-senate-allen-vs-kaine', fmt='json')
 chart2 <- getchart(chart='2012-virginia-senate-allen-vs-kaine', fmt='xml')
 }

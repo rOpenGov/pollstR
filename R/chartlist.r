@@ -8,7 +8,7 @@ chartlist <- function(topic=NULL, state=NULL, topic_check=TRUE, fmt='json', ...)
                      '2013-house', '2013-governor', '2012-senate', '2012-president',
                      '2012-house', '2012-governor', '2012-gop-primary')
         if(topic_check && !topic %in% allowed)
-            stop(paste("topic must be one of:",allowed))
+            stop(paste("topic must be one of:",paste(allowed,collapse=', ')))
         params <- paste(params,if(nchar(params)>1) '&' else '','topic=',topic,sep='')
     }
     url <- paste('http://elections.huffingtonpost.com/pollster/api/charts.',

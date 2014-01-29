@@ -80,6 +80,8 @@ Note: Requesting `fmt='xml'` only returns overall estimates, whereas requestion 
 The last function in **pollstR** provides comprehensive access to the polling data underlying the Pollster charts. This function is adapted from [code originally written by Drew Linzer](https://github.com/dlinzer/pollstR).
 
 ```
-> getpolls('2013-house')
+> getpolls(topic='2012-house', page=1)
+## COMING SOON
+> getpolls('2012-arizona-gop-primary', return.all=TRUE)
 ## COMING SOON
 ```
