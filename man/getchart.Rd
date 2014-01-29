@@ -1,6 +1,6 @@
 \name{getchart}
 \alias{getchart}
-\alias{print.}
+\alias{print.pollsterchart}
 \title{Get a Pollster chart}
 \description{Retrieve a specific pollster chart by \dQuote{slug} name}
 \usage{
