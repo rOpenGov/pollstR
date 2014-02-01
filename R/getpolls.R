@@ -43,15 +43,15 @@ getpolls <- function(chart=NULL, topic=NULL, state=NULL,
             p <- xmlParse(z)
             zout <- xmlToDataFrame(p)
             zout$questions <- NULL # delete terrible parsing
-            zout <- cbind(zout,
-            do.call(rbind, xpathApply(p, '//subpopulations', function(node){
-                nodeout <- xmlToDataFrame(node)
-                nodeout$responses <-
-                    xmlToDataFrame(xmlChildren(xmlChildren(node)[[1]])$response)
-                names(nodeout)[names(nodeout)=='name'] <- 'subpopulation'
-                return(nodeout)
-                
-            })))
+            zout$subpopulations <-
+            do.call(rbind.data.frame, xpathApply(p, '//subpopulations', function(node){
+                return(list(
+                    subpopulation_name = xmlValue(xmlChildren(xmlChildren(node)[[1]])$name),
+                    observations = xmlValue(xmlChildren(xmlChildren(node)[[1]])$observations),
+                    margin_of_error = xmlValue(xmlChildren(xmlChildren(node)[[1]])$margin_of_error)))
+            }))
+            #zout$responses <- 
+            #    lapply(xpathApply(p, '//subpopulations/subpopulation/responses'),xmlToDataFrame)
             return(zout)
         }
         dat <- data.frame() 
