@@ -5,7 +5,7 @@
 huffpost_chart(slug)
 }
 \arguments{
-  \item{slug}{}
+  \item{slug}{The slug-name of the chart to be returned.}
 }
 \value{
 \code{"list"} with elements \itemize{ \item \code{title}
@@ -18,6 +18,7 @@ frame with an observation for each choice at each date,
 with estimates. }
 }
 \description{
-Return a single chart
+Return a single chart. This includes both current and
+historical estimates by date.
 }
 
