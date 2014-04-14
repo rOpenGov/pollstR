@@ -17,7 +17,7 @@ pollster_charts_url <- function(topic, state) {
 }
 
 # clean up the objects returned by the API
-pollster_charts_parse <- function(.data) {
+charts2df <- function(.data) {
     charts <- ldply(.data, function(x) {
         x[["estimates"]] <- NULL
         if (is.null(x[["topic"]])) {
@@ -51,19 +51,20 @@ pollster_charts_parse <- function(.data) {
 
 #' Get list of available charts
 #'
-#' Get a list of all charts available through the API, with the ability to filter by state and topic.
-#'
 #' @param state Only include charts from a single state. Use 2-letter state abbreviations. "US" will return all national charts.
 #' @param topic Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollster/api} for examples.
+#' @param convert Rearrange the data returned by the API into easier to use data frames.
 #'
-#' @return \code{"list"} with elements
+#' @return If \code{convert=TRUE}, a \code{"list"} with elements
 #' \describe{
 #'   \item{\code{charts}}{Data frame with data on charts.}
 #'   \item{\code{estimates}}{Data frame with current estimates from each chart. The column \code{slug} matches this data frame to \code{charts}}
 #' }
+#' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 #' @export
-pollster_charts <- function(topic = NULL, state = NULL) {
+pollster_charts <- function(topic = NULL, state = NULL, convert = TRUE) {
     .data <- get_url(pollster_charts_url(topic, state), as = "parsed")
-    pollster_chart_parse(.data)
+    if (convert) .data <- charts2df(.data)
+    .data
 }
 

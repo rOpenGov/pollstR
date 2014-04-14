@@ -2,7 +2,7 @@
 \alias{pollster_charts}
 \title{Get list of available charts}
 \usage{
-pollster_charts(topic = NULL, state = NULL)
+pollster_charts(topic = NULL, state = NULL, convert = TRUE)
 }
 \arguments{
   \item{state}{Only include charts from a single state. Use
@@ -13,16 +13,20 @@ pollster_charts(topic = NULL, state = NULL)
   topic. See
   \url{http://elections.huffingtonpost.com/pollster/api}
   for examples.}
+
+  \item{convert}{Rearrange the data returned by the API
+  into easier to use data frames.}
 }
 \value{
-\code{"list"} with elements \describe{
-\item{\code{charts}}{Data frame with data on charts.}
-\item{\code{estimates}}{Data frame with current estimates
-from each chart. The column \code{slug} matches this data
-frame to \code{charts}} }
+If \code{convert=TRUE}, a \code{"list"} with elements
+\describe{ \item{\code{charts}}{Data frame with data on
+charts.} \item{\code{estimates}}{Data frame with current
+estimates from each chart. The column \code{slug} matches
+this data frame to \code{charts}} } Otherwise, a
+\code{"list"} in the original structure of the json
+returned by the API.
 }
 \description{
-Get a list of all charts available through the API, with
-the ability to filter by state and topic.
+Get list of available charts
 }
 

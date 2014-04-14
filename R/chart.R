@@ -37,12 +37,13 @@ pollster_chart_parse <- function(.data) {
     .data
 }
 
-#' Get a single chart
+#' Return a single chart
 #'
-#' Get a single chart. The results includes both current and historical estimates.
+#' Return a single chart. This includes both current and historical estimates by date.
 #'
 #' @param slug The slug-name of the chart to be returned.
-#' @return \code{"list"} with elements
+#' @param convert Rearrange the data returned by the API into easier to use data frames.
+#' @return If \code{convert=TRUE}, then a \code{"list"} with elements
 #' \itemize{
 #' \item \code{title}
 #' \item \code{slug}
@@ -54,9 +55,10 @@ pollster_chart_parse <- function(.data) {
 #' \item \code{estimates} A data frame with an observation for each choice and the current estimates.
 #' \item \code{estimates_by_date} A data frame with an observation for each choice at each date, with estimates.
 #' }
+#' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 #' @export
-pollster_chart <- function(slug) {
+pollster_chart <- function(slug, convert=TRUE) {
     .data <- get_url(pollster_chart_url(slug), as = "parsed")
-    pollster_chart_parse(.data)
+    if (convert) pollster_chart_parse(.data)
 }
 

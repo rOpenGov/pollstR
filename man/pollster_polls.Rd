@@ -3,7 +3,8 @@
 \title{Get a list of polls}
 \usage{
 pollster_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
-  before = NULL, after = NULL, sort = FALSE, npages = 1)
+  before = NULL, after = NULL, sort = FALSE, max_pages = 1,
+  convert = TRUE)
 }
 \arguments{
   \item{page}{Return page number}
@@ -30,11 +31,20 @@ pollster_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
   \item{sort}{If \code{TRUE}, then sort polls by the last
   updated time.}
 
-  \item{npages}{Number of pages to get. Each page contains
-  10 polls.}
+  \item{max_pages}{Maximum number of pages to get.}
+
+  \item{convert}{Rearrange the data returned by the API
+  into easier to use data frames.}
+}
+\value{
+If \code{convert=TRUE}, a \code{list} with elements
+\describe{ \item{\code{polls}}{A \code{data.frame} with
+entries for each poll.} \item{\code{questions}}{A
+\code{data.frame} with entries for each question asked in
+the polls.} } Otherwise, a \code{"list"} in the original
+structure of the json returned by the API.
 }
 \description{
-Get a list of poll results, with the ability to filter by
-time, geography, or topic.
+Get a list of polls
 }
 

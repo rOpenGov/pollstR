@@ -44,7 +44,7 @@ convert_df <- function(x) {
     as.data.frame(x, stringsAsFactors = FALSE)
 }
 
-pollster_polls_parse <- function(.data) {
+polls2df <- function(.data) {
     polls <- ldply(.data,
                    function(x) {
                        y <- x[c("id", "pollster", "start_date", "end_date",
@@ -99,17 +99,14 @@ pollster_polls_parse <- function(.data) {
     list(polls = polls, questions = questions)
 }
 
-get_poll <- function(page, chart, state, topic, before, after, sort) {
-    .data <- get_url(pollster_polls_url(page, chart, state, topic,
-                                        before, after, sort),
-                    as = "parsed")
-    pollster_polls_parse(.data)
+get_poll <- function(page, chart, state, topic, before, after, sort, as = "parsed") {
+    url <- pollster_polls_url(page, chart, state, topic, before, after, sort)
+    print(url)
+    get_url(url, as = as)
 }
 
 #' Get a list of polls
 #'
-#' Get a list of poll results, with the ability to filter by time, geography, or topic.
-#' 
 #' @param page Return page number
 #' @param chart List polls related to the specified chart. Chart names are the \code{slug} returned by \code{pollster_charts}.
 #' @param state Only include charts from a single state. Use 2-letter pstate abbreviations. "US" will return all national charts.
@@ -117,18 +114,30 @@ get_poll <- function(page, chart, state, topic, before, after, sort) {
 #' @param before Only list polls that ended on or bfore the specified date.
 #' @param after Only list polls that ended on or bfore the specified date.
 #' @param sort If \code{TRUE}, then sort polls by the last updated time.
-#' @param npages Number of pages to get. Each page contains 10 polls.
+#' @param max_pages Maximum number of pages to get.
+#' @param convert Rearrange the data returned by the API into easier to use data frames.
 #'
+#' @return If \code{convert=TRUE}, a \code{list} with elements
+#' \describe{
+#' \item{\code{polls}}{A \code{data.frame} with entries for each poll.}
+#' \item{\code{questions}}{A \code{data.frame} with entries for each question asked in the polls.}
+#' }
+#' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 #' @export
 pollster_polls <- function(page = 1, chart = NULL, state = NULL,
                            topic = NULL, before = NULL, after = NULL,
-                           sort = FALSE, npages = 1) {
-    if (npages == 1) {
-        get_poll(page, chart, state, topic, before, after, sort)
-    } else if (npages > 1) {
-        .data <- llply(seq(page, page + npages - 1L, by = 1),
-                       function(i) get_poll(i, chart, state, topic, before, after, sort))
-        list(polls = ldply(.data, `[[`, i = "polls"),
-             questions = ldply(.data, `[[`, i = "questions"))
+                           sort = FALSE, max_pages = 1, convert = TRUE) {
+    .data <- list()
+    pages <- seq(page, page + max_pages - 1L, by = 1)
+    for (i in pages) {
+        newdata <- get_poll(i, chart, state, topic, before, after, sort)
+        if (length(newdata)) {
+            .data <- append(.data, newdata)
+        } else {
+            break
+        }
     }
+    if (convert) .data <- polls2df(.data)
+    .data
 }
+
