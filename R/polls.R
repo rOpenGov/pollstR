@@ -96,6 +96,13 @@ huffpost_polls_parse <- function(.data) {
     list(polls = polls, questions = questions)
 }
 
+get_poll <- function(page, chart, state, topic, before, after, sort) {
+    url <- huffpost_polls_url(page, chart, state, topic, before, after, sort)
+    print(url)
+    response <- GET(url)
+    .data <- content(response, as = "parsed")
+    huffpost_polls_parse(.data)
+}
 
 #' Get a list of polls
 #'
@@ -111,11 +118,15 @@ huffpost_polls_parse <- function(.data) {
 #' @export
 huffpost_polls <- function(page = 1, chart = NULL, state = NULL,
                             topic = NULL, before = NULL, after = NULL,
-                           sort = TRUE, npages = 1) {
-    huffpost_polls_url(page, chart, state, topic, before, after, sort)
-    response <- GET(url)
-    .data <- content(response, as = "parsed")
-    huffpost_polls_parse(.data)
+                           sort = FALSE, npages = 1) {
+    if (npages == 1) {
+        get_poll(page, chart, state, topic, before, after, sort)
+    } else if (npages > 1) {
+        .data <- llply(seq(page, page + npages - 1L, by = 1),
+                       function(i) get_poll(i, chart, state, topic, before, after, sort))
+        list(polls = ldply(.data, `[[`, i = "polls"),
+             questions = ldply(.data, `[[`, i = "questions"))
+    } 
 }
 
 

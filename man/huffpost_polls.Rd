@@ -3,7 +3,7 @@
 \title{Get a list of polls}
 \usage{
 huffpost_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
-  before = NULL, after = NULL, sort = TRUE, npages = 1)
+  before = NULL, after = NULL, sort = FALSE, npages = 1)
 }
 \arguments{
   \item{page}{Return page number}
