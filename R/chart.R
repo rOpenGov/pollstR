@@ -37,9 +37,9 @@ pollster_chart_parse <- function(.data) {
     .data
 }
 
-#' Return a single chart
+#' Get a single chart
 #'
-#' Return a single chart. This includes both current and historical estimates by date.
+#' Get a single chart. The results includes both current and historical estimates.
 #'
 #' @param slug The slug-name of the chart to be returned.
 #' @return \code{"list"} with elements

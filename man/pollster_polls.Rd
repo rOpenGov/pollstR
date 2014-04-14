@@ -34,6 +34,7 @@ pollster_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
   10 polls.}
 }
 \description{
-Get a list of polls
+Get a list of poll results, with the ability to filter by
+time, geography, or topic.
 }
 

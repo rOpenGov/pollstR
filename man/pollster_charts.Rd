@@ -22,6 +22,7 @@ from each chart. The column \code{slug} matches this data
 frame to \code{charts}} }
 }
 \description{
-Get list of available charts
+Get a list of all charts available through the API, with
+the ability to filter by state and topic.
 }
 

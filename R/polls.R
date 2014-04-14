@@ -108,6 +108,8 @@ get_poll <- function(page, chart, state, topic, before, after, sort) {
 
 #' Get a list of polls
 #'
+#' Get a list of poll results, with the ability to filter by time, geography, or topic.
+#' 
 #' @param page Return page number
 #' @param chart List polls related to the specified chart. Chart names are the \code{slug} returned by \code{pollster_charts}.
 #' @param state Only include charts from a single state. Use 2-letter pstate abbreviations. "US" will return all national charts.

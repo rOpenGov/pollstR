@@ -1,6 +1,6 @@
 \name{pollster_chart}
 \alias{pollster_chart}
-\title{Return a single chart}
+\title{Get a single chart}
 \usage{
 pollster_chart(slug)
 }
@@ -18,7 +18,7 @@ frame with an observation for each choice at each date,
 with estimates. }
 }
 \description{
-Return a single chart. This includes both current and
-historical estimates by date.
+Get a single chart. The results includes both current and
+historical estimates.
 }
 

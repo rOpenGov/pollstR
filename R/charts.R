@@ -51,6 +51,8 @@ pollster_charts_parse <- function(.data) {
 
 #' Get list of available charts
 #'
+#' Get a list of all charts available through the API, with the ability to filter by state and topic.
+#'
 #' @param state Only include charts from a single state. Use 2-letter state abbreviations. "US" will return all national charts.
 #' @param topic Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollster/api} for examples.
 #'
