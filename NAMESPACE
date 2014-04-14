@@ -1,0 +1,4 @@
+export(huffpost_chart)
+export(huffpost_charts)
+import(httr)
+import(plyr)

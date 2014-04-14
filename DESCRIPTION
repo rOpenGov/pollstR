@@ -1,0 +1,13 @@
+Package: pollstr
+Title: Interface to the Huffpost Pollster API
+Description: A programatic
+Version: 0.0.1
+Authors@R: person("Jeffrey B.", "Arnold", email = "jeffrey.arnold@gmail.com",
+    role = c("aut", "cre"))
+Depends:
+    R (>= 3.0.3)
+Imports:
+    httr,
+    plyr
+License: GPL-3
+LazyData: true
