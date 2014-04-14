@@ -1,5 +1,8 @@
+#'@include pollster-package.R
+NULL
+
 # Create URL for the charts API method
-huffpost_charts_url <- function(topic, state) {
+pollster_charts_url <- function(topic, state) {
     query <- list()
     if (! is.null(topic)) {
         query[["topic"]] <- as.character(topic)[1]
@@ -14,7 +17,7 @@ huffpost_charts_url <- function(topic, state) {
 }
 
 # clean up the objects returned by the API
-huffpost_charts_parse <- function(.data) {
+pollster_charts_parse <- function(.data) {
     charts <- ldply(.data, function(x) {
         x[["estimates"]] <- NULL
         if (is.null(x[["topic"]])) {
@@ -57,10 +60,8 @@ huffpost_charts_parse <- function(.data) {
 #'   \item{\code{estimates}}{Data frame with current estimates from each chart. The column \code{slug} matches this data frame to \code{charts}}
 #' }
 #' @export
-huffpost_charts <- function(topic = NULL, state = NULL) {
-    url <- huffpost_charts_url(topic, state)
-    response <- GET(url)
-    .data <- content(response, as = "parsed")
-    huffpost_charts_parse(.data)
+pollster_charts <- function(topic = NULL, state = NULL) {
+    .data <- get_url(pollster_charts_url(topic, state), as = "parsed")
+    pollster_chart_parse(.data)
 }
 

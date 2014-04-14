@@ -1,10 +1,13 @@
+#'@include pollster-package.R
+NULL
+
 # Create URL for the charts API method
-huffpost_chart_url <- function(slug) {
+pollster_chart_url <- function(slug) {
     paste(.POLLSTR_API_URL, "charts", slug[1], sep="/")
 }
 
 # clean up the objects returned by the API
-huffpost_chart_parse <- function(.data) {
+pollster_chart_parse <- function(.data) {
     # Convert
     .data[["last_updated"]] <-
         as.POSIXct(.data[["last_updated"]],
@@ -52,10 +55,8 @@ huffpost_chart_parse <- function(.data) {
 #' \item \code{estimates_by_date} A data frame with an observation for each choice at each date, with estimates.
 #' }
 #' @export
-huffpost_chart <- function(slug) {
-    url <- huffpost_chart_url(slug)
-    response <- GET(url)
-    .data <- content(response, as = "parsed")
-    huffpost_chart_parse(.data)
+pollster_chart <- function(slug) {
+    .data <- get_url(pollster_chart_url(slug), as = "parsed")
+    pollster_chart_parse(.data)
 }
 

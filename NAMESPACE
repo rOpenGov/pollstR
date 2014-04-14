@@ -1,5 +1,5 @@
-export(huffpost_chart)
-export(huffpost_charts)
-export(huffpost_polls)
+export(pollster_chart)
+export(pollster_charts)
+export(pollster_polls)
 import(httr)
 import(plyr)

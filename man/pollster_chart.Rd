@@ -1,8 +1,8 @@
-\name{huffpost_chart}
-\alias{huffpost_chart}
+\name{pollster_chart}
+\alias{pollster_chart}
 \title{Return a single chart}
 \usage{
-huffpost_chart(slug)
+pollster_chart(slug)
 }
 \arguments{
   \item{slug}{The slug-name of the chart to be returned.}

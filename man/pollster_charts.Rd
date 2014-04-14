@@ -1,8 +1,8 @@
-\name{huffpost_charts}
-\alias{huffpost_charts}
+\name{pollster_charts}
+\alias{pollster_charts}
 \title{Get list of available charts}
 \usage{
-huffpost_charts(topic = NULL, state = NULL)
+pollster_charts(topic = NULL, state = NULL)
 }
 \arguments{
   \item{state}{Only include charts from a single state. Use

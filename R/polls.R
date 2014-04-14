@@ -1,5 +1,8 @@
+#'@include pollster-package.R
+NULL
+
 # Create URL for the charts API method
-huffpost_polls_url <- function(page, chart, state, topic, before, after, sort) {
+pollster_polls_url <- function(page, chart, state, topic, before, after, sort) {
     query <- list()
     if (! is.null(page)) {
         query[["page"]] <- as.character(page)[1]
@@ -41,7 +44,7 @@ convert_df <- function(x) {
     as.data.frame(x, stringsAsFactors = FALSE)
 }
 
-huffpost_polls_parse <- function(.data) {
+pollster_polls_parse <- function(.data) {
     polls <- ldply(.data,
                    function(x) {
                        y <- x[c("id", "pollster", "start_date", "end_date",
@@ -97,27 +100,26 @@ huffpost_polls_parse <- function(.data) {
 }
 
 get_poll <- function(page, chart, state, topic, before, after, sort) {
-    url <- huffpost_polls_url(page, chart, state, topic, before, after, sort)
-    print(url)
-    response <- GET(url)
-    .data <- content(response, as = "parsed")
-    huffpost_polls_parse(.data)
+    .data <- get_url(pollster_polls_url(page, chart, state, topic,
+                                        before, after, sort),
+                    as = "parsed")
+    pollster_polls_parse(.data)
 }
 
 #' Get a list of polls
 #'
 #' @param page Return page number
-#' @param chart List polls related to the specified chart. Chart names are the \code{slug} returned by \code{huffpost_charts}.
-#' @param state Only include charts from a single state. Use 2-letter state abbreviations. "US" will return all national charts.
-#' @param topic Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollster/api} for examples.
+#' @param chart List polls related to the specified chart. Chart names are the \code{slug} returned by \code{pollster_charts}.
+#' @param state Only include charts from a single state. Use 2-letter pstate abbreviations. "US" will return all national charts.
+#' @param topic Only include charts related to a specific topic. See the \url{http://elections.huffingtonpost.com/pollster/api} for examples.
 #' @param before Only list polls that ended on or bfore the specified date.
 #' @param after Only list polls that ended on or bfore the specified date.
 #' @param sort If \code{TRUE}, then sort polls by the last updated time.
 #' @param npages Number of pages to get. Each page contains 10 polls.
 #'
 #' @export
-huffpost_polls <- function(page = 1, chart = NULL, state = NULL,
-                            topic = NULL, before = NULL, after = NULL,
+pollster_polls <- function(page = 1, chart = NULL, state = NULL,
+                           topic = NULL, before = NULL, after = NULL,
                            sort = FALSE, npages = 1) {
     if (npages == 1) {
         get_poll(page, chart, state, topic, before, after, sort)
@@ -126,7 +128,5 @@ huffpost_polls <- function(page = 1, chart = NULL, state = NULL,
                        function(i) get_poll(i, chart, state, topic, before, after, sort))
         list(polls = ldply(.data, `[[`, i = "polls"),
              questions = ldply(.data, `[[`, i = "questions"))
-    } 
+    }
 }
-
-

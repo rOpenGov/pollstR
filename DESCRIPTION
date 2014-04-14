@@ -1,6 +1,7 @@
-Package: pollstr
+Package: pollster
 Title: Interface to the Huffpost Pollster API
-Description: A programatic
+Description: An R interface to the Huffington Post Pollster API, which provides
+    programatic interface to political polls.
 Version: 0.0.1
 Authors@R: person("Jeffrey B.", "Arnold", email = "jeffrey.arnold@gmail.com",
     role = c("aut", "cre"))
