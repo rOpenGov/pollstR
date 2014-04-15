@@ -70,7 +70,7 @@ us_charts <- pollster_charts(state = "US")
 ```
 
 
-## Charts
+## Chart
 
 To get a particular chart use the function ``pollster_chart``.
 For example, to get the chart for [Barack Obama's Favorable Rating](http://elections.huffingtonpost.com/pollster/obama-favorable-rating), specify its *slug*, ``obama-favorable-rating``.
