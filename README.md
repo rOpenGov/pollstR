@@ -1,6 +1,6 @@
 
 ```
-## Loading required package: methods
+## Error: could not find function "suppresPackageStartupMessages"
 ```
 
 
@@ -29,6 +29,8 @@ library("pollster")
 
 
 # Examples
+
+## Charts
 
 To get a list of all the charts in the API use the function ``pollster_charts``,
 
@@ -70,6 +72,8 @@ For example, to get only charts related to national topics,
 us_charts <- pollster_charts(state = "US")
 ```
 
+
+## Charts
 
 To get a particular chart use the function ``pollster_chart``.
 For example, to get the chart for [Barack Obama's Favorable Rating](http://elections.huffingtonpost.com/pollster/obama-favorable-rating), specify its *slug*, ``obama-favorable-rating``.
@@ -113,12 +117,15 @@ The historical estimates of the Huffpost Pollster poll-tracking model are contai
     geom_line())
 ```
 
-![plot of chunk obama-favorable-chart](inst/figure/obama-favorable-chart.png) 
+```
+## Error: could not find function "ggplot"
+```
 
 
-To get the poll results for individual charts use the function ``pollster_polls`.
-The polls can be filtered by topic, chart, state, or date.
+## Polls
 
+To get the opinion poll results use the function ``pollster_polls`.
+The polls returned can be filtered by topic, chart, state, or date.
 
 By default, ``pollster_polls`` only returns 1 page of results (about 10 polls).
 To have it return more polls, increase the value of ``max_pages``.
