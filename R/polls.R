@@ -101,7 +101,6 @@ polls2df <- function(.data) {
 
 get_poll <- function(page, chart, state, topic, before, after, sort, as = "parsed") {
     url <- pollster_polls_url(page, chart, state, topic, before, after, sort)
-    print(url)
     get_url(url, as = as)
 }
 
@@ -128,14 +127,15 @@ pollster_polls <- function(page = 1, chart = NULL, state = NULL,
                            topic = NULL, before = NULL, after = NULL,
                            sort = FALSE, max_pages = 1, convert = TRUE) {
     .data <- list()
-    pages <- seq(page, page + max_pages - 1L, by = 1)
-    for (i in pages) {
-        newdata <- get_poll(i, chart, state, topic, before, after, sort)
+    i <- 0L
+    while (i < max_pages) {
+        newdata <- get_poll(page + i, chart, state, topic, before, after, sort)
         if (length(newdata)) {
             .data <- append(.data, newdata)
         } else {
             break
         }
+        i <- 1 + 1L
     }
     if (convert) .data <- polls2df(.data)
     .data
