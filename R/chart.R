@@ -3,7 +3,7 @@ NULL
 
 # Create URL for the charts API method
 pollster_chart_url <- function(slug) {
-    paste(.POLLSTR_API_URL, "charts", slug[1], sep="/")
+    paste(.POLLSTER_API_URL, "charts", slug[1], sep="/")
 }
 
 # clean up the objects returned by the API

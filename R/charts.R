@@ -13,7 +13,7 @@ pollster_charts_url <- function(topic, state) {
     if (! length(query)) {
         query <- NULL
     }
-    modify_url(paste(.POLLSTR_API_URL, "charts", sep="/"), query = query)
+    modify_url(paste(.POLLSTER_API_URL, "charts", sep="/"), query = query)
 }
 
 # clean up the objects returned by the API

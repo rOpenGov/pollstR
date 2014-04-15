@@ -32,7 +32,7 @@ pollster_polls_url <- function(page, chart, state, topic, before, after, sort) {
     if (! length(query)) {
         query <- NULL
     }
-    modify_url(paste(.POLLSTR_API_URL, "polls", sep="/"), query = query)
+    modify_url(paste(.POLLSTER_API_URL, "polls", sep="/"), query = query)
 }
 
 convert_df <- function(x) {

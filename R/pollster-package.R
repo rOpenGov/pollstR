@@ -11,7 +11,7 @@
 #' @import plyr
 NULL
 
-.POLLSTR_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
+.POLLSTER_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
 
 get_url <- function(url, as = "parsed") {
     response <- GET(url)
