@@ -10,5 +10,9 @@ Depends:
 Imports:
     httr,
     plyr
+Suggests:
+    dplyr,
+    ggplot2
+VignetteBuilder: knitr
 License: GPL-3
 LazyData: true

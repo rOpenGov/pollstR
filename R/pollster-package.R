@@ -5,7 +5,7 @@
 #'
 #' See \url{http://elections.huffingtonpost.com/pollster/api} for more details on the API.
 #'
-#' @name pollstr
+#' @name pollster
 #' @docType package
 #' @import httr
 #' @import plyr

@@ -1,0 +1,171 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Introduction to pollster}
+-->
+
+```{r, echo = FALSE, results='hide', message = FALSE}
+library("dplyr")
+library("ggplot2")
+knitr::opts_chunk$set(
+  comment = "#>",
+  error = FALSE,
+  tidy = FALSE)
+```
+
+# R interface to the Huffpost Pollster API
+
+This R package is an interface to the Huffington Post [Pollster API](http://elections.huffingtonpost.com/pollster/api), which provides access to opinion polls collected by the Huffington Post.
+
+# Install
+
+Currently this package is **unstable** and may change.
+
+This package is not *yet* on CRAN.
+
+You can install this with the function ``install_github`` in the **devtools** package.
+```{r,eval=FALSE}
+install.packages("devools")
+library("devtools")
+install_github("jrnold/pollster")
+```
+```{r}
+library("pollster")
+```
+
+# Usage
+
+There are three functions in that provide access to the opinion polls and model estimates from Huffpost Pollster.
+
+- ``pollster_charts``: Get a list of all charts and the current model estimates.
+- ``pollster_chart``: Get a single chart along with historical model estimates.
+- ``pollster_polls``: Get opinion poll data.
+
+## Charts
+
+To get a list of all the charts in the API use the function ``pollster_charts``,
+```{r}
+charts <- pollster_charts()
+str(charts)
+```
+This returns a ``list`` with two data frames.
+The data frame ``charts`` has data on each chart,
+while the data frame ``estimates`` has the current poll-tracking estimates from each chart.
+
+The query can be filtered by state or topic.
+For example, to get only charts related to national topics,
+```{r}
+us_charts <- pollster_charts(state = "US")
+```
+
+## Chart
+
+To get a particular chart use the function ``pollster_chart``.
+For example, to get the chart for [Barack Obama's Favorable Rating](http://elections.huffingtonpost.com/pollster/obama-favorable-rating), specify its *slug*, ``obama-favorable-rating``.
+```{r}
+obama_favorable <- pollster_chart('obama-favorable-rating')
+str(obama_favorable)
+```
+The slug can be found from the results of a ``pollster_charts`` query.
+Alternatively the slug is the path of the url of a chart, http://elections.huffingtonpost.com/pollster/obama-favorable-rating.
+
+The historical estimates of the Huffpost Pollster poll-tracking model are contained in the element ``"estimates_by_date"``,
+```{r obama-favorable-chart}
+(ggplot(obama_favorable[["estimates_by_date"]], aes(x = date, y = value, color = choice))
+ + geom_line())
+```
+
+## Polls
+
+To get the opinion poll results use the function ``pollster_polls`.
+The polls returned can be filtered by topic, chart, state, or date.
+
+By default, ``pollster_polls`` only returns 1 page of results (about 10 polls).
+To have it return more polls, increase the value of ``max_pages``.
+To have it return all polls, set the value of ``max_pages`` to a very high number.
+For example, to return all the polls on the favorability of Bararck Obama after March 1, 2014,
+```{r}
+obama_favorable_polls <- pollster_polls(max_pages = 10000, chart = 'obama-favorable-rating', after = "2014-3-1")
+str(obama_favorable_polls)	
+```
+
+# Example: Obama's Job Approval Rating
+
+This section shows how to use ``pollster`` to create a chart similar to those displayed on the Huffpost Pollster website.
+I'll use Obama's job approval rating in this example.
+
+Load ``dplyr`` and ``ggplot`` since they'll be needed for some data manipulation and plotting.
+```{r}
+library("pollster")
+library("dplyr")
+```
+
+The slug or name of the chart is ``obama-job-approval``, which is derived from the chart's URL , http://elections.huffingtonpost.com/pollster/obama-job-approval.
+```{r}
+slug <- "obama-job-approval"
+```
+For the plot, I'll need both Pollster's model estimates,
+```{r}
+chart <- pollster_chart(slug)
+```
+and the opinion poll results,
+```{r}
+polls <- pollster_polls(chart = slug, max_pages = 1000000)
+```
+Note that in ``polster_poll`` I set the ``max_pages`` argument to a very large number in order to download all the polls available.
+This may take several minutes.
+
+Before continuing, we will need to clean up the opinion poll data.
+First, only keep results from national subpopulations ("Adults", "Likely Voters", "Registered Voters").
+This will drop subpopulations like Republicans, Democrats, and Independents.
+```{r}
+questions <-
+    subset(polls[["questions"]],
+           chart == slug
+           & subpopulation %in% c("Adults", "Likely Voters", "Registered Voters"))
+```
+Second, I will need to recode the choices into three categories, "Approve", "Disapprove", and "Undecided".
+```{r}
+approvalcat <- c("Approve" = "Approve",
+                 "Disapprove" = "Disapprove",
+                 "Undecided" = "Undecided",
+                 "Neither" = "Undecided",
+                 "Mixed" = "Undecided",
+                 "Don't Know" = "Undecided",
+                 "Refused" = NA,
+                 "Neutral" = "Undecided",
+                 "Strongly Approve" = "Approve",
+                 "Somewhat Approve" = "Approve", 
+                 "Somewhat Disapprove" = "Disapprove",
+                 "Strongly Disapprove" = "Disapprove")
+
+questions2 <-
+    (questions
+     %.% mutate(approve = revalue(choice, approvalcat))
+     %.% group_by(id, subpopulation, approve)
+     %.% summarise(value = sum(value)))
+```
+Now merge the question data with the poll metadata,
+```{r}
+polldata <- merge(polls$polls, questions2, by = "id")
+```
+
+Now, I can plot the opinion poll results along with the Huffpost Pollster trend estimates,
+```{r}
+(ggplot()
+ + geom_point(data = polldata,
+              mapping = aes(y = value, x = end_date, color = approve),
+              alpha = 0.3)
+ + geom_line(data = chart[["estimates_by_date"]],
+             mapping = aes(y = value, x = date, color = choice)))
+```
+
+# Misc
+
+Also see an earlier R interface by [Drew Linzer](https://github.com/dlinzer/pollstR/).
+
+<!--  LocalWords:  Huffpost API Huffington CRAN github devtools str
+ -->
+<!--  LocalWords:  devools jrnold ggplot obama url aes favorability
+ -->
+<!--  LocalWords:  Bararck
+ -->
