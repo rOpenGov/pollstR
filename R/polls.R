@@ -129,13 +129,14 @@ pollster_polls <- function(page = 1, chart = NULL, state = NULL,
     .data <- list()
     i <- 0L
     while (i < max_pages) {
+        print(i)
         newdata <- get_poll(page + i, chart, state, topic, before, after, sort)
         if (length(newdata)) {
             .data <- append(.data, newdata)
         } else {
             break
         }
-        i <- 1 + 1L
+        i <- i + 1L
     }
     if (convert) .data <- polls2df(.data)
     .data
