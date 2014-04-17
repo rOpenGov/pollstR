@@ -9,7 +9,8 @@ Depends:
     R (>= 3.0.3)
 Imports:
     httr,
-    plyr
+    plyr,
+    jsonlite
 Suggests:
     dplyr,
     ggplot2
