@@ -13,7 +13,8 @@ Imports:
     jsonlite
 Suggests:
     dplyr,
-    ggplot2
+    ggplot2,
+    testthat
 VignetteBuilder: knitr
 License: GPL-3
 LazyData: true
