@@ -41,7 +41,7 @@ convert_df <- function(x) {
             x[[i]] <- NA
         }
     }
-    as.data.frame(x, stringsAsFactors = FALSE)
+    as.data.frame(x)
 }
 
 polls2df <- function(.data) {

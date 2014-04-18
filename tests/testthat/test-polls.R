@@ -33,14 +33,14 @@ test_that("polls$polls is in expected format", {
                      c("POSIXct", "POSIXt"), "character", "character"))
 })
     
-test_that("polls$polls is in expected format", {
+test_that("polls$questions is in expected format", {
     expect_equal(names(polls$questions),
                 c("question", "chart", "topic", "state", "subpopulation", "observations", 
                   "margin_of_error", "choice", "value", "first_name", "last_name", 
                   "party", "incumbent", "id"))
     expect_equal(unname(sapply(polls$questions, class)),
-                c("character", "character", "character", "character", "character", 
-                  "numeric", "numeric", "character", "numeric", "character", "character", 
-                  "character", "logical", "numeric"))
+                 c("factor", "character", "character", "character", "factor", 
+                   "numeric", "numeric", "factor", "numeric", "character", "character", 
+                   "character", "logical", "numeric"))
 })
 
