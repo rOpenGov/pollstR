@@ -19,3 +19,12 @@ get_url <- function(url, as = "parsed") {
     stop_for_status(response)
     content(response, as = as)
 }
+
+convert_df <- function(x) {
+    for (i in names(x)) {
+        if (is.null(x[[i]])) {
+            x[[i]] <- NA
+        }
+    }
+    as.data.frame(x)
+}
