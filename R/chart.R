@@ -59,6 +59,7 @@ pollster_chart_parse <- function(.data) {
 #' @export
 pollster_chart <- function(slug, convert=TRUE) {
     .data <- get_url(pollster_chart_url(slug), as = "parsed")
-    if (convert) pollster_chart_parse(.data)
+    if (convert) .data <- pollster_chart_parse(.data)
+    .data
 }
 
