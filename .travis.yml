@@ -17,4 +17,4 @@ notifications:
     on_failure: change
 
 env:
-  - R_BUILD_ARGS='--no-manual' R_CHECK_ARGS='--no-manual --as-cran'
+  - R_BUILD_ARGS="--no-manual" R_CHECK_ARGS="--no-manual --as-cran"
