@@ -9,6 +9,7 @@
 #' @docType package
 #' @import httr
 #' @import plyr
+#' @import jsonlite
 NULL
 
 .POLLSTER_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
