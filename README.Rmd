@@ -1,5 +1,5 @@
 ```{r,echo=FALSE,results='hide'}
-opts_chunk[["set"]](fig.path='inst/figure/')
+opts_chunk[["set"]](fig.path='figures/')
 suppressPackageStartupMessages({
   library("ggplot2")
 })

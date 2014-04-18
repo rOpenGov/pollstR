@@ -19,4 +19,3 @@ get_url <- function(url, as = "parsed") {
     stop_for_status(response)
     content(response, as = as)
 }
-

@@ -7,6 +7,7 @@
 library("dplyr")
 library("ggplot2")
 knitr::opts_chunk$set(
+  fig.path = 'inst/vign/figures/',
   comment = "#>",
   error = FALSE,
   tidy = FALSE)
@@ -93,23 +94,28 @@ str(obama_favorable_polls)
 This section shows how to use ``pollster`` to create a chart similar to those displayed on the Huffpost Pollster website.
 I'll use Obama's job approval rating in this example.
 
-Load ``dplyr`` and ``ggplot`` since they'll be needed for some data manipulation and plotting.
-```{r}
-library("pollster")
-library("dplyr")
-```
-
 The slug or name of the chart is ``obama-job-approval``, which is derived from the chart's URL , http://elections.huffingtonpost.com/pollster/obama-job-approval.
+I'll focus on approval in 2013 in order to reduce the time necessary to run this code.
 ```{r}
 slug <- "obama-job-approval"
+start_date <- as.Date("2013-1-1")
+end_date <- as.Date("2014-1-1")
 ```
-For the plot, I'll need both Pollster's model estimates,
+For the plot, I'll need both Pollster's model estimates and opinion poll estimates.
+I get the Pollster model estimates using ``polster_chart``,
 ```{r}
 chart <- pollster_chart(slug)
+estimates <- chart[["estimates_by_date"]]
+
+estimates <- estimates[estimates$date >= start_date 
+                       & estimates$date < end_date, ]
 ```
 and the opinion poll results,
 ```{r}
-polls <- pollster_polls(chart = slug, max_pages = 1000000)
+polls <- pollster_polls(chart = slug, 
+                        after = start_date, 
+                        before = end_date,
+                        max_pages = 1000000)
 ```
 Note that in ``polster_poll`` I set the ``max_pages`` argument to a very large number in order to download all the polls available.
 This may take several minutes.
@@ -122,6 +128,7 @@ questions <-
     subset(polls[["questions"]],
            chart == slug
            & subpopulation %in% c("Adults", "Likely Voters", "Registered Voters"))
+
 ```
 Second, I will need to recode the choices into three categories, "Approve", "Disapprove", and "Undecided".
 ```{r}
@@ -129,8 +136,6 @@ approvalcat <- c("Approve" = "Approve",
                  "Disapprove" = "Disapprove",
                  "Undecided" = "Undecided",
                  "Neither" = "Undecided",
-                 "Mixed" = "Undecided",
-                 "Don't Know" = "Undecided",
                  "Refused" = NA,
                  "Neutral" = "Undecided",
                  "Strongly Approve" = "Approve",
@@ -140,8 +145,8 @@ approvalcat <- c("Approve" = "Approve",
 
 questions2 <-
     (questions
-     %.% mutate(approve = revalue(choice, approvalcat))
-     %.% group_by(id, subpopulation, approve)
+     %.% mutate(choice = plyr::revalue(choice, approvalcat))
+     %.% group_by(id, subpopulation, choice)
      %.% summarise(value = sum(value)))
 ```
 Now merge the question data with the poll metadata,
@@ -150,18 +155,25 @@ polldata <- merge(polls$polls, questions2, by = "id")
 ```
 
 Now, I can plot the opinion poll results along with the Huffpost Pollster trend estimates,
-```{r}
+```{r obama-favorable-chart-2}
 (ggplot()
  + geom_point(data = polldata,
-              mapping = aes(y = value, x = end_date, color = approve),
+              mapping = aes(y = value, x = end_date, color = choice),
               alpha = 0.3)
- + geom_line(data = chart[["estimates_by_date"]],
-             mapping = aes(y = value, x = date, color = choice)))
+ + geom_line(data = estimates,
+             mapping = aes(y = value, x = date, color = choice))
+ + scale_x_date("date")
+ + scale_color_manual(values = c("Approve" = "black", 
+                                 "Disapprove" = "red", 
+                                 "Undecided" = "blue"))
+ )
+
+
 ```
 
 # Misc
 
-Also see an earlier R interface by [Drew Linzer](https://github.com/dlinzer/pollstR/).
+An earlier R interface to the Pollster API was written by [Drew Linzer](https://github.com/dlinzer/pollstR/).
 
 <!--  LocalWords:  Huffpost API Huffington CRAN github devtools str
  -->
