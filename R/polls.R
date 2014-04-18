@@ -125,8 +125,7 @@ get_poll <- function(page, chart, state, topic, before, after, sort, as = "parse
 #' @export
 pollster_polls <- function(page = 1, chart = NULL, state = NULL,
                            topic = NULL, before = NULL, after = NULL,
-                           sort = FALSE, max_pages = 1, convert = TRUE,
-                           verbose = FALSE) {
+                           sort = FALSE, max_pages = 1, convert = TRUE) {
     .data <- list()
     i <- 0L
     while (i < max_pages) {
