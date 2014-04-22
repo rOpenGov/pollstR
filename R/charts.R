@@ -33,15 +33,7 @@ charts2df <- function(.data) {
     estimates <- ldply(.data,
                        function(x) {
                            if (length(x[["estimates"]])) {
-                               y <- ldply(x[["estimates"]],
-                                          function(z) {
-                                              for (i in names(z)) {
-                                                  if (is.null(z[[i]])) {
-                                                      z[[i]] <- NA
-                                                  }
-                                              }
-                                              as.data.frame(z)
-                                          })
+                               y <- ldply(x[["estimates"]], convert_df)
                                y[["slug"]] <- x[["slug"]]
                                y
                            }

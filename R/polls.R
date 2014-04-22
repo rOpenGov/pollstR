@@ -35,26 +35,11 @@ pollster_polls_url <- function(page, chart, state, topic, before, after, sort) {
     modify_url(paste(.POLLSTER_API_URL, "polls", sep="/"), query = query)
 }
 
-convert_df <- function(x) {
-    for (i in names(x)) {
-        if (is.null(x[[i]])) {
-            x[[i]] <- NA
-        }
-    }
-    as.data.frame(x, stringsAsFactors = FALSE)
-}
-
 polls2df <- function(.data) {
     polls <- ldply(.data,
                    function(x) {
-                       y <- x[c("id", "pollster", "start_date", "end_date",
-                                "method", "source", "last_updated")]
-                       for (i in names(y)) {
-                           if (is.null(y[[i]])) {
-                               y[[i]] <- NA
-                           }
-                       }
-                       y <- as.data.frame(y)
+                       y <- convert_df(x[c("id", "pollster", "start_date", "end_date",
+                                           "method", "source", "last_updated")])
                        y[["start_date"]] <- as.Date(y[["start_date"]])
                        y[["end_date"]] <- as.Date(y[["end_date"]])
                        y[["last_updated"]] <- as.POSIXct(y[["last_updated"]], "%Y-%m-%dT%H:%M:%SZ",
@@ -129,7 +114,6 @@ pollster_polls <- function(page = 1, chart = NULL, state = NULL,
     .data <- list()
     i <- 0L
     while (i < max_pages) {
-        print(i)
         newdata <- get_poll(page + i, chart, state, topic, before, after, sort)
         if (length(newdata)) {
             .data <- append(.data, newdata)

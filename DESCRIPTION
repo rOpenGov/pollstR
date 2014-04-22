@@ -13,7 +13,11 @@ Imports:
     jsonlite
 Suggests:
     dplyr,
-    ggplot2
+    ggplot2,
+    testthat
+URL: https://github.com/jrnold/pollster
+BugReports: https://github.com/jrnold/pollster/issues
 VignetteBuilder: knitr
 License: GPL-3
+LazyLoad: yes
 LazyData: true

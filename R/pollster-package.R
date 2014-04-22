@@ -9,6 +9,7 @@
 #' @docType package
 #' @import httr
 #' @import plyr
+#' @import jsonlite
 NULL
 
 .POLLSTER_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
@@ -19,3 +20,11 @@ get_url <- function(url, as = "parsed") {
     content(response, as = as)
 }
 
+convert_df <- function(x) {
+    for (i in names(x)) {
+        if (is.null(x[[i]])) {
+            x[[i]] <- NA
+        }
+    }
+    as.data.frame(x)
+}

@@ -14,15 +14,7 @@ pollster_chart_parse <- function(.data) {
                    format = "%Y-%m-%dT%H:%M:%SZ",
                    tz = "GMT")
     if (length(.data[["estimates"]])) {
-        estimates <- ldply(.data[["estimates"]],
-                           function(z) {
-                               for (i in names(z)) {
-                                   if (is.null(z[[i]])) {
-                                       z[[i]] <- NA
-                                   }
-                               }
-                               as.data.frame(z)
-                           })
+        estimates <- ldply(.data[["estimates"]], convert_df)
         .data[["estimates"]] <- estimates
     }
     if (length(.data[["estimates_by_date"]])) {
@@ -59,6 +51,7 @@ pollster_chart_parse <- function(.data) {
 #' @export
 pollster_chart <- function(slug, convert=TRUE) {
     .data <- get_url(pollster_chart_url(slug), as = "parsed")
-    if (convert) pollster_chart_parse(.data)
+    if (convert) .data <- pollster_chart_parse(.data)
+    .data
 }
 
