@@ -34,18 +34,30 @@ To get a list of all the charts in the API use the function ``pollster_charts``,
 
 ```r
 charts <- pollster_charts()
-```
-
-```
-## Error: arguments imply differing number of rows: 1, 0
-```
-
-```r
 str(charts)
 ```
 
 ```
-## Error: object 'charts' not found
+## List of 2
+##  $ charts   :'data.frame':	431 obs. of  9 variables:
+##   ..$ title        : Factor w/ 431 levels "2012 Iowa GOP Primary",..: 1 2 3 4 5 6 7 8 9 10 ...
+##   ..$ slug         : Factor w/ 430 levels "2012-iowa-gop-primary",..: 1 2 3 4 5 6 7 8 9 10 ...
+##   ..$ topic        : Factor w/ 27 levels "2012-president-gop-primary",..: 1 1 1 1 1 1 1 1 2 3 ...
+##   ..$ state        : Factor w/ 51 levels "IA","NH","SC",..: 1 2 3 4 5 6 7 8 8 8 ...
+##   ..$ short_title  : Factor w/ 431 levels "1/3 Iowa Caucus",..: 1 2 3 4 5 6 7 8 9 10 ...
+##   ..$ election_date: Date[1:431], format: NA ...
+##   ..$ poll_count   : num [1:431] 65 55 44 59 10 34 19 258 589 300 ...
+##   ..$ last_updated : POSIXct[1:431], format: "2012-01-02 13:08:44" ...
+##   ..$ url          : Factor w/ 430 levels "http://elections.huffingtonpost.com/pollster/2012-iowa-gop-primary",..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ estimates:'data.frame':	1033 obs. of  8 variables:
+##   ..$ choice         : Factor w/ 312 levels "Romney","Paul",..: 1 2 3 4 5 6 7 8 9 1 ...
+##   ..$ value          : num [1:1033] 22.5 21.3 15.9 12.6 11.1 8.3 3.7 5.9 0.9 39.6 ...
+##   ..$ lead_confidence: num [1:1033] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ first_name     : chr [1:1033] "Mitt" "Ron" "Rick" "Newt" ...
+##   ..$ last_name      : chr [1:1033] "Romney" "Paul" "Santorum" "Gingrich" ...
+##   ..$ party          : chr [1:1033] "Rep" "Rep" "Rep" "Rep" ...
+##   ..$ incumbent      : logi [1:1033] FALSE FALSE FALSE FALSE FALSE FALSE ...
+##   ..$ slug           : chr [1:1033] "2012-iowa-gop-primary" "2012-iowa-gop-primary" "2012-iowa-gop-primary" "2012-iowa-gop-primary" ...
 ```
 
 This returns a ``list`` with two data frames.
@@ -57,10 +69,6 @@ For example, to get only charts related to national topics,
 
 ```r
 us_charts <- pollster_charts(state = "US")
-```
-
-```
-## Error: arguments imply differing number of rows: 1, 0
 ```
 
 
@@ -81,7 +89,7 @@ str(obama_favorable)
 ##  $ topic            : chr "favorable-ratings"
 ##  $ state            : chr "US"
 ##  $ short_title      : chr "Obama Favorability"
-##  $ election_date    : NULL
+##  $ election_date    : Date[1:1], format: NA
 ##  $ poll_count       : num 803
 ##  $ last_updated     : POSIXct[1:1], format: "2014-04-17 15:48:01"
 ##  $ url              : chr "http://elections.huffingtonpost.com/pollster/obama-favorable-rating"
