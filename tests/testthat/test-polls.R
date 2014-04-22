@@ -39,7 +39,7 @@ test_that("polls$questions is in expected format", {
                   "margin_of_error", "choice", "value", "first_name", "last_name", 
                   "party", "incumbent", "id"))
     expect_equal(unname(sapply(polls$questions, class)),
-                 c("factor", "character", "character", "character", "factor", 
+                 c("factor", "factor",  "factor", "factor", "factor",
                    "numeric", "numeric", "factor", "numeric", "character", "character", 
                    "character", "logical", "numeric"))
 })

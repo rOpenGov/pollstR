@@ -28,3 +28,12 @@ convert_df <- function(x) {
     }
     as.data.frame(x)
 }
+
+# election date entry
+electiondate2date <- function(x) {
+    if (is.null(x)) {
+        NA_character_
+    } else {
+        sprintf("%d-%d-%d", x$year, x$month, x$day)
+    }
+}

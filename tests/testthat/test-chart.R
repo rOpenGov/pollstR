@@ -11,13 +11,13 @@ chart <- pollster_chart(slug)
 
 test_that("chart data is in the correct format", {
     expect_is(chart, "list")
-    expect_equal(length(chart), 10)
+    expect_equal(length(chart), 11)
     expect_equal(names(chart),
-                 c("title", "slug", "topic", "state", "short_title", "poll_count", 
+                 c("title", "slug", "topic", "state", "short_title", "election_date", "poll_count", 
                    "last_updated", "url", "estimates", "estimates_by_date"))
     expect_equal(unname(sapply(chart, class)),
                  list("character", "character", "character", "character", "character", 
-                      "numeric", c("POSIXct", "POSIXt"), "character", "data.frame", 
+                      "Date", "numeric", c("POSIXct", "POSIXt"), "character", "data.frame", 
                       "data.frame"))
 })
 
@@ -28,6 +28,7 @@ test_that("chart$esimates is in expected format", {
     expect_equal(unname(sapply(chart$estimates, class)),
                  c("factor", "numeric", "logical", "logical", "logical", "logical", 
                    "logical"))
+    
 })
 
 test_that("chart$esimates is in expected format", {

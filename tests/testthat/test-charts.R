@@ -6,7 +6,8 @@ test_that("charts is in expected format if not converted", {
     expect_is(chartsu, "list")
     expect_true(length(chartsu) > 0)
     expect_equal(names(chartsu[[1]]),
-                 c("title", "slug", "topic", "state", "short_title", "poll_count", 
+                 c("title", "slug", "topic", "state",
+                   "short_title", "election_date", "poll_count",
                    "last_updated", "url", "estimates"))
 
 })
@@ -27,11 +28,11 @@ test_that("query returns data", {
 
 test_that("charts$charts is in expected format", {
     expect_equal(names(charts$charts),
-                 c("title", "slug", "topic", "state", "short_title", "poll_count", 
-                   "last_updated", "url"))
+                 c("title", "slug", "topic", "state", "short_title", "election_date", "poll_count", "last_updated", "url"))
+                   
     expect_equal(unname(sapply(charts$charts, class)),
-                 list("factor", "factor", "factor", "factor", "factor", "numeric", 
-                      c("POSIXct", "POSIXt"), "factor"))
+                 list("factor", "factor", "factor", "factor", "factor", "Date", 
+                      "numeric", c("POSIXct", "POSIXt"), "factor"))
 })
 
 test_that("charts$charts is in expected format", {

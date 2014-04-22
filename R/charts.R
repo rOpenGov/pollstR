@@ -23,6 +23,9 @@ charts2df <- function(.data) {
         if (is.null(x[["topic"]])) {
             x[["topic"]] <- ""
         }
+        x[["election_date"]] <-
+            as.Date(electiondate2date(x[["election_date"]]),
+                    "%Y-%m-%d")
         as.data.frame(x)
     })
     # Convert
@@ -59,4 +62,3 @@ pollster_charts <- function(topic = NULL, state = NULL, convert = TRUE) {
     if (convert) .data <- charts2df(.data)
     .data
 }
-
