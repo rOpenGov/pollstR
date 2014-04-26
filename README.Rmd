@@ -5,10 +5,12 @@ suppressPackageStartupMessages({
 })
 ```
 
-
-# R interface to the Huffpost Pollster API
+# R client for the Huffpost Pollster API
 
 This R package is an interface to the Huffington Post [Pollster API](http://elections.huffingtonpost.com/pollster/api), which provides access to opinion polls collected by the Huffington Post.
+
+The package is released under GPL-2 and the API data it accesses is released under the [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US).
+
 
 # Install
 
@@ -23,6 +25,24 @@ install_github("rOpenGov/pollstR")
 ```{r}
 library("pollstR")
 ```
+
+# API Overview
+
+The Pollster API has two primary data structures: charts and polls.
+
+*Polls* are individual, dated topline results for a single set of candidates in a single race.
+The poll data structure consists of (generally) named candidates and percentage support for each, along with additional information (e.g., polling house, sampling frame, sample size, margin of error, state, etc.).
+
+*Charts* aggregate polls for a particular race or topic (e.g., "2012-president" or "obama-job-approval".
+A chart reports aggregated survey estimates of support for the candidates in a given race and, possibly, daily estimates of support.
+Each chart is named, reports the number of aggregated polls it presents, a last-updated date, and a "slug" field. The "slug" identifies the chart both in the API and on the Pollster website.
+
+In ``pollstR``, there are three functions in that provide access to the opinion polls and model estimates from Huffpost Pollster.
+
+- ``pollstr_charts``: Get a list of all charts and the current model estimates.
+- ``pollstr_chart``: Get a single chart along with historical model estimates.
+- ``pollstr_polls``: Get opinion poll data.
+
 
 # Examples
 
@@ -49,10 +69,10 @@ To get a particular chart use the function ``pollstr_chart``.
 For example, to get the chart for [Barack Obama's Favorable Rating](http://elections.huffingtonpost.com/pollster/obama-favorable-rating), specify its *slug*, ``obama-favorable-rating``.
 ```{r}
 obama_favorable <- pollstr_chart('obama-favorable-rating')
-str(obama_favorable)
+print(obama_favorable)
 ```
 The slug can be found from the results of a ``pollstr_charts`` query.
-Alternatively the slug is the path of the url of a chart, http://elections.huffingtonpost.com/pollster/obama-favorable-rating.
+Also, the slug is the path of the url of a chart, http://elections.huffingtonpost.com/pollster/obama-favorable-rating.
 
 The historical estimates of the Huffpost Pollster poll-tracking model are contained in the element ``"estimates_by_date"``,
 ```{r obama-favorable-chart}
