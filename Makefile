@@ -1,11 +1,13 @@
 all: vignettes vignettes/introduction.Rmd README.md
 
-%.md: %.Rmd
-	Rscript -e 'library(knitr);knit("$<",output="$@")'
+RMD_CHILDREN = $(wildcard inst/vign/children/*.Rmd)
 
 README.md: README.Rmd
+	Rscript -e 'library(knitr);knit("$<",output="$@")'
 
-inst/vign/introduction.md: inst/vign/introduction.Rmd
+inst/vign/introduction.md: inst/vign/introduction.Rmd $(RMD_CHDILDREN)
+	cd $(dir $@) ; \
+	Rscript -e 'library(knitr);knit("$(notdir $^)",output="$(notdir $@)")'
 
 vignettes:
 	-mkdir vignettes
