@@ -1,12 +1,25 @@
 Package: pollstR
-Type: Package
-Title: R client for the Pollster API
-Version: 0.1
-Date: 2014-01-28
-Author: Authors@R: c(person("Thomas J.", "Leeper", role = c("aut", "cre"),
-                            email = "thosjleeper@gmail.com"),
-                     person("Drew", "Linzer", role = "cre"))
-Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
-Imports: XML, RJSONIO, plyr
-Description: Extract polling information and charts from Huffington Post's Pollster API.
+Title: R client for the Huffpost Pollster API
+Description: An R interface to the Huffington Post Pollster API, which provides
+    programatic interface to political polls.
+Version: 0.1.0
+Authors@R: c(person("Jeffrey B.", "Arnold", email = "jeffrey.arnold@gmail.com",
+    role = c("aut", "cre")),
+    person("Thomas J.", "Leeper", role = c("aut"),
+    email = "thosjleeper@gmail.com"))
+Depends:
+    R (>= 3.0.3)
+Imports:
+    httr,
+    plyr,
+    jsonlite
+Suggests:
+    dplyr,
+    ggplot2,
+    testthat
+URL: https://github.com/rOpenGov/pollstR
+BugReports: https://github.com/rOpenGov/pollstR/issues
+VignetteBuilder: knitr
 License: GPL-2
+LazyLoad: yes
+LazyData: true
