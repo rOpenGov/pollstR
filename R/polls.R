@@ -102,12 +102,21 @@ get_poll <- function(page, chart, state, topic, before, after, sort, as = "parse
 #' @param max_pages Maximum number of pages to get.
 #' @param convert Rearrange the data returned by the API into easier to use data frames.
 #'
-#' @return If \code{convert=TRUE}, a \code{list} with elements
+#' @return If \code{convert=TRUE}, a \code{"pollstr_polls"} object with elements
 #' \describe{
 #' \item{\code{polls}}{A \code{data.frame} with entries for each poll.}
 #' \item{\code{questions}}{A \code{data.frame} with entries for each question asked in the polls.}
 #' }
 #' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
+#' @examples
+#' \dontrun{
+#' # Get polls related to a chart pulled programmatically with
+#' # pollstr_charts()
+#' a <- pollstr_charts()
+#' pollstr_polls(chart=a$slug[1])
+#' # Lookup polls related to a specific topic
+#' pollstr_polls(topic='2013-house')
+#' }
 #' @export
 pollstr_polls <- function(page = 1, chart = NULL, state = NULL,
                            topic = NULL, before = NULL, after = NULL,

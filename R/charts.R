@@ -51,12 +51,21 @@ charts2df <- function(.data) {
 #' @param topic Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollstero/api} for examples.
 #' @param convert Rearrange the data returned by the API into easier to use data frames.
 #'
-#' @return If \code{convert=TRUE}, a \code{"list"} with elements
+#' @return If \code{convert=TRUE}, a \code{"pollstr_charts"} object with elements
 #' \describe{
 #'   \item{\code{charts}}{Data frame with data on charts.}
 #'   \item{\code{estimates}}{Data frame with current estimates from each chart. The column \code{slug} matches this data frame to \code{charts}}
 #' }
 #' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
+#' @examples
+#' \dontrun{
+#' # Get charts related to Minnesota
+#'  mn <- pollstr_charts(state='MN')
+#'  # Get charts in the topic '2013-governor'
+#'  gov <- pollstr_charts(topic='2013-governor')
+#'  # Get all charts
+#'  allcharts <- pollstr_charts()
+#' }
 #' @export
 pollstr_charts <- function(topic = NULL, state = NULL, convert = TRUE) {
     .data <- get_url(pollstr_charts_url(topic, state), as = "parsed")

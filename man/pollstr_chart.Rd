@@ -11,10 +11,10 @@ pollstr_chart(slug, convert = TRUE)
   into easier to use data frames.}
 }
 \value{
-If \code{convert=TRUE}, then a \code{"list"} with elements
-\itemize{ \item \code{title} \item \code{slug} \item
-\code{topic} \item \code{short_title} \item
-\code{poll_count} \item \code{last_updated} \item
+If \code{convert=TRUE}, then a \code{"pollstr_chart"}
+object with elements \itemize{ \item \code{title} \item
+\code{slug} \item \code{topic} \item \code{short_title}
+\item \code{poll_count} \item \code{last_updated} \item
 \code{url} \item \code{estimates} A data frame with an
 observation for each choice and the current estimates.
 \item \code{estimates_by_date} A data frame with an
@@ -25,5 +25,10 @@ json returned by the API.
 \description{
 Return a single chart. This includes both current and
 historical estimates by date.
+}
+\examples{
+\dontrun{
+chart1 <- pollstr_chart('2012-virginia-senate-allen-vs-kaine')
+}
 }
 

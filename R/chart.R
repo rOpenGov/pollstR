@@ -38,7 +38,7 @@ pollstr_chart_parse <- function(.data) {
 #'
 #' @param slug The slug-name of the chart to be returned.
 #' @param convert Rearrange the data returned by the API into easier to use data frames.
-#' @return If \code{convert=TRUE}, then a \code{"list"} with elements
+#' @return If \code{convert=TRUE}, then a \code{"pollstr_chart"} object with elements
 #' \itemize{
 #' \item \code{title}
 #' \item \code{slug}
@@ -51,6 +51,10 @@ pollstr_chart_parse <- function(.data) {
 #' \item \code{estimates_by_date} A data frame with an observation for each choice at each date, with estimates.
 #' }
 #' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
+#' @examples
+#' \dontrun{
+#' chart1 <- pollstr_chart('2012-virginia-senate-allen-vs-kaine')
+#' }
 #' @export
 pollstr_chart <- function(slug, convert=TRUE) {
     .data <- get_url(pollstr_chart_url(slug), as = "parsed")

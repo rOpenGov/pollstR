@@ -18,15 +18,25 @@ pollstr_charts(topic = NULL, state = NULL, convert = TRUE)
   into easier to use data frames.}
 }
 \value{
-If \code{convert=TRUE}, a \code{"list"} with elements
-\describe{ \item{\code{charts}}{Data frame with data on
-charts.} \item{\code{estimates}}{Data frame with current
-estimates from each chart. The column \code{slug} matches
-this data frame to \code{charts}} } Otherwise, a
-\code{"list"} in the original structure of the json
-returned by the API.
+If \code{convert=TRUE}, a \code{"pollstr_charts"} object
+with elements \describe{ \item{\code{charts}}{Data frame
+with data on charts.} \item{\code{estimates}}{Data frame
+with current estimates from each chart. The column
+\code{slug} matches this data frame to \code{charts}} }
+Otherwise, a \code{"list"} in the original structure of the
+json returned by the API.
 }
 \description{
 Get list of available charts
+}
+\examples{
+\dontrun{
+# Get charts related to Minnesota
+ mn <- pollstr_charts(state='MN')
+ # Get charts in the topic '2013-governor'
+ gov <- pollstr_charts(topic='2013-governor')
+ # Get all charts
+ allcharts <- pollstr_charts()
+}
 }
 
