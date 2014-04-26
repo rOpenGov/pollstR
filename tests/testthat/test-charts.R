@@ -1,6 +1,6 @@
 context("charts")
 
-chartsu <- pollster_charts(convert=FALSE)
+chartsu <- pollstr_charts(convert=FALSE)
 
 test_that("charts is in expected format if not converted", {
     expect_is(chartsu, "list")
@@ -12,7 +12,7 @@ test_that("charts is in expected format if not converted", {
 
 })
 
-charts <- pollster_charts()
+charts <- pollstr_charts()
 
 test_that("charts is in expected format", {
     expect_is(chartsu, "list")

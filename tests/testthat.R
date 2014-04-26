@@ -1,2 +1,2 @@
 library("testthat")
-test_check("pollster")
+test_check("pollstR")

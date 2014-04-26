@@ -1,6 +1,6 @@
 context("polls")
 
-pollsu <- pollster_polls(max_pages = 1, convert = FALSE)
+pollsu <- pollstr_polls(max_pages = 1, convert = FALSE)
 
 test_that("polls is in expected format if not converted", {
     expect_is(pollsu, "list")
@@ -10,7 +10,7 @@ test_that("polls is in expected format if not converted", {
                    "last_updated", "survey_houses", "sponsors", "questions"))
 })
 
-polls <- pollster_polls(max_pages = 1)
+polls <- pollstr_polls(max_pages = 1)
 
 test_that("polls data is in the correct format", {
     expect_is(polls, "list")

@@ -1,8 +1,8 @@
-#'@include pollster-package.R
+#'@include pollstr-package.R
 NULL
 
 # Create URL for the charts API method
-pollster_polls_url <- function(page, chart, state, topic, before, after, sort) {
+pollstr_polls_url <- function(page, chart, state, topic, before, after, sort) {
     query <- list()
     if (! is.null(page)) {
         query[["page"]] <- as.character(page)[1]
@@ -32,7 +32,7 @@ pollster_polls_url <- function(page, chart, state, topic, before, after, sort) {
     if (! length(query)) {
         query <- NULL
     }
-    modify_url(paste(.POLLSTER_API_URL, "polls", sep="/"), query = query)
+    modify_url(paste(.POLLSTR_API_URL, "polls", sep="/"), query = query)
 }
 
 polls2df <- function(.data) {
@@ -85,14 +85,14 @@ polls2df <- function(.data) {
 }
 
 get_poll <- function(page, chart, state, topic, before, after, sort, as = "parsed") {
-    url <- pollster_polls_url(page, chart, state, topic, before, after, sort)
+    url <- pollstr_polls_url(page, chart, state, topic, before, after, sort)
     get_url(url, as = as)
 }
 
 #' Get a list of polls
 #'
 #' @param page Return page number
-#' @param chart List polls related to the specified chart. Chart names are the \code{slug} returned by \code{pollster_charts}.
+#' @param chart List polls related to the specified chart. Chart names are the \code{slug} returned by \code{pollstr_charts}.
 #' @param state Only include charts from a single state. Use 2-letter pstate abbreviations. "US" will return all national charts.
 #' @param topic Only include charts related to a specific topic. See the \url{http://elections.huffingtonpost.com/pollster/api} for examples.
 #' @param before Only list polls that ended on or bfore the specified date.
@@ -108,7 +108,7 @@ get_poll <- function(page, chart, state, topic, before, after, sort, as = "parse
 #' }
 #' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 #' @export
-pollster_polls <- function(page = 1, chart = NULL, state = NULL,
+pollstr_polls <- function(page = 1, chart = NULL, state = NULL,
                            topic = NULL, before = NULL, after = NULL,
                            sort = FALSE, max_pages = 1, convert = TRUE) {
     .data <- list()

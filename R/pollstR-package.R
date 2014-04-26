@@ -1,18 +1,18 @@
-#' Huffpost Pollster API
+#' R client for the Huffpost Pollster API
 #'
 #' This pacakge provides an R interface to the Huffington Post Pollster API.
 #' Pollster provides programmatic access to opinion polls collected by the Huffington Post.
 #'
 #' See \url{http://elections.huffingtonpost.com/pollster/api} for more details on the API.
 #'
-#' @name pollster
+#' @name pollstR
 #' @docType package
 #' @import httr
 #' @import plyr
 #' @import jsonlite
 NULL
 
-.POLLSTER_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
+.POLLSTR_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
 
 get_url <- function(url, as = "parsed") {
     response <- GET(url)

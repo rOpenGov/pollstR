@@ -1,13 +1,13 @@
-#'@include pollster-package.R
+#'@include pollstr-package.R
 NULL
 
 # Create URL for the charts API method
-pollster_chart_url <- function(slug) {
-    paste(.POLLSTER_API_URL, "charts", slug[1], sep="/")
+pollstr_chart_url <- function(slug) {
+    paste(.POLLSTR_API_URL, "charts", slug[1], sep="/")
 }
 
 # clean up the objects returned by the API
-pollster_chart_parse <- function(.data) {
+pollstr_chart_parse <- function(.data) {
     # Convert
     .data[["election_date"]] <-
         as.Date(electiondate2date(.data[["election_date"]]),
@@ -52,9 +52,9 @@ pollster_chart_parse <- function(.data) {
 #' }
 #' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 #' @export
-pollster_chart <- function(slug, convert=TRUE) {
-    .data <- get_url(pollster_chart_url(slug), as = "parsed")
-    if (convert) .data <- pollster_chart_parse(.data)
+pollstr_chart <- function(slug, convert=TRUE) {
+    .data <- get_url(pollstr_chart_url(slug), as = "parsed")
+    if (convert) .data <- pollstr_chart_parse(.data)
     .data
 }
 

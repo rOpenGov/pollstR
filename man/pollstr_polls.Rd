@@ -1,8 +1,8 @@
-\name{pollster_polls}
-\alias{pollster_polls}
+\name{pollstr_polls}
+\alias{pollstr_polls}
 \title{Get a list of polls}
 \usage{
-pollster_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
+pollstr_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
   before = NULL, after = NULL, sort = FALSE, max_pages = 1,
   convert = TRUE)
 }
@@ -11,7 +11,7 @@ pollster_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
 
   \item{chart}{List polls related to the specified chart.
   Chart names are the \code{slug} returned by
-  \code{pollster_charts}.}
+  \code{pollstr_charts}.}
 
   \item{state}{Only include charts from a single state. Use
   2-letter pstate abbreviations. "US" will return all

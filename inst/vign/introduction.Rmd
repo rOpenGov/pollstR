@@ -1,6 +1,6 @@
 <!--
 %\VignetteEngine{knitr}
-%\VignetteIndexEntry{Introduction to pollster}
+%\VignetteIndexEntry{Introduction to pollstR}
 -->
 
 ```{r, echo = FALSE, results='hide', message = FALSE}
@@ -25,25 +25,25 @@ You can install this with the function ``install_github`` in the **devtools** pa
 ```{r,eval=FALSE}
 install.packages("devools")
 library("devtools")
-install_github("jrnold/pollster")
+install_github("rOpenGov/pollstR")
 ```
 ```{r}
-library("pollster")
+library("pollstR")
 ```
 
 # Usage
 
 There are three functions in that provide access to the opinion polls and model estimates from Huffpost Pollster.
 
-- ``pollster_charts``: Get a list of all charts and the current model estimates.
-- ``pollster_chart``: Get a single chart along with historical model estimates.
-- ``pollster_polls``: Get opinion poll data.
+- ``pollstr_charts``: Get a list of all charts and the current model estimates.
+- ``pollstr_chart``: Get a single chart along with historical model estimates.
+- ``pollstr_polls``: Get opinion poll data.
 
 ## Charts
 
-To get a list of all the charts in the API use the function ``pollster_charts``,
+To get a list of all the charts in the API use the function ``pollstr_charts``,
 ```{r}
-charts <- pollster_charts()
+charts <- pollstr_charts()
 str(charts)
 ```
 This returns a ``list`` with two data frames.
@@ -53,18 +53,18 @@ while the data frame ``estimates`` has the current poll-tracking estimates from 
 The query can be filtered by state or topic.
 For example, to get only charts related to national topics,
 ```{r}
-us_charts <- pollster_charts(state = "US")
+us_charts <- pollstr_charts(state = "US")
 ```
 
 ## Chart
 
-To get a particular chart use the function ``pollster_chart``.
+To get a particular chart use the function ``pollstr_chart``.
 For example, to get the chart for [Barack Obama's Favorable Rating](http://elections.huffingtonpost.com/pollster/obama-favorable-rating), specify its *slug*, ``obama-favorable-rating``.
 ```{r}
-obama_favorable <- pollster_chart('obama-favorable-rating')
+obama_favorable <- pollstr_chart('obama-favorable-rating')
 str(obama_favorable)
 ```
-The slug can be found from the results of a ``pollster_charts`` query.
+The slug can be found from the results of a ``pollstr_charts`` query.
 Alternatively the slug is the path of the url of a chart, http://elections.huffingtonpost.com/pollster/obama-favorable-rating.
 
 The historical estimates of the Huffpost Pollster poll-tracking model are contained in the element ``"estimates_by_date"``,
@@ -75,21 +75,21 @@ The historical estimates of the Huffpost Pollster poll-tracking model are contai
 
 ## Polls
 
-To get the opinion poll results use the function ``pollster_polls`.
+To get the opinion poll results use the function ``pollstr_polls`.
 The polls returned can be filtered by topic, chart, state, or date.
 
-By default, ``pollster_polls`` only returns 1 page of results (about 10 polls).
+By default, ``pollstr_polls`` only returns 1 page of results (about 10 polls).
 To have it return more polls, increase the value of ``max_pages``.
 To have it return all polls, set the value of ``max_pages`` to a very high number.
 For example, to return all the polls on the favorability of Bararck Obama after March 1, 2014,
 ```{r}
-obama_favorable_polls <- pollster_polls(max_pages = 10000, chart = 'obama-favorable-rating', after = "2014-3-1")
+obama_favorable_polls <- pollstr_polls(max_pages = 10000, chart = 'obama-favorable-rating', after = "2014-3-1")
 str(obama_favorable_polls)	
 ```
 
 # Example: Obama's Job Approval Rating
 
-This section shows how to use ``pollster`` to create a chart similar to those displayed on the Huffpost Pollster website.
+This section shows how to use ``pollstr`` to create a chart similar to those displayed on the Huffpost Pollster website.
 I'll use Obama's job approval rating in this example.
 
 The slug or name of the chart is ``obama-job-approval``, which is derived from the chart's URL , http://elections.huffingtonpost.com/pollster/obama-job-approval.
@@ -102,7 +102,7 @@ end_date <- as.Date("2014-1-1")
 For the plot, I'll need both Pollster's model estimates and opinion poll estimates.
 I get the Pollster model estimates using ``polster_chart``,
 ```{r}
-chart <- pollster_chart(slug)
+chart <- pollstr_chart(slug)
 estimates <- chart[["estimates_by_date"]]
 
 estimates <- estimates[estimates$date >= start_date 
@@ -110,7 +110,7 @@ estimates <- estimates[estimates$date >= start_date
 ```
 and the opinion poll results,
 ```{r}
-polls <- pollster_polls(chart = slug, 
+polls <- pollstr_polls(chart = slug, 
                         after = start_date, 
                         before = end_date,
                         max_pages = 1000000)

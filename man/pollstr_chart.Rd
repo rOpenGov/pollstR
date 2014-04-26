@@ -1,8 +1,8 @@
-\name{pollster_chart}
-\alias{pollster_chart}
+\name{pollstr_chart}
+\alias{pollstr_chart}
 \title{Return a single chart}
 \usage{
-pollster_chart(slug, convert = TRUE)
+pollstr_chart(slug, convert = TRUE)
 }
 \arguments{
   \item{slug}{The slug-name of the chart to be returned.}

@@ -1,8 +1,8 @@
 \docType{package}
-\name{pollster}
-\alias{pollster}
-\alias{pollster-package}
-\title{Huffpost Pollster API}
+\name{pollstR}
+\alias{pollstR}
+\alias{pollstR-package}
+\title{R client for the Huffpost Pollster API}
 \description{
 This pacakge provides an R interface to the Huffington Post
 Pollster API. Pollster provides programmatic access to

@@ -1,8 +1,8 @@
-\name{pollster_charts}
-\alias{pollster_charts}
+\name{pollstr_charts}
+\alias{pollstr_charts}
 \title{Get list of available charts}
 \usage{
-pollster_charts(topic = NULL, state = NULL, convert = TRUE)
+pollstr_charts(topic = NULL, state = NULL, convert = TRUE)
 }
 \arguments{
   \item{state}{Only include charts from a single state. Use
@@ -11,7 +11,7 @@ pollster_charts(topic = NULL, state = NULL, convert = TRUE)
 
   \item{topic}{Only include charts related to a specific
   topic. See
-  \url{http://elections.huffingtonpost.com/pollster/api}
+  \url{http://elections.huffingtonpost.com/pollstero/api}
   for examples.}
 
   \item{convert}{Rearrange the data returned by the API

@@ -4,9 +4,9 @@ Description: An R interface to the Huffington Post Pollster API, which provides
     programatic interface to political polls.
 Version: 0.0.1
 Authors@R: c(person("Jeffrey B.", "Arnold", email = "jeffrey.arnold@gmail.com",
-	           role = c("aut", "cre")),
- 	     person("Thomas J.", "Leeper", role = c("aut"),
-                    email = "thosjleeper@gmail.com"))
+    role = c("aut", "cre")),
+    person("Thomas J.", "Leeper", role = c("aut"),
+    email = "thosjleeper@gmail.com"))
 Depends:
     R (>= 3.0.3)
 Imports:

@@ -1,13 +1,13 @@
 context("chart")
 
 slug <- "obama-job-approval"
-chartu <- pollster_chart(slug, convert = FALSE)
+chartu <- pollstr_chart(slug, convert = FALSE)
 
 test_that("API returns data", {
     expect_true(length(chartu) > 0)    
 })
 
-chart <- pollster_chart(slug)
+chart <- pollstr_chart(slug)
 
 test_that("chart data is in the correct format", {
     expect_is(chart, "list")
