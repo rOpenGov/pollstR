@@ -5,8 +5,6 @@ suppressPackageStartupMessages({
 })
 ```
 
-[![Build Status](https://travis-ci.org/jrnold/pollster.svg?branch=master)](https://travis-ci.org/jrnold/pollster)
-
 
 # R interface to the Huffpost Pollster API
 
