@@ -1,3 +1,12 @@
-# CHANGES TO pollstR 0.1 #
+# pollstR 0.2.0
+
+Merge with http://github.com/jrnold/pollster. This is a complete rewrite of the client.
+
+* ``getchart`` replaced with ``pollstr_charts``. Returns class ``pollstr_charts``.
+* ``getchart`` replaced with ``pollstr_chart``. Returns class ``pollstr_chart``.
+* ``getpolls`` replaced with ``pollstr_polls``. Returns class ``pollstr_polls``.
+* ``xml`` API access no longer available.
+
+# pollstR 0.1
 
 * Initial package release
