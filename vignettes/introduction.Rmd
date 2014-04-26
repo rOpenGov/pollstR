@@ -6,28 +6,13 @@
 
 
 
+
 # R client for the Huffpost Pollster API
 
 This R package is an interface to the Huffington Post [Pollster API](http://elections.huffingtonpost.com/pollster/api), which provides access to opinion polls collected by the Huffington Post.
 
 The package is released under GPL-2 and the API data it accesses is released under the [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US).
 
-# Install
-
-This package is not *yet* on CRAN.
-
-You can install this with the function ``install_github`` in the **devtools** package.
-
-```r
-install.packages("devools")
-library("devtools")
-install_github("rOpenGov/pollstR")
-```
-
-
-```r
-library("pollstR")
-```
 
 
 # API Overview
@@ -46,8 +31,6 @@ In ``pollstR``, there are three functions in that provide access to the opinion 
 - ``pollstr_charts``: Get a list of all charts and the current model estimates.
 - ``pollstr_chart``: Get a single chart along with historical model estimates.
 - ``pollstr_polls``: Get opinion poll data.
-
-# Examples
 
 ## Charts
 
@@ -144,7 +127,7 @@ The historical estimates of the Huffpost Pollster poll-tracking model are contai
  + geom_line())
 ```
 
-![plot of chunk obama-favorable-chart](figures/obama-favorable-chart.png) 
+![plot of chunk obama-favorable-chart](./figures/obama-favorable-chart.png) 
 
 
 ## Polls
@@ -191,6 +174,8 @@ str(obama_favorable_polls)
 #>   ..$ id             : num [1:971] 19316 19316 19316 19316 19316 ...
 #>  - attr(*, "class")= chr "pollstr_polls"
 ```
+
+
 
 
 # Example: Obama's Job Approval Rating
@@ -285,16 +270,20 @@ Now, I can plot the opinion poll results along with the Huffpost Pollster trend 
  )
 ```
 
-![plot of chunk obama-favorable-chart-2](figures/obama-favorable-chart-2.png) 
+![plot of chunk obama-favorable-chart-2](./figures/obama-favorable-chart-2.png) 
 
 ```r
 
 ```
 
 
-# Misc
+<!--  LocalWords:  Huffpost API Huffington CRAN github devtools str
+ -->
+<!--  LocalWords:  devools jrnold ggplot obama url aes favorability
+ -->
+<!--  LocalWords:  Bararck
+ -->
 
-An earlier R interface to the Pollster API was written by [Drew Linzer](https://github.com/dlinzer/pollstR/).
 
 <!--  LocalWords:  Huffpost API Huffington CRAN github devtools str
  -->

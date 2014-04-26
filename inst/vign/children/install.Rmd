@@ -1,0 +1,13 @@
+# Install
+
+This package is not *yet* on CRAN.
+
+You can install this with the function ``install_github`` in the **devtools** package.
+```{r,eval=FALSE}
+install.packages("devools")
+library("devtools")
+install_github("rOpenGov/pollstR")
+```
+```{r}
+library("pollstR")
+```

@@ -3,11 +3,13 @@
 
 [![Build Status](https://travis-ci.org/rOpenGov/pollstR.svg?branch=master)](https://travis-ci.org/rOpenGov/pollstR)
 
+
 # R client for the Huffpost Pollster API
 
 This R package is an interface to the Huffington Post [Pollster API](http://elections.huffingtonpost.com/pollster/api), which provides access to opinion polls collected by the Huffington Post.
 
 The package is released under GPL-2 and the API data it accesses is released under the [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US).
+
 
 
 # Install
@@ -28,6 +30,8 @@ library("pollstR")
 ```
 
 
+
+
 # API Overview
 
 The Pollster API has two primary data structures: charts and polls.
@@ -44,9 +48,6 @@ In ``pollstR``, there are three functions in that provide access to the opinion 
 - ``pollstr_charts``: Get a list of all charts and the current model estimates.
 - ``pollstr_chart``: Get a single chart along with historical model estimates.
 - ``pollstr_polls``: Get opinion poll data.
-
-
-# Examples
 
 ## Charts
 
@@ -134,7 +135,7 @@ print(obama_favorable)
 ```
 
 The slug can be found from the results of a ``pollstr_charts`` query.
-Also, the slug is the path of the url of a chart, http://elections.huffingtonpost.com/pollster/obama-favorable-rating.
+Alternatively the slug is the path of the url of a chart, http://elections.huffingtonpost.com/pollster/obama-favorable-rating.
 
 The historical estimates of the Huffpost Pollster poll-tracking model are contained in the element ``"estimates_by_date"``,
 
@@ -194,9 +195,106 @@ str(obama_favorable_polls)
 
 
 
+
+# Example: Obama's Job Approval Rating
+
+This section shows how to use ``pollstr`` to create a chart similar to those displayed on the Huffpost Pollster website.
+I'll use Obama's job approval rating in this example.
+
+The slug or name of the chart is ``obama-job-approval``, which is derived from the chart's URL , http://elections.huffingtonpost.com/pollster/obama-job-approval.
+I'll focus on approval in 2013 in order to reduce the time necessary to run this code.
+
+```r
+slug <- "obama-job-approval"
+start_date <- as.Date("2013-1-1")
+end_date <- as.Date("2014-1-1")
+```
+
+For the plot, I'll need both Pollster's model estimates and opinion poll estimates.
+I get the Pollster model estimates using ``polster_chart``,
+
+```r
+chart <- pollstr_chart(slug)
+estimates <- chart[["estimates_by_date"]]
+
+estimates <- estimates[estimates$date >= start_date & estimates$date < end_date, 
+    ]
+```
+
+and the opinion poll results,
+
+```r
+polls <- pollstr_polls(chart = slug, after = start_date, before = end_date, 
+    max_pages = 1e+06)
+```
+
+Note that in ``polster_poll`` I set the ``max_pages`` argument to a very large number in order to download all the polls available.
+This may take several minutes.
+
+Before continuing, we will need to clean up the opinion poll data.
+First, only keep results from national subpopulations ("Adults", "Likely Voters", "Registered Voters").
+This will drop subpopulations like Republicans, Democrats, and Independents.
+
+```r
+questions <- subset(polls[["questions"]], chart == slug & subpopulation %in% 
+    c("Adults", "Likely Voters", "Registered Voters"))
+```
+
+Second, I will need to recode the choices into three categories, "Approve", "Disapprove", and "Undecided".
+
+```r
+approvalcat <- c(Approve = "Approve", Disapprove = "Disapprove", Undecided = "Undecided", 
+    Neither = "Undecided", Refused = NA, Neutral = "Undecided", `Strongly Approve` = "Approve", 
+    `Somewhat Approve` = "Approve", `Somewhat Disapprove` = "Disapprove", `Strongly Disapprove` = "Disapprove")
+
+questions2 <- (questions %.% mutate(choice = plyr::revalue(choice, approvalcat)) %.% 
+    group_by(id, subpopulation, choice) %.% summarise(value = sum(value)))
+```
+
+```
+## Error: could not find function "%.%"
+```
+
+Now merge the question data with the poll metadata,
+
+```r
+polldata <- merge(polls$polls, questions2, by = "id")
+```
+
+```
+## Error: object 'questions2' not found
+```
+
+
+Now, I can plot the opinion poll results along with the Huffpost Pollster trend estimates,
+
+```r
+(ggplot() + geom_point(data = polldata, mapping = aes(y = value, x = end_date, 
+    color = choice), alpha = 0.3) + geom_line(data = estimates, mapping = aes(y = value, 
+    x = date, color = choice)) + scale_x_date("date") + scale_color_manual(values = c(Approve = "black", 
+    Disapprove = "red", Undecided = "blue")))
+```
+
+```
+## Error: object 'polldata' not found
+```
+
+```r
+
+```
+
+
+<!--  LocalWords:  Huffpost API Huffington CRAN github devtools str
+ -->
+<!--  LocalWords:  devools jrnold ggplot obama url aes favorability
+ -->
+<!--  LocalWords:  Bararck
+ -->
+
+
 # Misc
 
-Also see an earlier R interface by [Drew Linzer](https://github.com/dlinzer/pollstR/).
+An earlier R interface was written by [Drew Linzer](https://github.com/dlinzer/pollstR/).
 
 <!--  LocalWords:  Huffpost API Huffington CRAN github devtools str
  -->
