@@ -10,7 +10,7 @@ test_that("API returns data", {
 chart <- pollstr_chart(slug)
 
 test_that("chart data is in the correct format", {
-    expect_is(chart, "list")
+    expect_is(chart, "pollstr_chart")
     expect_equal(length(chart), 11)
     expect_equal(names(chart),
                  c("title", "slug", "topic", "state", "short_title", "election_date", "poll_count", 

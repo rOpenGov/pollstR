@@ -41,7 +41,8 @@ charts2df <- function(.data) {
                                y
                            }
                        })
-    list(charts = charts, estimates = estimates)
+    structure(list(charts = charts, estimates = estimates),
+              class = c("pollstr_charts"))
 }
 
 #' Get list of available charts
@@ -61,4 +62,11 @@ pollstr_charts <- function(topic = NULL, state = NULL, convert = TRUE) {
     .data <- get_url(pollstr_charts_url(topic, state), as = "parsed")
     if (convert) .data <- charts2df(.data)
     .data
+}
+
+
+#' @export
+print.pollstr_charts <- function(x, ...) {
+    print(x$charts[,c('title','slug','state','poll_count','last_updated')])
+    return(invisible(x))
 }

@@ -81,7 +81,8 @@ polls2df <- function(.data) {
                   ques[["id"]] <- x[["id"]]
                   ques
               })
-    list(polls = polls, questions = questions)
+    structure(list(polls = polls, questions = questions),
+              class = "pollstr_polls")
 }
 
 get_poll <- function(page, chart, state, topic, before, after, sort, as = "parsed") {
@@ -125,4 +126,3 @@ pollstr_polls <- function(page = 1, chart = NULL, state = NULL,
     if (convert) .data <- polls2df(.data)
     .data
 }
-

@@ -15,7 +15,7 @@ test_that("charts is in expected format if not converted", {
 charts <- pollstr_charts()
 
 test_that("charts is in expected format", {
-    expect_is(chartsu, "list")
+    expect_is(charts, "pollstr_charts")
     expect_equal(length(charts), 2)
     expect_equal(names(charts), c("charts", "estimates"))
     expect_equal(unname(sapply(charts, class)), rep("data.frame", 2))
