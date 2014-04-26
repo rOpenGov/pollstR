@@ -251,18 +251,10 @@ questions2 <- (questions %.% mutate(choice = plyr::revalue(choice, approvalcat))
     group_by(id, subpopulation, choice) %.% summarise(value = sum(value)))
 ```
 
-```
-## Error: could not find function "%.%"
-```
-
 Now merge the question data with the poll metadata,
 
 ```r
 polldata <- merge(polls$polls, questions2, by = "id")
-```
-
-```
-## Error: object 'questions2' not found
 ```
 
 
@@ -275,9 +267,7 @@ Now, I can plot the opinion poll results along with the Huffpost Pollster trend 
     Disapprove = "red", Undecided = "blue")))
 ```
 
-```
-## Error: object 'polldata' not found
-```
+![plot of chunk obama-favorable-chart-2](figures/obama-favorable-chart-2.png) 
 
 ```r
 

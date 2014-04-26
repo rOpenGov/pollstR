@@ -3,6 +3,7 @@ opts_chunk[["set"]](fig.path='figures/', errors = FALSE)
 suppressPackageStartupMessages({
 library("ggplot2")
 library("pollstR")
+library("dplyr")
 })
 ```
 
