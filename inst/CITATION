@@ -1,15 +1,16 @@
 citHeader("To cite package 'pollstR' in publications use:")
      
- year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
- vers <- paste("R package version", meta$Version)
- 
- citEntry(entry="Manual",
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+vers <- paste("R package version", meta$Version)
+
+citEntry(entry="Manual",
 		  title = "pollstR: R client for Pollster API",
-		  author = personList(as.person("Thomas J. Leeper")),
+                  author = personList(as.person("Thomas J. Leeper"),
+                                      as.person("Jeffrey B. Arnold")),
 		  year = year,
 		  note = vers,
 		  textVersion =
-		  paste("Thomas J. Leeper (",
+		  paste("Thomas J. Leeper and Jeffrey B. Arnold (",
 				year,
 				"). pollstR: R client for Pollster API. ",
 				vers, ".", sep=""))
