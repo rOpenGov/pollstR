@@ -1,5 +1,5 @@
 ```{r,echo=FALSE,results='hide'}
-opts_chunk[["set"]](fig.path='figures/', errors = FALSE)
+opts_chunk[["set"]](fig.path='README-figures/', errors = FALSE)
 suppressPackageStartupMessages({
 library("ggplot2")
 library("pollstR")

@@ -10,7 +10,7 @@ suppressPackageStartupMessages({
   library("pollstR")
 })
 knitr::opts_chunk$set(
-  fig.path = './figures/',
+  fig.path = 'figures/',
   comment = "#>",
   error = FALSE,
   tidy = FALSE)
