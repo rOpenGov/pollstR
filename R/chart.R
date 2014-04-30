@@ -16,10 +16,27 @@ pollstr_chart_parse <- function(.data) {
         as.POSIXct(.data[["last_updated"]],
                    format = "%Y-%m-%dT%H:%M:%SZ",
                    tz = "GMT")
+    for (i in c("title", "slug", "topic", "short_title",
+                "url")) {
+        .data[[i]] <- as.character(.data[[i]])
+    }
+    for (i in c("state")) {
+        .data[[i]] <- as.factor(.data[[i]])
+    }
+    for (i in c("poll_count")) {
+        .data[[i]] <- as.integer(.data[[i]])
+    }
+    
     if (length(.data[["estimates"]])) {
         estimates <- ldply(.data[["estimates"]], convert_df)
         .data[["estimates"]] <- estimates
     }
+    for (i in c("first_name", "last_name",
+                "party", "choice")) {
+        .data[["estimates"]][[i]] <-
+            as.character(.data[["estimates"]][[i]])
+    }
+    
     if (length(.data[["estimates_by_date"]])) {
         .data[["estimates_by_date"]] <-
             ldply(.data[["estimates_by_date"]],
@@ -29,6 +46,11 @@ pollstr_chart_parse <- function(.data) {
                       y
                   })
     }
+    for (i in c("choice")) {
+        .data[["estimates_by_date"]][[i]] <-
+            as.character(.data[["estimates_by_date"]][[i]])
+    }
+
     structure(.data, class = "pollstr_chart")
 }
 

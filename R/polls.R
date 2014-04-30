@@ -81,6 +81,29 @@ polls2df <- function(.data) {
                   ques[["id"]] <- x[["id"]]
                   ques
               })
+    
+    # convert
+    for (i in c("question", "chart", "topic", "state",
+                "party")) {
+        questions[[i]] <- as.factor(questions[[i]])
+    }
+    for (i in c("choice", "first_name", "last_name")) {
+        questions[[i]] <- as.character(questions[[i]])
+    }
+    for (i in c("observations", "id")) {
+        questions[[i]] <- as.integer(questions[[i]])
+    }
+    # Convert polls
+    for (i in c("id")) {
+        polls[[i]] <- as.integer(polls[[i]])
+    }
+    for (i in c("source", "survey_houses", "sponsors")) {
+        polls[[i]] <- as.character(polls[[i]])
+    }
+    for (i in c("method", "pollster")) {
+        polls[[i]] <- as.factor(polls[[i]])
+    }
+    
     structure(list(polls = polls, questions = questions),
               class = "pollstr_polls")
 }

@@ -29,8 +29,9 @@ test_that("polls$polls is in expected format", {
                 c("id", "pollster", "start_date", "end_date", "method", "source", 
                   "last_updated", "survey_houses", "sponsors"))
     expect_equal(unname(sapply(polls$polls, class)),
-                list("numeric", "factor", "Date", "Date", "factor", "factor", 
-                     c("POSIXct", "POSIXt"), "character", "character"))
+                 list("integer", "factor", "Date", "Date", "factor", "character", 
+                      c("POSIXct", "POSIXt"), "character", "character"))
+    
 })
     
 test_that("polls$questions is in expected format", {
@@ -39,9 +40,9 @@ test_that("polls$questions is in expected format", {
                   "margin_of_error", "choice", "value", "first_name", "last_name", 
                   "party", "incumbent", "id"))
     expect_equal(unname(sapply(polls$questions, class)),
-                 c("factor", "character", "character", "character", "factor", 
-                   "numeric", "numeric", "factor", "numeric", "character", "character", 
-                   "character", "logical", "numeric"))
+                 c("factor", "factor", "factor", "factor", "factor", "integer", 
+                   "numeric", "character", "numeric", "character", "character", 
+                   "factor", "logical", "integer"))
     
 })
 

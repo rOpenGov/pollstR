@@ -31,8 +31,9 @@ test_that("charts$charts is in expected format", {
                  c("title", "slug", "topic", "state", "short_title", "election_date", "poll_count", "last_updated", "url"))
                    
     expect_equal(unname(sapply(charts$charts, class)),
-                 list("factor", "factor", "factor", "factor", "factor", "Date", 
-                      "numeric", c("POSIXct", "POSIXt"), "factor"))
+                 list("character", "character", "character", "factor", "character", 
+                      "Date", "integer", c("POSIXct", "POSIXt"), "character"))
+    
 })
 
 test_that("charts$charts is in expected format", {
@@ -40,6 +41,6 @@ test_that("charts$charts is in expected format", {
                  c("choice", "value", "lead_confidence", "first_name", "last_name", 
                    "party", "incumbent", "slug"))
     expect_equal(unname(sapply(charts$estimates, class)),
-                 c("factor", "numeric", "numeric", "character", "character", "character", 
-                   "logical", "character"))
+                 c("character", "numeric", "numeric", "character", "character", 
+                   "factor", "logical", "character"))
 })
