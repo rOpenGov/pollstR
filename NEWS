@@ -1,3 +1,7 @@
+# pollstR 1.0.0
+
+* submit to CRAN
+
 # pollstR 0.2.0
 
 Merge with http://github.com/jrnold/pollster. This is a complete rewrite of the client.
