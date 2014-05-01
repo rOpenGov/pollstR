@@ -25,6 +25,10 @@ knitr::opts_chunk$set(
 ```{r install, child = './children/example-obamas-approval.Rmd'}
 ```
 
+```{r echo=FALSE,results='asis'}
+cat("```{r echo=FALSE,results='hide'}\nNULL\n```\n")
+```
+
 <!--  LocalWords:  Huffpost API Huffington CRAN github devtools str
  -->
 <!--  LocalWords:  devools jrnold ggplot obama url aes favorability
