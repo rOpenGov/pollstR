@@ -15,6 +15,7 @@ Imports:
     plyr,
     jsonlite
 Suggests:
+    knitr,
     dplyr,
     ggplot2,
     testthat
