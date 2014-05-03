@@ -6,7 +6,7 @@ rmd_children = $(wildcard inst/vign/children/*.Rmd)
 
 all: vignettes vignettes/introduction.Rmd README.md
 
-README.md: README.Rmd
+README.md: README.Rmd $(rmd_chdildren)
 	Rscript -e 'library(knitr);knit("$<",output="$@")'
 
 inst/vign/introduction.md: inst/vign/introduction.Rmd $(rmd_chdildren)
