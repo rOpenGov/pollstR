@@ -2,8 +2,8 @@ Package: pollstR
 Title: R client for the Huffpost Pollster API
 Description: An R interface to the Huffington Post Pollster API, which provides
     programmatic interface to political polls.
-Version: 1.0.0
-Date: 2014-4-30
+Version: 1.0.1
+Date: 2014-7-15
 Authors@R: c(person("Jeffrey B.", "Arnold", email = "jeffrey.arnold@gmail.com",
     role = c("aut", "cre")),
     person("Thomas J.", "Leeper", role = c("aut"),
