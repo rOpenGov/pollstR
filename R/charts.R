@@ -23,9 +23,7 @@ charts2df <- function(.data) {
         if (is.null(x[["topic"]])) {
             x[["topic"]] <- ""
         }
-        x[["election_date"]] <-
-            as.Date(electiondate2date(x[["election_date"]]),
-                    "%Y-%m-%d")
+        x[["election_date"]] <- electiondate2date(x[["election_date"]])
         as.data.frame(x)
     })
     # Convert

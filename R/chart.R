@@ -9,9 +9,7 @@ pollstr_chart_url <- function(slug) {
 # clean up the objects returned by the API
 pollstr_chart_parse <- function(.data) {
     # Convert
-    .data[["election_date"]] <-
-        as.Date(electiondate2date(.data[["election_date"]]),
-                "%Y-%m-%d")
+    .data[["election_date"]] <- electiondate2date(.data[["election_date"]])
     .data[["last_updated"]] <-
         as.POSIXct(.data[["last_updated"]],
                    format = "%Y-%m-%dT%H:%M:%SZ",

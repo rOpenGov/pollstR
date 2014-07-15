@@ -1,3 +1,7 @@
+# pollstR 1.0.1
+
+* Bugfix: did not convert some election date fields
+
 # pollstR 1.0.0
 
 * submit to CRAN
