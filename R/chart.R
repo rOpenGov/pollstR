@@ -65,7 +65,8 @@ pollstr_chart_parse <- function(.data) {
 #' \item \code{title}
 #' \item \code{slug}
 #' \item \code{topic}
-#' \item \code{short_title}
+
+#' #' \item \code{short_title}
 #' \item \code{poll_count}
 #' \item \code{last_updated}
 #' \item \code{url}
