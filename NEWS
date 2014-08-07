@@ -1,3 +1,8 @@
+# pollstR 1.0.2
+
+* Bugfix: fix test failures due to API change. 
+* Remove tests brittle to API changes so fewer CRAN check failures
+
 # pollstR 1.0.1
 
 * Bugfix: did not convert some election date fields
