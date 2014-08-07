@@ -1,17 +1,19 @@
-# pollstR 1.0.2
+pollstR News
+
+CHANGES IN 1.0.2
 
 * Bugfix: fix test failures due to API change. 
 * Remove tests brittle to API changes so fewer CRAN check failures
 
-# pollstR 1.0.1
+CHANGES IN 1.0.1
 
 * Bugfix: did not convert some election date fields
 
-# pollstR 1.0.0
+CHANGES IN 1.0.0
 
 * submit to CRAN
 
-# pollstR 0.2.0
+CHANGES IN 0.2.0
 
 Merge with http://github.com/jrnold/pollster. This is a complete rewrite of the client.
 
@@ -20,6 +22,6 @@ Merge with http://github.com/jrnold/pollster. This is a complete rewrite of the 
 * ``getpolls`` replaced with ``pollstr_polls``. Returns class ``pollstr_polls``.
 * ``xml`` API access no longer available.
 
-# pollstR 0.1
+CHANGES IN 0.1
 
 * Initial package release
