@@ -38,22 +38,22 @@ pollstr_polls_url <- function(page, chart, state, topic, before, after, sort) {
 polls2df <- function(.data) {
     polls <- ldply(.data,
                    function(x) {
-                       y <- convert_df(x[c("id", "pollster", "start_date", "end_date",
-                                           "method", "source", "last_updated")])
+                       y <- convert_df(x[setdiff(names(x),
+                                                 c("questions", "survey_houses", "sponsors"))])
                        y[["start_date"]] <- as.Date(y[["start_date"]])
                        y[["end_date"]] <- as.Date(y[["end_date"]])
                        y[["last_updated"]] <- as.POSIXct(y[["last_updated"]], "%Y-%m-%dT%H:%M:%SZ",
                                                          tz = "GMT")
-                       if (length(y[["survey_houses"]])) {
+                       if (length(x[["survey_houses"]])) {
                            y[["survey_houses"]] <-
                                paste(sapply(x[["survey_houses"]], `[[`, i = "name"),
                                      sep = ";")
                        } else {
                            y[["survey_houses"]] <- ""
                        }
-                       if (length(y[["sponsors"]])) {
+                       if (length(x[["sponsors"]])) {
                            y[["sponsors"]] <-
-                               paste(sapply(y[["sponsors"]], `[[`, i = "name"),
+                               paste(sapply(x[["sponsors"]], `[[`, i = "name"),
                                      sep = ";")
                        } else {
                            y[["sponsors"]] <- ""
