@@ -39,25 +39,13 @@ polls2df <- function(.data) {
     polls <- ldply(.data,
                    function(x) {
                        y <- convert_df(x[setdiff(names(x),
-                                                 c("questions", "survey_houses", "sponsors"))])
+                                                 c("questions", "survey_houses",
+                                                   "sponsors"))])
                        y[["start_date"]] <- as.Date(y[["start_date"]])
                        y[["end_date"]] <- as.Date(y[["end_date"]])
-                       y[["last_updated"]] <- as.POSIXct(y[["last_updated"]], "%Y-%m-%dT%H:%M:%SZ",
+                       y[["last_updated"]] <- as.POSIXct(y[["last_updated"]],
+                                                         "%Y-%m-%dT%H:%M:%SZ",
                                                          tz = "GMT")
-                       if (length(x[["survey_houses"]])) {
-                           y[["survey_houses"]] <-
-                               paste(sapply(x[["survey_houses"]], `[[`, i = "name"),
-                                     sep = ";")
-                       } else {
-                           y[["survey_houses"]] <- ""
-                       }
-                       if (length(x[["sponsors"]])) {
-                           y[["sponsors"]] <-
-                               paste(sapply(x[["sponsors"]], `[[`, i = "name"),
-                                     sep = ";")
-                       } else {
-                           y[["sponsors"]] <- ""
-                       }
                        y
                    })
 
@@ -73,6 +61,28 @@ polls2df <- function(.data) {
               subpops)
     }
 
+    clean_sponsors <- function(x) {
+        sponsors <- x[["sponsors"]]
+        if (length(sponsors)) {
+            sponsors <- ldply(sponsors, convert_df)
+            sponsors[["id"]] <- x[["id"]]
+            sponsors
+        } else {
+            NULL
+        }
+    }
+
+    clean_survey_houses <- function(x) {
+        survey_houses <- x[["survey_houses"]]
+        if (length(survey_houses)) {
+            survey_houses <- ldply(survey_houses, convert_df)
+            survey_houses[["id"]] <- x[["id"]]
+            survey_houses
+        } else {
+            NULL
+        }
+    }
+    
     questions <-
         ldply(.data,
               function(x) {
@@ -81,30 +91,22 @@ polls2df <- function(.data) {
                   ques[["id"]] <- x[["id"]]
                   ques
               })
-    
+    survey_houses <- factors2char(ldply(.data, clean_survey_houses))
+    sponsors <- factors2char(ldply(.data, clean_sponsors))
     # convert
-    for (i in c("question", "chart", "topic", "state",
-                "party")) {
-        questions[[i]] <- as.factor(questions[[i]])
-    }
-    for (i in c("choice", "first_name", "last_name")) {
-        questions[[i]] <- as.character(questions[[i]])
-    }
     for (i in c("observations", "id")) {
         questions[[i]] <- as.integer(questions[[i]])
     }
+    questions <- factors2char(questions)
     # Convert polls
     for (i in c("id")) {
         polls[[i]] <- as.integer(polls[[i]])
     }
-    for (i in c("source", "survey_houses", "sponsors")) {
-        polls[[i]] <- as.character(polls[[i]])
-    }
-    for (i in c("method", "pollster")) {
-        polls[[i]] <- as.factor(polls[[i]])
-    }
-    
-    structure(list(polls = polls, questions = questions),
+    polls <- factors2char(polls)
+    structure(list(polls = polls,
+                   questions = questions,
+                   survey_houses = survey_houses,
+                   sponsors = sponsors),
               class = "pollstr_polls")
 }
 
@@ -129,6 +131,8 @@ get_poll <- function(page, chart, state, topic, before, after, sort, as = "parse
 #' \describe{
 #' \item{\code{polls}}{A \code{data.frame} with entries for each poll.}
 #' \item{\code{questions}}{A \code{data.frame} with entries for each question asked in the polls.}
+#' \item{\code{survey_houses}}{A \code{data.frame} with the survey houses of the polls. There can be multiple survey houses for a poll.}
+#' \item{\code{sponsors}}{A \code{data.frame} with the sponsors of the polls. Not all polls have sponsors.}
 #' }
 #' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 #' @examples

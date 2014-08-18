@@ -37,3 +37,12 @@ electiondate2date <- function(x) {
         as.Date(x, "%Y-%m-%d")
     }
 }
+
+factors2char <- function(x) {
+    for (i in names(x)) {
+        if (is(x[[i]], "factor")) {
+            x[[i]] <- as.character(x[[i]])
+        }
+    }
+    x
+}

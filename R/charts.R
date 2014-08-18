@@ -31,13 +31,7 @@ charts2df <- function(.data) {
         as.POSIXct(charts[["last_updated"]],
                    format = "%Y-%m-%dT%H:%M:%SZ",
                    tz = "GMT")
-    for (i in c("url", "title", "slug", "topic",
-                "short_title")) {
-        charts[[i]] <- as.character(charts[[i]])
-    }
-    for (i in c("poll_count")) {
-        charts[[i]] <- as.integer(charts[[i]])
-    }
+    charts <- factors2char(charts)
     
     estimates <- ldply(.data,
                        function(x) {
@@ -47,14 +41,7 @@ charts2df <- function(.data) {
                                y
                            }
                        })
-
-    # Convert estimates
-    for (i in c("choice", "first_name", "last_name", "slug")) {
-        estimates[[i]] <- as.character(estimates[[i]])
-    }
-    for (i in c("party")) {
-        estimates[[i]] <- as.factor(estimates[[i]])
-    }
+    estimates <- factors2char(estimates)
     structure(list(charts = charts, estimates = estimates),
               class = c("pollstr_charts"))
 }
