@@ -1,5 +1,10 @@
 pollstR News
 
+CHANGES IN 1.1.0
+
+* Bugfix: Update to new API changes in polls.
+* Move testthat tests to inst
+
 CHANGES IN 1.0.2
 
 * Bugfix: fix test failures due to API change. 
