@@ -31,6 +31,8 @@ If \code{convert=TRUE}, a \code{"pollstr_polls"} object with elements
 \describe{
 \item{\code{polls}}{A \code{data.frame} with entries for each poll.}
 \item{\code{questions}}{A \code{data.frame} with entries for each question asked in the polls.}
+\item{\code{survey_houses}}{A \code{data.frame} with the survey houses of the polls. There can be multiple survey houses for a poll.}
+\item{\code{sponsors}}{A \code{data.frame} with the sponsors of the polls. Not all polls have sponsors.}
 }
 Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 }
