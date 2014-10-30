@@ -1,6 +1,5 @@
 
 
-
 [![Build Status](https://travis-ci.org/rOpenGov/pollstR.svg?branch=master)](https://travis-ci.org/rOpenGov/pollstR)
 
 
@@ -11,15 +10,13 @@ This R package is an interface to the Huffington Post [Pollster API](http://elec
 The package is released under GPL-2 and the API data it accesses is released under the [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US).
 
 
-
 # Install
 
 You can install the stable version on [CRAN](http://cran.r-project.org/package=pollstR):
 
 ```r
-install.packages("pollstR", dependencies = TRUE)
+install.packages('pollstR', dependencies = TRUE)
 ```
-
 
 You can install the development version from github with the function ``install_github`` in the **devtools** package.
 
@@ -29,12 +26,23 @@ library("devtools")
 install_github("rOpenGov/pollstR")
 ```
 
-
 ```r
 library("pollstR")
 ```
 
 
+# Errors
+
+If you encounter an error when using one of the functions it is likely that there was an error in converting the data as returned by the API into data structures more usable in R.
+The conversion code is fragile, and can break when there are changes in APIs, or from weird cases that I didn't anticipate.
+So if you encounter an error, try running the function with `convert = FALSE`; this will return the data as returned by the API.
+If there is no error, then it is problem with the conversion code in this package.
+Using `convert = FALSE`, you will still be able to get the data from the Pollster API, but you will need to do the extra data cleaning yourself.
+To get the bug fixed, open a new issue on [github](https://github.com/rOpenGov/pollstR/issues).
+
+
+<!--  LocalWords:  API APIs github
+ -->
 
 
 # API Overview
@@ -65,28 +73,27 @@ str(charts)
 
 ```
 ## List of 2
-##  $ charts   :'data.frame':	444 obs. of  9 variables:
-##   ..$ title        : chr [1:444] "2012 Iowa GOP Primary" "2012 New Hampshire GOP Primary" "2012 South Carolina GOP Primary" "2012 Florida GOP Primary" ...
-##   ..$ slug         : chr [1:444] "2012-iowa-gop-primary" "2012-new-hampshire-gop-primary" "2012-south-carolina-gop-primary" "2012-florida-gop-primary" ...
-##   ..$ topic        : chr [1:444] "2012-president-gop-primary" "2012-president-gop-primary" "2012-president-gop-primary" "2012-president-gop-primary" ...
-##   ..$ state        : Factor w/ 51 levels "IA","NH","SC",..: 1 2 3 4 5 6 7 8 8 8 ...
-##   ..$ short_title  : chr [1:444] "1/3 Iowa Caucus" "1/10 New Hampshire Primary" "1/21 South Carolina Primary" "1/31 Florida Primary" ...
-##   ..$ election_date: Date[1:444], format: NA ...
-##   ..$ poll_count   : int [1:444] 65 55 44 59 10 34 19 258 589 300 ...
-##   ..$ last_updated : POSIXct[1:444], format: "2012-01-02 13:08:44" ...
-##   ..$ url          : chr [1:444] "http://elections.huffingtonpost.com/pollster/2012-iowa-gop-primary" "http://elections.huffingtonpost.com/pollster/2012-new-hampshire-gop-primary" "http://elections.huffingtonpost.com/pollster/2012-south-carolina-gop-primary" "http://elections.huffingtonpost.com/pollster/2012-florida-gop-primary" ...
-##  $ estimates:'data.frame':	1048 obs. of  8 variables:
-##   ..$ choice         : chr [1:1048] "Romney" "Paul" "Santorum" "Gingrich" ...
-##   ..$ value          : num [1:1048] 22.5 21.3 15.9 12.6 11.1 8.3 3.7 5.9 0.9 39.6 ...
-##   ..$ lead_confidence: num [1:1048] NA NA NA NA NA NA NA NA NA NA ...
-##   ..$ first_name     : chr [1:1048] "Mitt" "Ron" "Rick" "Newt" ...
-##   ..$ last_name      : chr [1:1048] "Romney" "Paul" "Santorum" "Gingrich" ...
-##   ..$ party          : Factor w/ 6 levels "Dem","Gre","ind",..: 6 6 6 6 6 6 6 NA NA 6 ...
-##   ..$ incumbent      : logi [1:1048] FALSE FALSE FALSE FALSE FALSE FALSE ...
-##   ..$ slug           : chr [1:1048] "2012-iowa-gop-primary" "2012-iowa-gop-primary" "2012-iowa-gop-primary" "2012-iowa-gop-primary" ...
+##  $ charts   :'data.frame':	497 obs. of  9 variables:
+##   ..$ title        : Factor w/ 497 levels "2012 Iowa GOP Primary",..: 1 2 3 4 5 6 7 8 9 10 ...
+##   ..$ slug         : Factor w/ 496 levels "2012-iowa-gop-primary",..: 1 2 3 4 5 6 7 8 9 10 ...
+##   ..$ topic        : Factor w/ 28 levels "2012-president-gop-primary",..: 1 1 1 1 1 1 1 1 2 3 ...
+##   ..$ state        : Factor w/ 53 levels "IA","NH","SC",..: 1 2 3 4 5 6 7 8 8 8 ...
+##   ..$ short_title  : Factor w/ 497 levels "1/3 Iowa Caucus",..: 1 2 3 4 5 6 7 8 9 10 ...
+##   ..$ election_date: Date[1:497], format: NA ...
+##   ..$ poll_count   : int [1:497] 65 55 44 59 10 34 19 258 589 300 ...
+##   ..$ last_updated : POSIXct[1:497], format: "2012-01-02 13:08:44" ...
+##   ..$ url          : Factor w/ 496 levels "http://elections.huffingtonpost.com/pollster/2012-iowa-gop-primary",..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ estimates:'data.frame':	1245 obs. of  8 variables:
+##   ..$ choice         : chr [1:1245] "Romney" "Paul" "Santorum" "Gingrich" ...
+##   ..$ value          : num [1:1245] 22.5 21.3 15.9 12.6 11.1 8.3 3.7 5.9 0.9 39.6 ...
+##   ..$ lead_confidence: num [1:1245] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ first_name     : chr [1:1245] "Mitt" "Ron" "Rick" "Newt" ...
+##   ..$ last_name      : chr [1:1245] "Romney" "Paul" "Santorum" "Gingrich" ...
+##   ..$ party          : chr [1:1245] "Rep" "Rep" "Rep" "Rep" ...
+##   ..$ incumbent      : logi [1:1245] FALSE FALSE FALSE FALSE FALSE FALSE ...
+##   ..$ slug           : chr [1:1245] "2012-iowa-gop-primary" "2012-iowa-gop-primary" "2012-iowa-gop-primary" "2012-iowa-gop-primary" ...
 ##  - attr(*, "class")= chr "pollstr_charts"
 ```
-
 This returns a ``list`` with two data frames.
 The data frame ``charts`` has data on each chart,
 while the data frame ``estimates`` has the current poll-tracking estimates from each chart.
@@ -98,14 +105,13 @@ For example, to get only charts related to national topics,
 us_charts <- pollstr_charts(state = "US")
 ```
 
-
 ## Chart
 
 To get a particular chart use the function ``pollstr_chart``.
 For example, to get the chart for [Barack Obama's Favorable Rating](http://elections.huffingtonpost.com/pollster/obama-favorable-rating), specify its *slug*, ``obama-favorable-rating``.
 
 ```r
-obama_favorable <- pollstr_chart("obama-favorable-rating")
+obama_favorable <- pollstr_chart('obama-favorable-rating')
 print(obama_favorable)
 ```
 
@@ -113,39 +119,37 @@ print(obama_favorable)
 ## Title:       Barack Obama Favorable Rating 
 ## Chart Slug:  obama-favorable-rating 
 ## Topic:       favorable-ratings 
-## State:       1 
-## Polls:       807 
-## Updated:     1.399e+09 
+## State:       US 
+## Polls:       844 
+## Updated:     1414529680 
 ## URL:         http://elections.huffingtonpost.com/pollster/obama-favorable-rating 
 ## Estimates:
 ##        choice value lead_confidence first_name last_name party incumbent
-## 1   Favorable  45.9              NA       <NA>      <NA>  <NA>        NA
-## 2 Unfavorable  48.5              NA       <NA>      <NA>  <NA>        NA
-## 3   Undecided   4.0              NA       <NA>      <NA>  <NA>        NA
-## 4     Neutral  12.6              NA       <NA>      <NA>  <NA>        NA
+## 1   Favorable  44.3              NA         NA        NA    NA        NA
+## 2 Unfavorable  49.3              NA         NA        NA    NA        NA
+## 3   Undecided   4.7              NA         NA        NA    NA        NA
+## 4     Refused   1.5              NA         NA        NA    NA        NA
 ## 
-## First 6 (of 2130) daily estimates:
+## First 6 (of 2236) daily estimates:
 ##        choice value       date
-## 1   Favorable  45.9 2014-04-28
-## 2   Undecided   4.0 2014-04-28
-## 3 Unfavorable  48.5 2014-04-28
-## 4   Favorable  45.9 2014-04-27
-## 5   Undecided   4.0 2014-04-27
-## 6 Unfavorable  48.5 2014-04-27
+## 1   Favorable  44.3 2014-10-21
+## 2 Unfavorable  49.3 2014-10-21
+## 3   Favorable  44.3 2014-10-20
+## 4 Unfavorable  49.3 2014-10-20
+## 5   Undecided   4.7 2014-10-20
+## 6     Refused   1.5 2014-10-20
 ```
-
 The slug can be found from the results of a ``pollstr_charts`` query.
 Alternatively the slug is the path of the url of a chart, http://elections.huffingtonpost.com/pollster/obama-favorable-rating.
 
 The historical estimates of the Huffpost Pollster poll-tracking model are contained in the element ``"estimates_by_date"``,
 
 ```r
-(ggplot(obama_favorable[["estimates_by_date"]], aes(x = date, y = value, color = choice)) + 
-    geom_line())
+(ggplot(obama_favorable[["estimates_by_date"]], aes(x = date, y = value, color = choice))
+ + geom_line())
 ```
 
-![plot of chunk obama-favorable-chart](README-figures/obama-favorable-chart.png) 
-
+![plot of chunk obama-favorable-chart](README-figures/obama-favorable-chart-1.png) 
 
 ## Polls
 
@@ -158,42 +162,47 @@ To have it return all polls, set the value of ``max_pages`` to a very high numbe
 For example, to return all the polls on the favorability of Bararck Obama after March 1, 2014,
 
 ```r
-obama_favorable_polls <- pollstr_polls(max_pages = 10000, chart = "obama-favorable-rating", 
-    after = "2014-3-1")
-str(obama_favorable_polls)
+obama_favorable_polls <- pollstr_polls(max_pages = 10000, chart = 'obama-favorable-rating', after = "2014-3-1")
+str(obama_favorable_polls)	
 ```
 
 ```
-## List of 2
-##  $ polls    :'data.frame':	18 obs. of  9 variables:
-##   ..$ id           : int [1:18] 19367 19357 19316 19256 19261 19372 19252 19239 19169 19132 ...
-##   ..$ pollster     : Factor w/ 9 levels "YouGov/Economist",..: 1 2 1 3 1 4 5 1 1 1 ...
-##   ..$ start_date   : Date[1:18], format: "2014-04-26" ...
-##   ..$ end_date     : Date[1:18], format: "2014-04-28" ...
-##   ..$ method       : Factor w/ 3 levels "Internet","Phone",..: 1 2 1 2 1 3 2 1 1 1 ...
-##   ..$ source       : chr [1:18] "http://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/boljc6ah6k/econToplines.pdf" "http://msnbcmedia.msn.com/i/MSNBC/Sections/A_Politics/14271_APRIL_NBC_WSJ_Poll.pdf" "http://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/lx2kkwdvcu/econToplines.pdf" "http://www.foxnews.com/politics/interactive/2014/04/21/fox-news-poll-independents-more-likely-to-back-anti-obamacare-candidates"| __truncated__ ...
-##   ..$ last_updated : POSIXct[1:18], format: "2014-05-02 16:05:38" ...
-##   ..$ survey_houses: chr [1:18] "" "" "" "" ...
-##   ..$ sponsors     : chr [1:18] "" "" "" "" ...
-##  $ questions:'data.frame':	1150 obs. of  14 variables:
-##   ..$ question       : Factor w/ 33 levels "US Right Direction Wrong Track",..: 1 1 1 2 2 2 2 2 3 3 ...
-##   ..$ chart          : Factor w/ 31 levels "2014-national-house-race",..: 31 31 31 16 16 16 16 16 20 20 ...
-##   ..$ topic          : Factor w/ 7 levels "","2014-house",..: 1 1 1 6 6 6 6 6 6 6 ...
-##   ..$ state          : Factor w/ 1 level "US": 1 1 1 1 1 1 1 1 1 1 ...
-##   ..$ subpopulation  : Factor w/ 12 levels "Adults","Adults - Democrat",..: 1 1 1 1 1 1 1 1 1 1 ...
-##   ..$ observations   : int [1:1150] 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 ...
-##   ..$ margin_of_error: num [1:1150] 4.3 4.3 4.3 4.3 4.3 4.3 4.3 4.3 4.3 4.3 ...
-##   ..$ choice         : chr [1:1150] "Right Direction" "Wrong Track" "Undecided" "Don't know" ...
-##   ..$ value          : num [1:1150] 32 58 11 39 19 15 9 17 26 24 ...
-##   ..$ first_name     : chr [1:1150] NA NA NA NA ...
-##   ..$ last_name      : chr [1:1150] NA NA NA NA ...
-##   ..$ party          : Factor w/ 3 levels "Dem","ind","Rep": NA NA NA NA NA NA NA NA NA NA ...
-##   ..$ incumbent      : logi [1:1150] NA NA NA NA NA NA ...
-##   ..$ id             : int [1:1150] 19367 19367 19367 19367 19367 19367 19367 19367 19367 19367 ...
+## List of 4
+##  $ polls        :'data.frame':	55 obs. of  9 variables:
+##   ..$ id          : int [1:55] 21021 21151 20893 20905 20884 20791 20790 20686 20590 20492 ...
+##   ..$ pollster    : chr [1:55] "Democracy Corps (D)" "AP-GfK (Web)" "FOX" "YouGov/Economist" ...
+##   ..$ start_date  : Date[1:55], format: "2014-10-16" ...
+##   ..$ end_date    : Date[1:55], format: "2014-10-21" ...
+##   ..$ method      : chr [1:55] "Live Phone" "Internet" "Live Phone" "Internet" ...
+##   ..$ source      : chr [1:55] "http://www.democracycorps.com/attachments/article/990/102114_DCOR_fq_for%20website.pdf" "http://surveys.ap.org/data/GfK/AP-GfK_Poll_October_2014_Topline_Politics.pdf" "http://www.foxnews.com/politics/interactive/2014/10/15/fox-news-polls-us-voters-weigh-in-on-isis-and-ebola/" "http://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/3ahawzfzp3/econToplines.pdf" ...
+##   ..$ last_updated: POSIXct[1:55], format: "2014-10-24 17:20:07" ...
+##   ..$ partisan    : chr [1:55] "Pollster" "Nonpartisan" "Nonpartisan" "Nonpartisan" ...
+##   ..$ affiliation : chr [1:55] "Dem" "None" "None" "None" ...
+##  $ questions    :'data.frame':	4215 obs. of  14 variables:
+##   ..$ question       : chr [1:4215] "2014 National House Race" "2014 National House Race" "2014 National House Race" "2014 National House Race" ...
+##   ..$ chart          : chr [1:4215] "2014-national-house-race" "2014-national-house-race" "2014-national-house-race" "2014-national-house-race" ...
+##   ..$ topic          : chr [1:4215] "2014-house" "2014-house" "2014-house" "2014-house" ...
+##   ..$ state          : chr [1:4215] "US" "US" "US" "US" ...
+##   ..$ subpopulation  : chr [1:4215] "Likely Voters" "Likely Voters" "Likely Voters" "Likely Voters" ...
+##   ..$ observations   : int [1:4215] 698 698 698 698 698 698 698 698 698 698 ...
+##   ..$ margin_of_error: num [1:4215] -3 -3 -3 -3 -3 -3 -3 -3 -3 -3 ...
+##   ..$ choice         : chr [1:4215] "Democrat" "Republican" "Other" "Undecided" ...
+##   ..$ value          : int [1:4215] 46 46 1 5 1 25 68 7 44 52 ...
+##   ..$ first_name     : chr [1:4215] NA NA NA NA ...
+##   ..$ last_name      : chr [1:4215] NA NA NA NA ...
+##   ..$ party          : chr [1:4215] "Dem" "Rep" NA NA ...
+##   ..$ incumbent      : logi [1:4215] FALSE FALSE NA NA NA NA ...
+##   ..$ id             : int [1:4215] 21021 21021 21021 21021 21021 21021 21021 21021 21021 21021 ...
+##  $ survey_houses:'data.frame':	67 obs. of  3 variables:
+##   ..$ name : chr [1:67] "Greenberg Quinlan Rosner Research (D)" "Gfk" "Anderson Robbins Research" "Shaw & Company Research" ...
+##   ..$ party: chr [1:67] "Dem" "N/A" "Dem" "Rep" ...
+##   ..$ id   : int [1:67] 21021 21151 20893 20893 20905 20884 20884 20791 20790 20686 ...
+##  $ sponsors     :'data.frame':	60 obs. of  3 variables:
+##   ..$ name : chr [1:60] "Associated Press" "FOX News" "Economist" "NBC News" ...
+##   ..$ party: chr [1:60] "N/A" "N/A" "N/A" "N/A" ...
+##   ..$ id   : int [1:60] 21151 20893 20905 20884 20884 20791 20790 20686 20590 20492 ...
 ##  - attr(*, "class")= chr "pollstr_polls"
 ```
-
-
 
 
 # Example: Obama's Job Approval Rating
@@ -209,7 +218,6 @@ slug <- "obama-job-approval"
 start_date <- as.Date("2013-1-1")
 end_date <- as.Date("2014-1-1")
 ```
-
 For the plot, I'll need both Pollster's model estimates and opinion poll estimates.
 I get the Pollster model estimates using ``polster_chart``,
 
@@ -217,17 +225,17 @@ I get the Pollster model estimates using ``polster_chart``,
 chart <- pollstr_chart(slug)
 estimates <- chart[["estimates_by_date"]]
 
-estimates <- estimates[estimates$date >= start_date & estimates$date < end_date, 
-    ]
+estimates <- estimates[estimates$date >= start_date 
+                       & estimates$date < end_date, ]
 ```
-
 and the opinion poll results,
 
 ```r
-polls <- pollstr_polls(chart = slug, after = start_date, before = end_date, 
-    max_pages = 1e+06)
+polls <- pollstr_polls(chart = slug, 
+                        after = start_date, 
+                        before = end_date,
+                        max_pages = 1000000)
 ```
-
 Note that in ``polster_poll`` I set the ``max_pages`` argument to a very large number in order to download all the polls available.
 This may take several minutes.
 
@@ -236,43 +244,66 @@ First, only keep results from national subpopulations ("Adults", "Likely Voters"
 This will drop subpopulations like Republicans, Democrats, and Independents.
 
 ```r
-questions <- subset(polls[["questions"]], chart == slug & subpopulation %in% 
-    c("Adults", "Likely Voters", "Registered Voters"))
+questions <-
+    subset(polls[["questions"]],
+           chart == slug
+           & subpopulation %in% c("Adults", "Likely Voters", "Registered Voters"))
 ```
-
 Second, I will need to recode the choices into three categories, "Approve", "Disapprove", and "Undecided".
 
 ```r
-approvalcat <- c(Approve = "Approve", Disapprove = "Disapprove", Undecided = "Undecided", 
-    Neither = "Undecided", Refused = NA, Neutral = "Undecided", `Strongly Approve` = "Approve", 
-    `Somewhat Approve` = "Approve", `Somewhat Disapprove` = "Disapprove", `Strongly Disapprove` = "Disapprove")
+approvalcat <- c("Approve" = "Approve",
+                 "Disapprove" = "Disapprove",
+                 "Undecided" = "Undecided",
+                 "Neither" = "Undecided",
+                 "Refused" = NA,
+                 "Neutral" = "Undecided",
+                 "Strongly Approve" = "Approve",
+                 "Somewhat Approve" = "Approve", 
+                 "Somewhat Disapprove" = "Disapprove",
+                 "Strongly Disapprove" = "Disapprove")
 
-questions2 <- (questions %.% mutate(choice = plyr::revalue(choice, approvalcat)) %.% 
-    group_by(id, subpopulation, choice) %.% summarise(value = sum(value)))
+questions2 <-
+    (questions
+     %.% mutate(choice = plyr::revalue(choice, approvalcat))
+     %.% group_by(id, subpopulation, choice)
+     %.% summarise(value = sum(value)))
 ```
 
+```
+## Warning: %.% is deprecated. Please use %>%
+```
+
+```
+## Warning: %.% is deprecated. Please use %>%
+```
+
+```
+## Warning: %.% is deprecated. Please use %>%
+```
 Now merge the question data with the poll metadata,
 
 ```r
 polldata <- merge(polls$polls, questions2, by = "id")
 ```
 
-
 Now, I can plot the opinion poll results along with the Huffpost Pollster trend estimates,
 
 ```r
-(ggplot() + geom_point(data = polldata, mapping = aes(y = value, x = end_date, 
-    color = choice), alpha = 0.3) + geom_line(data = estimates, mapping = aes(y = value, 
-    x = date, color = choice)) + scale_x_date("date") + scale_color_manual(values = c(Approve = "black", 
-    Disapprove = "red", Undecided = "blue")))
+(ggplot()
+ + geom_point(data = polldata,
+              mapping = aes(y = value, x = end_date, color = choice),
+              alpha = 0.3)
+ + geom_line(data = estimates,
+             mapping = aes(y = value, x = date, color = choice))
+ + scale_x_date("date")
+ + scale_color_manual(values = c("Approve" = "black", 
+                                 "Disapprove" = "red", 
+                                 "Undecided" = "blue"))
+ )
 ```
 
-![plot of chunk obama-favorable-chart-2](README-figures/obama-favorable-chart-2.png) 
-
-```r
-
-```
-
+![plot of chunk obama-favorable-chart-2](README-figures/obama-favorable-chart-2-1.png) 
 
 <!--  LocalWords:  Huffpost API Huffington CRAN github devtools str
  -->
@@ -280,7 +311,6 @@ Now, I can plot the opinion poll results along with the Huffpost Pollster trend 
  -->
 <!--  LocalWords:  Bararck
  -->
-
 
 # Misc
 

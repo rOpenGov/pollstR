@@ -15,6 +15,9 @@ library("dplyr")
 ```{r install, child = 'inst/vign/children/install.Rmd'}
 ```
 
+```{r install, child = 'inst/vign/children/bugs.Rmd'}
+```
+
 ```{r install, child = 'inst/vign/children/api-overview.Rmd'}
 ```
 

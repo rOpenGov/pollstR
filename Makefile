@@ -7,11 +7,11 @@ rmd_children = $(wildcard inst/vign/children/*.Rmd)
 all: vignettes vignettes/introduction.Rmd README.md
 
 README.md: README.Rmd $(rmd_chdildren)
-	Rscript -e 'library(knitr);knit("$<",output="$@")'
+	Rscript -e 'library(devtools);dev_mode(on=TRUE,path=tempdir());install(quick=TRUE);library(pollstR);library(knitr);knit("$<",output="$@")'
 
 inst/vign/introduction.md: inst/vign/introduction.Rmd $(rmd_chdildren)
 	cd $(dir $@) ; \
-	Rscript -e 'library(knitr);knit("$(notdir $^)",output="$(notdir $@)")'
+	Rscript -e 'library(devtools);dev_mode(on=TRUE,path=tempdir());install("../../",quick=TRUE);library(pollstR);library(knitr);knit("$(notdir $^)",output="$(notdir $@)")'
 
 vignettes:
 	-mkdir vignettes

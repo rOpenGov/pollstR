@@ -1,0 +1,12 @@
+# Errors
+
+If you encounter an error when using one of the functions it is likely that there was an error in converting the data as returned by the API into data structures more usable in R.
+The conversion code is fragile, and can break when there are changes in APIs, or from weird cases that I didn't anticipate.
+So if you encounter an error, try running the function with `convert = FALSE`; this will return the data as returned by the API.
+If there is no error, then it is problem with the conversion code in this package.
+Using `convert = FALSE`, you will still be able to get the data from the Pollster API, but you will need to do the extra data cleaning yourself.
+To get the bug fixed, open a new issue on [github](https://github.com/rOpenGov/pollstR/issues).
+
+
+<!--  LocalWords:  API APIs github
+ -->
