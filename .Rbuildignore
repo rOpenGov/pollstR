@@ -2,3 +2,5 @@
 ^README-figures$
 ^README\.R?md$
 ^\.travis\.yml$
+^.*\.Rproj$
+^\.Rproj\.user$
