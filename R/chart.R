@@ -15,7 +15,7 @@ pollstr_chart_parse <- function(.data) {
                    format = "%Y-%m-%dT%H:%M:%SZ",
                    tz = "GMT")
     if (length(.data[["estimates"]])) {
-        estimates <- factors2char(ldply(.data[["estimates"]], convert_df))
+        estimates <- ldply(.data[["estimates"]], convert_df)
         .data[["estimates"]] <- estimates
     }
     
@@ -23,13 +23,11 @@ pollstr_chart_parse <- function(.data) {
         .data[["estimates_by_date"]] <-
             ldply(.data[["estimates_by_date"]],
                   function(x) {
-                      y <- ldply(x[["estimates"]], as.data.frame)
+                      y <- ldply(x[["estimates"]], convert_df)
                       y[["date"]] <- as.Date(x[["date"]])
-                      y <- factors2char(y)
                       y
                   })
     }
-    .data <- factors2char(.data)
     structure(.data, class = "pollstr_chart")
 }
 

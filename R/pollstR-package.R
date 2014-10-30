@@ -26,7 +26,7 @@ convert_df <- function(x) {
             x[[i]] <- NA
         }
     }
-    as.data.frame(x)
+    data.frame(x, stringsAsFactors = FALSE)
 }
 
 # election date entry
@@ -36,13 +36,4 @@ electiondate2date <- function(x) {
     } else {
         as.Date(x, "%Y-%m-%d")
     }
-}
-
-factors2char <- function(x) {
-    for (i in names(x)) {
-        if (is(x[[i]], "factor")) {
-            x[[i]] <- as.character(x[[i]])
-        }
-    }
-    x
 }

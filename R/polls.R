@@ -48,7 +48,12 @@ polls2df <- function(.data) {
                                                          tz = "GMT")
                        y
                    })
-
+    
+    # Convert polls
+    for (i in c("id")) {
+      polls[[i]] <- as.integer(polls[[i]])
+    }
+    
     clean_subpopulations <- function(x) {
         merge(convert_df(x[c("name", "observations", "margin_of_error")]),
               ldply(x[["responses"]], convert_df))
@@ -61,6 +66,19 @@ polls2df <- function(.data) {
               subpops)
     }
 
+    questions <-
+      ldply(.data,
+            function(x) {
+              ques <- rename(ldply(x[["questions"]], clean_questions),
+                             c(name = "question"))
+              ques[["id"]] <- x[["id"]]
+              ques
+            })
+    # convert
+    for (i in c("observations", "id")) {
+      questions[[i]] <- as.integer(questions[[i]])
+    }
+    
     clean_sponsors <- function(x) {
         sponsors <- x[["sponsors"]]
         if (length(sponsors)) {
@@ -70,8 +88,9 @@ polls2df <- function(.data) {
         } else {
             NULL
         }
-    }
-
+    }   
+    sponsors <- ldply(.data, clean_sponsors)
+    
     clean_survey_houses <- function(x) {
         survey_houses <- x[["survey_houses"]]
         if (length(survey_houses)) {
@@ -82,27 +101,9 @@ polls2df <- function(.data) {
             NULL
         }
     }
+    survey_houses <- ldply(.data, clean_survey_houses)
     
-    questions <-
-        ldply(.data,
-              function(x) {
-                  ques <- rename(ldply(x[["questions"]], clean_questions),
-                                 c(name = "question"))
-                  ques[["id"]] <- x[["id"]]
-                  ques
-              })
-    survey_houses <- factors2char(ldply(.data, clean_survey_houses))
-    sponsors <- factors2char(ldply(.data, clean_sponsors))
-    # convert
-    for (i in c("observations", "id")) {
-        questions[[i]] <- as.integer(questions[[i]])
-    }
-    questions <- factors2char(questions)
-    # Convert polls
-    for (i in c("id")) {
-        polls[[i]] <- as.integer(polls[[i]])
-    }
-    polls <- factors2char(polls)
+
     structure(list(polls = polls,
                    questions = questions,
                    survey_houses = survey_houses,

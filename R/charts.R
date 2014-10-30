@@ -31,7 +31,6 @@ charts2df <- function(.data) {
         as.POSIXct(charts[["last_updated"]],
                    format = "%Y-%m-%dT%H:%M:%SZ",
                    tz = "GMT")
-    charts <- factors2char(charts)
     
     estimates <- ldply(.data,
                        function(x) {
@@ -41,7 +40,6 @@ charts2df <- function(.data) {
                                y
                            }
                        })
-    estimates <- factors2char(estimates)
     structure(list(charts = charts, estimates = estimates),
               class = c("pollstr_charts"))
 }
