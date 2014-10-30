@@ -1,5 +1,10 @@
 pollstR News
 
+CHANGES IN 1.1.1
+
+* Bugfix: ensure that character vectors do not get converted to factors
+* Added section in documentation on errors in functions
+
 CHANGES IN 1.1.0
 
 * Bugfix: Update to new API changes in polls.
