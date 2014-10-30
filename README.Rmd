@@ -9,19 +9,19 @@ library("dplyr")
 
 [![Build Status](https://travis-ci.org/rOpenGov/pollstR.svg?branch=master)](https://travis-ci.org/rOpenGov/pollstR)
 
-```{r intro, child = 'inst/vign/children/intro.Rmd'}
+```{r intro, child = 'inst/vign-src/children/intro.Rmd'}
 ```
 
-```{r install, child = 'inst/vign/children/install.Rmd'}
+```{r install, child = 'inst/vign-src/children/install.Rmd'}
 ```
 
-```{r install, child = 'inst/vign/children/bugs.Rmd'}
+```{r install, child = 'inst/vign-src/children/bugs.Rmd'}
 ```
 
-```{r install, child = 'inst/vign/children/api-overview.Rmd'}
+```{r install, child = 'inst/vign-src/children/api-overview.Rmd'}
 ```
 
-```{r install, child = 'inst/vign/children/example-obamas-approval.Rmd'}
+```{r install, child = 'inst/vign-src/children/example-obamas-approval.Rmd'}
 ```
 
 # Misc

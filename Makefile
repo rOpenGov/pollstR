@@ -2,24 +2,26 @@ PKGNAME := $(shell sed -n "s/Package: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGVERS := $(shell sed -n "s/Version: *\([^ ]*\)/\1/p" DESCRIPTION)
 PKGSRC  := $(shell basename `pwd`)
 
-rmd_children = $(wildcard inst/vign/children/*.Rmd)
+rmd_children = $(wildcard inst/vign-src/children/*.Rmd)
 
 all: vignettes vignettes/introduction.Rmd README.md
 
 README.md: README.Rmd $(rmd_chdildren)
 	Rscript -e 'library(devtools);dev_mode(on=TRUE,path=tempdir());install(quick=TRUE);library(pollstR);library(knitr);knit("$<",output="$@")'
 
-inst/vign/introduction.md: inst/vign/introduction.Rmd $(rmd_chdildren)
-	cd $(dir $@) ; \
-	Rscript -e 'library(devtools);dev_mode(on=TRUE,path=tempdir());install("../../",quick=TRUE);library(pollstR);library(knitr);knit("$(notdir $^)",output="$(notdir $@)")'
+inst/vign-src/introduction.md: inst/vign-src/introduction.Rmd $(rmd_chdildren)
+	Rscript -e 'library(devtools);dev_mode(on=TRUE,path=tempdir());install(".",quick=TRUE);library(pollstR);library(knitr);knit("$^",output="$@")'
+
+inst/doc/introduction.html: inst/vign-src/introduction.Rmd $(rmd_chdildren)
+	Rscript -e 'library(devtools);dev_mode(on=TRUE,path=tempdir());install(".",quick=TRUE);library(pollstR);library(knitr);knit2html("$^",output="$@")'
 
 vignettes:
 	-mkdir vignettes
 	-mkdir vignettes/assets
 
-vignettes/introduction.Rmd: inst/vign/introduction.md
-	sed -e 's/(figures\//(assets\//' $< > $@
-	cp inst/vign/figures/* vignettes/assets/
+vignettes/introduction.Rmd: inst/vign-src/introduction.md
+	sed -e 's/(inst\/vign-src\/figures\//(assets\//' $< > $@
+	cp inst/vign-src/figures/* vignettes/assets/
 
 build:
 	cd ..;\
