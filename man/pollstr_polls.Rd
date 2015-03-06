@@ -5,7 +5,7 @@
 \title{Get a list of polls}
 \usage{
 pollstr_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
-  before = NULL, after = NULL, sort = NULL, showall = NULL,
+  before = NULL, after = NULL, sort = FALSE, showall = NULL,
   max_pages = 1, convert = TRUE)
 }
 \arguments{
