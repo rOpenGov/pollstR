@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/rOpenGov/pollstR.svg?branch=master)](https://travis-ci.org/rOpenGov/pollstR)
 
-# pollstR: An R Client for the HuffPost Pollster API"
+# pollstR: An R Client for the HuffPost Pollster API
 
 
 This R package is an interface to the Huffington Post [Pollster API](http://elections.huffingtonpost.com/pollster/api), which provides access to opinion polls collected by the Huffington Post.
