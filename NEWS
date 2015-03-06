@@ -1,5 +1,10 @@
 pollstR News
 
+CHANTES IN 1.2.1
+
+* Bugfix: Title case the title
+* Bugfix: Fix broken URLs in documentation
+
 CHANGES IN 1.2.0
 
 * Add showall argument to pollstr_charts and pollstr_polls
