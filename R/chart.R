@@ -12,7 +12,7 @@ pollstr_chart_parse <- function(.data) {
     .data[["election_date"]] <- electiondate2date(.data[["election_date"]])
     .data[["last_updated"]] <-
         as.POSIXct(.data[["last_updated"]],
-                   format = "%Y-%m-%dT%H:%M:%SZ",
+                   format = "%Y-%m-%dT%H:%M:%OSZ",
                    tz = "GMT")
     if (length(.data[["estimates"]])) {
         estimates <- ldply(.data[["estimates"]], convert_df)

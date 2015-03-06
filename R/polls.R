@@ -48,7 +48,7 @@ polls2df <- function(.data) {
                    y[["start_date"]] <- as.Date(y[["start_date"]])
                    y[["end_date"]] <- as.Date(y[["end_date"]])
                    y[["last_updated"]] <- as.POSIXct(y[["last_updated"]],
-                                                     "%Y-%m-%dT%H:%M:%SZ",
+                                                     "%Y-%m-%dT%H:%M:%OSZ",
                                                      tz = "GMT")
                    y
                  })
