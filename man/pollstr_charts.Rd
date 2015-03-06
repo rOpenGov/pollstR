@@ -8,7 +8,7 @@ pollstr_charts(topic = NULL, state = NULL, showall = NULL,
   convert = TRUE)
 }
 \arguments{
-\item{topic}{Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollstero/api} for examples.}
+\item{topic}{Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollster/api} for examples.}
 
 \item{state}{Only include charts from a single state. Use 2-letter state abbreviations. "US" will return all national charts.}
 

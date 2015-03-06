@@ -50,7 +50,7 @@ charts2df <- function(.data) {
 #' Get list of available charts
 #'
 #' @param state Only include charts from a single state. Use 2-letter state abbreviations. "US" will return all national charts.
-#' @param topic Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollstero/api} for examples.
+#' @param topic Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollster/api} for examples.
 #' @param showall logical Include charts for races that were once possible but didn't happen (e.g. Gingrich vs. Obama 2012)
 #' @param convert Rearrange the data returned by the API into easier to use data frames.
 #'
