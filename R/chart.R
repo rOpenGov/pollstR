@@ -53,7 +53,7 @@ pollstr_chart_parse <- function(.data) {
 #' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 #' @examples
 #' \dontrun{
-#' chart1 <- pollstr_chart('2012-general-election-romney-vs-obama.json')
+#' chart1 <- pollstr_chart('2012-general-election-romney-vs-obama')
 #' }
 #' @export
 pollstr_chart <- function(slug, convert=TRUE) {

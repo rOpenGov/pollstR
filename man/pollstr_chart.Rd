@@ -31,7 +31,7 @@ Return a single chart. This includes both current and historical estimates by da
 }
 \examples{
 \dontrun{
-chart1 <- pollstr_chart('2012-general-election-romney-vs-obama.json')
+chart1 <- pollstr_chart('2012-general-election-romney-vs-obama')
 }
 }
 \references{
