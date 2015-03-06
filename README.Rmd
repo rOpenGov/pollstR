@@ -9,6 +9,8 @@ library("dplyr")
 
 [![Build Status](https://travis-ci.org/rOpenGov/pollstR.svg?branch=master)](https://travis-ci.org/rOpenGov/pollstR)
 
+# pollstR: An R Client for the HuffPost Pollster API"
+
 ```{r intro, child = 'inst/vign-src/children/intro.Rmd'}
 ```
 
