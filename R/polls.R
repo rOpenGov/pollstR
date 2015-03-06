@@ -156,12 +156,13 @@ get_poll <- function(page, chart, state, topic, before, after, sort, showall,
 #' @export
 pollstr_polls <- function(page = 1, chart = NULL, state = NULL,
                           topic = NULL, before = NULL, after = NULL,
-                          sort = NULL, showall = NULL, max_pages = 1,
+                          sort = FALSE, showall = NULL, max_pages = 1,
                           convert = TRUE) {
   .data <- list()
   i <- 0L
   while (i < max_pages) {
-    newdata <- get_poll(page + i, chart, state, topic, before, after, sort)
+    newdata <- get_poll(page + i, chart, state, topic, before, after, sort,
+                        showall)
     if (length(newdata)) {
       .data <- append(.data, newdata)
     } else {
