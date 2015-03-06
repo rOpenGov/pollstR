@@ -31,7 +31,10 @@ Return a single chart. This includes both current and historical estimates by da
 }
 \examples{
 \dontrun{
-chart1 <- pollstr_chart('2012-virginia-senate-allen-vs-kaine')
+chart1 <- pollstr_chart('2012-general-election-romney-vs-obama.json')
 }
+}
+\references{
+\url{http://elections.huffingtonpost.com/pollster/api}
 }
 

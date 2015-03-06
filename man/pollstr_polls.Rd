@@ -5,8 +5,8 @@
 \title{Get a list of polls}
 \usage{
 pollstr_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
-  before = NULL, after = NULL, sort = FALSE, max_pages = 1,
-  convert = TRUE)
+  before = NULL, after = NULL, sort = NULL, showall = NULL,
+  max_pages = 1, convert = TRUE)
 }
 \arguments{
 \item{page}{Return page number}
@@ -22,6 +22,8 @@ pollstr_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
 \item{after}{Only list polls that ended on or bfore the specified date.}
 
 \item{sort}{If \code{TRUE}, then sort polls by the last updated time.}
+
+\item{showall}{Include polls for races that were once possible but didn't happen (e.g. Gingrich vs. Obama 2012)}
 
 \item{max_pages}{Maximum number of pages to get.}
 
@@ -44,10 +46,13 @@ Get a list of polls
 \dontrun{
 # Get polls related to a chart pulled programmatically with
 # pollstr_charts()
-a <- pollstr_charts()
-pollstr_polls(chart=a$slug[1])
+all_charts <- pollstr_charts()
+pollstr_polls(chart=all_charts$slug[1])
 # Lookup polls related to a specific topic
-pollstr_polls(topic='2013-house')
+pollstr_polls(topic='2016-president')
 }
+}
+\references{
+\url{http://elections.huffingtonpost.com/pollster/api}
 }
 
