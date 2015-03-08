@@ -1,8 +1,8 @@
 Package: pollstR
-Title: HuffPost Pollster API
+Title: Client for the HuffPost Pollster API
 Description: Client for the HuffPost Pollster API, which provides
     access to U.S. opinion polls since 2004.
-Version: 1.2.1
+Version: 1.2.0
 Date: 2015-03-05
 Authors@R: c(person("Jeffrey B.", "Arnold", email = "jeffrey.arnold@gmail.com",
     role = c("aut", "cre")),
