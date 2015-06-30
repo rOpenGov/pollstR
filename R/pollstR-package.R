@@ -10,6 +10,7 @@
 #' @import httr
 #' @import plyr
 #' @import jsonlite
+#' @importFrom utils head
 NULL
 
 .POLLSTR_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
