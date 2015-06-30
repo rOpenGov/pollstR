@@ -1,8 +1,6 @@
-## Resubmission
-This is a resubmission. In this version I have:
+## R CMD check
 
-* Rewritten the title and description fields in DESCRIPTION to remove mentions of R
+* In `DESCRIPTION`, "API", and "HuffPost" are not mis-spelled.
 
-* Rewritten title field in DESCRIPTION to use title case
 
-* Fixed invalid URL in man/pollstr_charts.Rd
+
