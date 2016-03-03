@@ -19,6 +19,7 @@ Suggests:
     knitr,
     dplyr,
     ggplot2,
+    rmarkdown,
     testthat
 URL: https://github.com/rOpenGov/pollstR
 BugReports: https://github.com/rOpenGov/pollstR/issues
