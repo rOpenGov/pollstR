@@ -26,3 +26,9 @@ VignetteBuilder: knitr
 License: GPL-2
 LazyLoad: yes
 LazyData: true
+Collate:
+    'pollstr-package.R'
+    'chart.R'
+    'charts.R'
+    'polls.R'
+RoxygenNote: 5.0.1
