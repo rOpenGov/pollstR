@@ -3,7 +3,7 @@ Title: Client for the HuffPost Pollster API
 Description: Client for the HuffPost Pollster API, which provides
     access to U.S. opinion polls since 2004.
 Version: 1.2.2
-Date: 2016-03-03
+Date: 2016-03-04
 Authors@R: c(person("Jeffrey B.", "Arnold", email = "jeffrey.arnold@gmail.com",
     role = c("aut", "cre")),
     person("Thomas J.", "Leeper", role = c("aut"),
