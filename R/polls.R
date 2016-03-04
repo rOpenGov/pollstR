@@ -40,6 +40,10 @@ pollstr_polls_url <- function(page, chart, state, topic, before, after,
 }
 
 polls2df <- function(.data) {
+
+  # Remove polls without questions or an error occurs in the conversion
+  .data <- .data[lapply(.data, function(x) length(x[["questions"]])) > 0]
+
   polls <- ldply(.data,
                  function(x) {
                    y <- convert_df(x[setdiff(names(x),
