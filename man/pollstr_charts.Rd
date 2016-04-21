@@ -4,10 +4,12 @@
 \alias{pollstr_charts}
 \title{Get list of available charts}
 \usage{
-pollstr_charts(topic = NULL, state = NULL, showall = NULL,
-  convert = TRUE)
+pollstr_charts(page = 1, topic = NULL, state = NULL, showall = NULL,
+  convert = TRUE, max_pages = 1)
 }
 \arguments{
+\item{page}{Return page number}
+
 \item{topic}{Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollster/api} for examples.}
 
 \item{state}{Only include charts from a single state. Use 2-letter state abbreviations. "US" will return all national charts.}
@@ -15,6 +17,8 @@ pollstr_charts(topic = NULL, state = NULL, showall = NULL,
 \item{showall}{logical Include charts for races that were once possible but didn't happen (e.g. Gingrich vs. Obama 2012)}
 
 \item{convert}{Rearrange the data returned by the API into easier to use data frames.}
+
+\item{max_pages}{Maximum number of pages to get.}
 }
 \value{
 If \code{convert=TRUE}, a \code{"pollstr_charts"} object with elements
