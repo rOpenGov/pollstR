@@ -1,32 +1,33 @@
-#'@include pollstr-package.R
-NULL
-
 # Create URL for the charts API method
 pollstr_chart_url <- function(slug) {
-    paste(.POLLSTR_API_URL, "charts", slug[1], sep="/")
+  paste(.POLLSTR_API_URL, "charts", as.character(slug)[1], sep = "/")
+}
+
+simplify_chart <- function(.data) {
+  .data <- jsonlite:::simplify(.data)
 }
 
 # clean up the objects returned by the API
 pollstr_chart_parse <- function(.data) {
     # Convert
-    .data[["election_date"]] <- electiondate2date(.data[["election_date"]])
+    .data[["election_date"]] <- 
+      electiondate2date(.data[["election_date"]])
     .data[["last_updated"]] <-
         as.POSIXct(.data[["last_updated"]],
                    format = "%Y-%m-%dT%H:%M:%OSZ",
                    tz = "GMT")
     if (length(.data[["estimates"]])) {
-        estimates <- ldply(.data[["estimates"]], convert_df)
+        estimates <- map_df(.data[["estimates"]], convert_df)
         .data[["estimates"]] <- estimates
     }
-    
     if (length(.data[["estimates_by_date"]])) {
         .data[["estimates_by_date"]] <-
-            ldply(.data[["estimates_by_date"]],
-                  function(x) {
-                      y <- ldply(x[["estimates"]], convert_df)
+            map_df(.data[["estimates_by_date"]],
+                   function(x) {
+                      y <- map_df(x[["estimates"]], convert_df)
                       y[["date"]] <- as.Date(x[["date"]])
                       y
-                  })
+                   })
     }
     structure(.data, class = "pollstr_chart")
 }
@@ -56,14 +57,13 @@ pollstr_chart_parse <- function(.data) {
 #' chart1 <- pollstr_chart('2012-general-election-romney-vs-obama')
 #' }
 #' @export
-pollstr_chart <- function(slug, convert=TRUE) {
+pollstr_chart <- function(slug, convert = TRUE) {
     .data <- get_url(pollstr_chart_url(slug), as = "parsed")
-    if (convert) .data <- pollstr_chart_parse(.data)
     .data
 }
 
 #' @export
-print.pollstr_chart <- function(x, ...) {
+print.pollstr_chart <- function(x, ..., n = 6) {
     cat('Title:      ',x$title,'\n')
     cat('Chart Slug: ',x$slug,'\n')
     cat('Topic:      ',x$topic,'\n')
@@ -77,14 +77,14 @@ print.pollstr_chart <- function(x, ...) {
         cat('\n')
     }
     if('estimates_by_date' %in% names(x)){
-        if(nrow(x$estimates_by_date)>6){
+        if(nrow(x[["estimates_by_date"]]) > n){
             cat('First 6 (of ',
                 nrow(x$estimates_by_date),
-                ') daily estimates:\n', sep='')
+                ') daily estimates:\n', sep = '')
             print(head(x$estimates_by_date))
         } else {
             cat('All daily estimates:\n')
-            print(x$estimates_by_date)
+            print(x[["estimates_by_date"]])
         }
     }
     cat('\n')

@@ -1,58 +1,34 @@
-#'@include pollstr-package.R
-NULL
-
 # Create URL for the charts API method
 pollstr_polls_url <- function(page, chart, state, topic, before, after,
                               sort, showall) {
   query <- list()
-  if (! is.null(page)) {
-    query[["page"]] <- as.character(page)[1]
-  }
-  if (! is.null(chart)) {
-    query[["chart"]] <- as.character(chart)[1]
-  }
-  if (! is.null(state)) {
-    query[["state"]] <- as.character(state)[1]
-  }
-  if (! is.null(topic)) {
-    query[["topic"]] <- as.character(topic)[1]
-  }
-  if (! is.null(before)) {
-    before <- before[1]
-    if (inherits(before, "Date")) before <- format(before, "%Y-%m-%d")
-    query[["before"]] <- as.character(before)[1]
-  }
-  if (! is.null(after)) {
-    after <- after[1]
-    if (inherits(after, "Date")) after <- format(after, "%Y-%m-%d")
-    query[["after"]] <- as.character(after)[1]
-  }
+  query[["page"]] <- q_param_character(page)
+  query[["chart"]] <- q_param_character(chart)
+  query[["state"]] <- q_param_character(state)
+  query[["topic"]] <- q_param_character(topic)
+  query[["before"]] <- q_param_date(before)
+  query[["after"]] <- q_param_date(after)
   if (sort) {
     query[["sort"]] <- "updated"
   }
-  if (! is.null(showall)) {
-    query[["showall"]] <- if (showall) "true" else "false"
-  }
-  if (! length(query)) {
-    query <- NULL
-  }
-  modify_url(paste(.POLLSTR_API_URL, "polls", sep="/"), query = query)
+  query[["showall"]] <- q_param_logical(showall)
+  make_api_url("polls", query)
 }
 
+
 polls2df <- function(.data) {
-  polls <- ldply(.data,
-                 function(x) {
-                   y <- convert_df(x[setdiff(names(x),
-                                             c("questions", "survey_houses",
-                                               "sponsors"))])
-                   y[["start_date"]] <- as.Date(y[["start_date"]])
-                   y[["end_date"]] <- as.Date(y[["end_date"]])
-                   y[["last_updated"]] <- as.POSIXct(y[["last_updated"]],
-                                                     "%Y-%m-%dT%H:%M:%OSZ",
-                                                     tz = "GMT")
-                   y
-                 })
-  
+  clean_polls <- function(x) {
+    y <- convert_df(x[setdiff(names(x),
+                              c("questions", "survey_houses",
+                                "sponsors"))])
+    y[["start_date"]] <- as.Date(y[["start_date"]])
+    y[["end_date"]] <- as.Date(y[["end_date"]])
+    y[["last_updated"]] <- as.POSIXct(y[["last_updated"]],
+                                      "%Y-%m-%dT%H:%M:%OSZ",
+                                      tz = "GMT")
+    y    
+  }
+  polls <- map_df(.data, clean_polls)
   # Convert polls
   for (i in c("id")) {
     polls[[i]] <- as.integer(polls[[i]])
@@ -60,20 +36,20 @@ polls2df <- function(.data) {
   
   clean_subpopulations <- function(x) {
     merge(convert_df(x[c("name", "observations", "margin_of_error")]),
-          ldply(x[["responses"]], convert_df))
+          map_df(x[["responses"]], convert_df))
   }
   
   clean_questions <- function(x) {
-    subpops <- ldply(x[["subpopulations"]], clean_subpopulations)
+    subpops <- map_df(x[["subpopulations"]], clean_subpopulations)
     subpops <- rename(subpops, c(name = "subpopulation"))
     merge(convert_df(x[c("name", "chart", "topic", "state")]),
           subpops)
   }
   
   questions <-
-    ldply(.data,
+    map_df(.data,
           function(x) {
-            ques <- rename(ldply(x[["questions"]], clean_questions),
+            ques <- rename(map_df(x[["questions"]], clean_questions),
                            c(name = "question"))
             ques[["id"]] <- x[["id"]]
             ques
@@ -86,26 +62,26 @@ polls2df <- function(.data) {
   clean_sponsors <- function(x) {
     sponsors <- x[["sponsors"]]
     if (length(sponsors)) {
-      sponsors <- ldply(sponsors, convert_df)
+      sponsors <- map_df(sponsors, convert_df)
       sponsors[["id"]] <- x[["id"]]
       sponsors
     } else {
       NULL
     }
   }   
-  sponsors <- ldply(.data, clean_sponsors)
+  sponsors <- map_df(.data, clean_sponsors)
   
   clean_survey_houses <- function(x) {
     survey_houses <- x[["survey_houses"]]
     if (length(survey_houses)) {
-      survey_houses <- ldply(survey_houses, convert_df)
+      survey_houses <- map_df(survey_houses, convert_df)
       survey_houses[["id"]] <- x[["id"]]
       survey_houses
     } else {
       NULL
     }
   }
-  survey_houses <- ldply(.data, clean_survey_houses)
+  survey_houses <- map_df(.data, clean_survey_houses)
   
   
   structure(list(polls = polls,
@@ -115,12 +91,8 @@ polls2df <- function(.data) {
             class = "pollstr_polls")
 }
 
-get_poll <- function(page, chart, state, topic, before, after, sort, showall,
-                     as = "parsed") {
-  url <- pollstr_polls_url(page, chart, state, topic, before, after, sort,
-                           showall)
-  get_url(url, as = as)
-}
+
+
 
 #' Get a list of polls
 #'
@@ -158,18 +130,11 @@ pollstr_polls <- function(page = 1, chart = NULL, state = NULL,
                           topic = NULL, before = NULL, after = NULL,
                           sort = FALSE, showall = NULL, max_pages = 1,
                           convert = TRUE) {
-  .data <- list()
-  i <- 0L
-  while (i < max_pages) {
-    newdata <- get_poll(page + i, chart, state, topic, before, after, sort,
-                        showall)
-    if (length(newdata)) {
-      .data <- append(.data, newdata)
-    } else {
-      break
-    }
-    i <- i + 1L
+  get_page <- function(page) {
+    get_url(pollstr_polls_url(page = page, chart, state, topic, before,
+                             after, sort, showall),
+            as = "parsed")
   }
-  if (convert) .data <- polls2df(.data)
+  .data <- iterpages(get_page, page, max_pages)
   .data
 }
