@@ -4,7 +4,7 @@ pollstr_chart_url <- function(slug) {
 }
 
 simplify_chart <- function(.data) {
-  .data <- jsonlite:::simplify(.data)
+  convert_df(.data)
 }
 
 # clean up the objects returned by the API

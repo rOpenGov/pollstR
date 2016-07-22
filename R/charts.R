@@ -19,7 +19,7 @@ charts2df <- function(.data) {
     x <- convert_df(x)  
 
   }
-  charts <- ldply(.data, clean_charts)
+  charts <- map_df(.data, clean_charts)
   # Convert
   charts[["last_updated"]] <-
         as.POSIXct(charts[["last_updated"]],
@@ -42,11 +42,12 @@ charts2df <- function(.data) {
 
 #' Get list of available charts
 #'
-#' @param page 
+#' @param page Page to get. The API returns results in pages of 100.
 #' @param state Only include charts from a single state. Use 2-letter state abbreviations. "US" will return all national charts.
 #' @param topic Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollster/api} for examples.
 #' @param showall logical Include charts for races that were once possible but didn't happen (e.g. Gingrich vs. Obama 2012)
 #' @param convert Rearrange the data returned by the API into easier to use data frames.
+#' @param max_pages Maximum number of pages to get.
 #'
 #' @references \url{http://elections.huffingtonpost.com/pollster/api}
 #' @return If \code{convert=TRUE}, a \code{"pollstr_charts"} object with elements
@@ -68,12 +69,12 @@ charts2df <- function(.data) {
 #' }
 #' @export
 pollstr_charts <- function(page = 1, topic = NULL, state = NULL, showall = NULL,
-                           convert = TRUE, max_page = 1) {
+                           convert = TRUE, max_pages = 1) {
   get_page <- function(page) {
     get_url(pollstr_charts_url(page = page, topic, state, showall),
             as = "parsed")
   }
-  .data <- iterpages(get_page, page, max_page)
+  .data <- iterpages(get_page, page, max_pages)
   .data
 }
 

@@ -5,8 +5,8 @@
 \title{Get a list of polls}
 \usage{
 pollstr_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
-  before = NULL, after = NULL, sort = FALSE, showall = NULL,
-  max_pages = 1, convert = TRUE)
+  question = NULL, before = NULL, after = NULL, sort = FALSE,
+  showall = NULL, max_pages = 1, convert = TRUE)
 }
 \arguments{
 \item{page}{Return page number}
@@ -16,6 +16,8 @@ pollstr_polls(page = 1, chart = NULL, state = NULL, topic = NULL,
 \item{state}{Only include charts from a single state. Use 2-letter pstate abbreviations. "US" will return all national charts.}
 
 \item{topic}{Only include charts related to a specific topic. See the \url{http://elections.huffingtonpost.com/pollster/api} for examples.}
+
+\item{question}{Only include charts that ask the specified question.}
 
 \item{before}{Only list polls that ended on or bfore the specified date.}
 

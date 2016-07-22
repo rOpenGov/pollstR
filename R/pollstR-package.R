@@ -64,11 +64,11 @@ make_api_url <- function(path, query) {
   modify_url(paste(.POLLSTR_API_URL, path, sep = "/"), query = query)  
 }
 
-iterpages <- function(.f, page = 1, max_page = 1) {
+iterpages <- function(.f, page = 1, max_pages = 1) {
   .data <- list()
   i <- 0L
-  while (i < max_page) {
-    newdata <- .f(page = i, ...)
+  while (i < max_pages) {
+    newdata <- .f(page = page + i)
     # Check if new results
     if (length(newdata)) {
       .data[[i]] <- newdata

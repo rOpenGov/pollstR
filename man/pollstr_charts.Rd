@@ -5,10 +5,10 @@
 \title{Get list of available charts}
 \usage{
 pollstr_charts(page = 1, topic = NULL, state = NULL, showall = NULL,
-  convert = TRUE, max_page = 1)
+  convert = TRUE, max_pages = 1)
 }
 \arguments{
-\item{page}{}
+\item{page}{Page to get. The API returns results in pages of 100.}
 
 \item{topic}{Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollster/api} for examples.}
 
@@ -17,6 +17,8 @@ pollstr_charts(page = 1, topic = NULL, state = NULL, showall = NULL,
 \item{showall}{logical Include charts for races that were once possible but didn't happen (e.g. Gingrich vs. Obama 2012)}
 
 \item{convert}{Rearrange the data returned by the API into easier to use data frames.}
+
+\item{max_pages}{Maximum number of pages to get.}
 }
 \value{
 If \code{convert=TRUE}, a \code{"pollstr_charts"} object with elements
