@@ -12,33 +12,40 @@ pollstr_charts_url <- function(page, topic, state, showall) {
 charts2df <- function(.data) {
   clean_charts <- function(x) {
     x[["estimates"]] <- NULL
-    if (is.null(x[["topic"]])) {
-      x[["topic"]] <- ""
-    }
-    x[["election_date"]] <- electiondate2date(x[["election_date"]])
     x <- convert_df(x)  
-
   }
   charts <- map_df(.data, clean_charts)
   # Convert
-  charts[["last_updated"]] <-
-        as.POSIXct(charts[["last_updated"]],
-                   format = "%Y-%m-%dT%H:%M:%OSZ",
-                   tz = "GMT")
+  for (i in "last_updated") {
+    charts[[i]] <- as.POSIXct(charts[[i]], tz = "UCT")
+  }
+  for (i in c("election_date")) {
+    charts[[i]] <- as.Date(charts[[i]], "%Y-%m-%d")
+  }
+  charts <- select_(charts, ~ id, ~ slug, ~ everything())
   clean_estimates <- function(x) {
-    if (length(x[["estimates"]])) {
-      y <- map_df(x[["estimates"]], convert_df)
+    if (length(x[["estimates"]]) > 0) {
+      y <- map_df(x[["estimates"]], function(.) {
+        ret <- convert_df(.)
+        # This is needed to avoid an error
+        # Error: Can not automatically convert from numeric to character in column "lead_confidence".
+        for (i in c("value", "lead_confidence")) {
+          ret[[i]] <- as.numeric(ret[[i]])
+        }
+        ret
+      })
       y[["slug"]] <- x[["slug"]]
-      y
+      select_(y, ~ slug, ~ everything())
     } else {
       NULL
     }
   }
   estimates <- map_df(.data, clean_estimates)
-  structure(list(charts = charts, estimates = estimates),
+
+  structure(list(charts = charts, 
+                 estimates = estimates),
             class = c("pollstr_charts"))
 }
-
 
 #' Get list of available charts
 #'
@@ -75,9 +82,11 @@ pollstr_charts <- function(page = 1, topic = NULL, state = NULL, showall = NULL,
             as = "parsed")
   }
   .data <- iterpages(get_page, page, max_pages)
+  if (convert) {
+    .data <- charts2df(.data)
+  }
   .data
 }
-
 
 #' @export
 print.pollstr_charts <- function(x, ...) {

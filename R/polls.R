@@ -20,19 +20,51 @@ pollstr_polls_url <- function(page, chart, state, topic, question,
 }
 
 polls2df <- function(.data) {
-  clean_polls <- function(x) {
-    y <- convert_df(x[setdiff(names(x), "questions")])
-    y[["start_date"]] <- as.Date(y[["start_date"]])
-    y[["end_date"]] <- as.Date(y[["end_date"]])
-    y[["last_updated"]] <- as.POSIXct(y[["last_updated"]],
-                                      "%Y-%m-%dT%H:%M:%OSZ",
-                                      tz = "GMT")
-    y    
+  extract_polls <- function(x) {
+    for (i in c("questions", "survey_houses", "sponsors")) {
+      x[[i]] <- NULL
+    }
+    convert_df(x)
   }
-  polls <- map_df(.data, clean_polls)
-  questions <- NULL
-  survey_houses <- NULL
-  sponsors <- NULL
+  clean_subpop <- function(x) {
+    responses <- map_df(x[["responses"]], convert_df)
+    x[["responses"]] <- NULL
+    one_to_many(convert_df(x), responses)
+  }
+  clean_questions <- function(x) {
+    subpop <- map_df(x[["subpopulations"]], clean_subpop)
+    x[["subpopulations"]] <- NULL
+    one_to_many(convert_df(x), subpop)
+  }
+  extract_questions <- function(x) {
+    y <- map_df(x[["questions"]], clean_questions)
+    y[["id"]] <- x[["id"]]
+    select_(y, ~ id, ~ everything())
+  }
+  extract_sponsors <- function(x) {
+    if (length(x[["sponsors"]]) > 0) {
+      y <- map_df(x[["sponsors"]], convert_df)
+      y[["id"]] <- x[["id"]]
+      select_(y, ~ id, ~ everything())
+    } else NULL
+  }
+  extract_survey_houses <- function(x) {
+    if (length(x[["survey_houses"]]) > 0) {
+      y <- map_df(x[["survey_houses"]], convert_df)
+      y[["id"]] <- x[["id"]]
+      select_(y, ~ id, ~ everything())
+    }
+  }
+  polls <- map_df(.data, extract_polls)  
+  for (i in c("start_date", "end_date")) {
+    polls[[i]] <- as.Date(polls[[i]], "%Y-%m-%d")
+  }
+  for (i in "last_updated") {
+    polls[[i]] <- as.POSIXct(polls[[i]], tz = "UCT")
+  }
+  questions <- map_df(.data, extract_questions)
+  survey_houses <- map_df(.data, extract_survey_houses)
+  sponsors <- map_df(.data, extract_sponsors)
   structure(list(polls = polls,
                  questions = questions,
                  survey_houses = survey_houses,
@@ -85,5 +117,8 @@ pollstr_polls <- function(page = 1, chart = NULL, state = NULL,
             as = "parsed")
   }
   .data <- iterpages(get_page, page, max_pages)
+  if (convert) {
+    .data <- polls2df(.data)
+  }
   .data
 }

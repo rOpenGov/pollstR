@@ -11,13 +11,13 @@ Authors@R: c(person("Jeffrey B.", "Arnold", email = "jeffrey.arnold@gmail.com",
 Depends:
   R (>= 3.0.3)
 Imports:
+  dplyr,
   httr,
   jsonlite,
   purrr,
   tibble
 Suggests:
   knitr,
-  dplyr,
   ggplot2,
   testthat
 URL: https://github.com/rOpenGov/pollstR

@@ -10,25 +10,24 @@ simplify_chart <- function(.data) {
 # clean up the objects returned by the API
 pollstr_chart_parse <- function(.data) {
     # Convert
-    .data[["election_date"]] <- 
-      electiondate2date(.data[["election_date"]])
+    if (!is.null(.data[["election_date"]])) {
+      .data[["election_date"]] <-
+        as.Date(.data[["election_date"]], "%Y-%m-%d")
+    }
     .data[["last_updated"]] <-
         as.POSIXct(.data[["last_updated"]],
                    format = "%Y-%m-%dT%H:%M:%OSZ",
                    tz = "GMT")
-    if (length(.data[["estimates"]])) {
-        estimates <- map_df(.data[["estimates"]], convert_df)
-        .data[["estimates"]] <- estimates
-    }
-    if (length(.data[["estimates_by_date"]])) {
-        .data[["estimates_by_date"]] <-
-            map_df(.data[["estimates_by_date"]],
-                   function(x) {
-                      y <- map_df(x[["estimates"]], convert_df)
-                      y[["date"]] <- as.Date(x[["date"]])
-                      y
-                   })
-    }
+
+    estimates <- map_df(.data[["estimates"]], convert_df)
+    .data[["estimates"]] <- estimates
+    .data[["estimates_by_date"]] <-
+        map_df(.data[["estimates_by_date"]],
+               function(x) {
+                  y <- map_df(x[["estimates"]], convert_df)
+                  y[["date"]] <- as.Date(x[["date"]])
+                  select_(y, ~ date, ~ everything())
+               })
     structure(.data, class = "pollstr_chart")
 }
 
@@ -59,6 +58,9 @@ pollstr_chart_parse <- function(.data) {
 #' @export
 pollstr_chart <- function(slug, convert = TRUE) {
     .data <- get_url(pollstr_chart_url(slug), as = "parsed")
+    if (convert) {
+      .data <- pollstr_chart_parse(.data)
+    }
     .data
 }
 
