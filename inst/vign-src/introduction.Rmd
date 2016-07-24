@@ -1,11 +1,11 @@
 ---
-title: "pollstR: An R Client for the HuffPost Pollster API"
+title: "pollstR: Client for the HuffPost Pollster API"
 author: "Jeffrey B. Arnold"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{pollstR: Client for the HuffPost Pollster API}
   \usepackage[utf8]{inputenc}
 ---
 

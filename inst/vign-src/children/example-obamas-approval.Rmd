@@ -15,7 +15,6 @@ I get the Pollster model estimates using ``polster_chart``,
 ```{r}
 chart <- pollstr_chart(slug)
 estimates <- chart[["estimates_by_date"]]
-
 estimates <- estimates[estimates$date >= start_date 
                        & estimates$date < end_date, ]
 ```

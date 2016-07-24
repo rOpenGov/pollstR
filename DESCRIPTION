@@ -2,26 +2,28 @@ Package: pollstR
 Title: Client for the HuffPost Pollster API
 Description: Client for the HuffPost Pollster API, which provides
     access to U.S. opinion polls since 2004.
-Version: 1.2.1
-Date: 2015-06-30
+Version: 1.2.2
+Date: 2016-03-03
 Authors@R: c(person("Jeffrey B.", "Arnold", email = "jeffrey.arnold@gmail.com",
-  role = c("aut", "cre")),
-  person("Thomas J.", "Leeper", role = c("aut"),
-  email = "thosjleeper@gmail.com"))
+    role = c("aut", "cre")),
+    person("Thomas J.", "Leeper", role = c("aut"),
+    email = "thosjleeper@gmail.com"),
+    person("Drew", "Linzer", role = c("aut")))
 Depends:
-  R (>= 3.0.3)
+    R (>= 3.0.3)
 Imports:
-  dplyr,
-  httr,
-  jsonlite,
-  purrr,
-  readr,
-  stringr,
-  tibble
+    dplyr,
+    httr,
+    jsonlite,
+    purrr,
+    readr,
+    stringr,
+    tibble
 Suggests:
-  knitr,
-  ggplot2,
-  testthat
+    knitr,
+    ggplot2,
+    rmarkdown,
+    testthat
 URL: https://github.com/rOpenGov/pollstR
 BugReports: https://github.com/rOpenGov/pollstR/issues
 VignetteBuilder: knitr

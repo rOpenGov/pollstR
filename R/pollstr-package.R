@@ -69,12 +69,12 @@ make_api_url <- function(path, query) {
 
 iterpages <- function(.f, page = 1, max_pages = 1) {
   .data <- list()
-  i <- 1L
-  while (i <= max_pages) {
+  i <- 0L
+  while (i < max_pages) {
     newdata <- .f(page = page + i)
     # Check if new results
     if (length(newdata)) {
-      .data[[i]] <- newdata
+      .data[[i + 1L]] <- newdata
     } else {
       break
     }
