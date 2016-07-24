@@ -9,7 +9,7 @@
 #' @docType package
 #' 
 #' @importFrom utils head
-#' @importFrom dplyr bind_rows bind_cols select_ select
+#' @importFrom dplyr bind_rows bind_cols select_ select everything
 #' @import httr
 #' @importFrom purrr map_df rerun
 #' @import tibble
