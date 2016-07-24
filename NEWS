@@ -1,3 +1,16 @@
+CHANGES IN 1.4.0
+
+* Renamed functions to start with `pollster_` since I kept misstyping them. However,
+    the old function names beginnning with `pollstr_` still work.
+* Renamed the classes returned by pollster functions to start with `pollster_`.
+* Added function `pollster_chart_tbl` which returns all polls related to a chart.
+* Added function `pollster_house_effects` which returns the pollster house effects for a chart.
+* Pollster API changes: deprecated `topic` argument in `pollstr_polls` (#11);
+  added `question` argument to `pollstr_polls` (#12); added `max_pages` argument to `pollstr_charts` to support paging.
+* Edited and rewrote much of the vignette. The new example uses the 2016 General Election 
+    between Clinton and Trump.
+* Miscellaneous non-user facing rewrites to code to make it more robust.
+
 CHANGES IN 1.2.1
 
 * Bugfix: fix R CMD check notes due to change in how it handles non-base default packages: http://developer.r-project.org/blosxom.cgi/R-devel/2015/06/29#n2015-06-29

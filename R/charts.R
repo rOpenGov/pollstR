@@ -1,61 +1,58 @@
-#'@include pollstr-package.R
-NULL
-
 # Create URL for the charts API method
-pollstr_charts_url <- function(topic, state, showall) {
+pollster_charts_url <- function(page, topic, state, showall) {
   query <- list()
-  if (! is.null(topic)) {
-    query[["topic"]] <- as.character(topic)[1]
-  }
-  if (! is.null(state)) {
-    query[["state"]] <- as.character(state)[1]
-  }
-  if (! is.null(showall)) {
-    query[["showall"]] <- if (showall) "true" else "false"
-  }
-  if (! length(query)) {
-    query <- NULL
-  }
-  modify_url(paste(.POLLSTR_API_URL, "charts", sep="/"), query = query)
+  query[["topic"]] <- q_param_integer(page)
+  query[["topic"]] <- q_param_character(topic)
+  query[["state"]] <- q_param_character(state)
+  query[["showall"]] <- q_param_logical(showall)
+  make_api_url("charts", query)
 }
 
 # clean up the objects returned by the API
 charts2df <- function(.data) {
-  charts <- ldply(.data, function(x) {
+  clean_charts <- function(x) {
     x[["estimates"]] <- NULL
-    if (is.null(x[["topic"]])) {
-      x[["topic"]] <- ""
-    }
-    x[["election_date"]] <- electiondate2date(x[["election_date"]])
-    convert_df(x)
-  })
+    x <- convert_df(x)
+  }
+  charts <- map_df(.data, clean_charts)
   # Convert
-  charts[["last_updated"]] <-
-    as.POSIXct(charts[["last_updated"]],
-               format = "%Y-%m-%dT%H:%M:%OSZ",
-               tz = "GMT")
-  
-  estimates <- ldply(.data,
-                     function(x) {
-                       if (length(x[["estimates"]])) {
-                         y <- ldply(x[["estimates"]], convert_df)
-                         y[["slug"]] <- x[["slug"]]
-                         y
-                       }
-                     })
-  structure(list(charts = charts, estimates = estimates),
-            class = c("pollstr_charts"))
+  for (i in "last_updated") {
+    charts[[i]] <- as.POSIXct(charts[[i]], tz = "UCT")
+  }
+  for (i in c("election_date")) {
+    charts[[i]] <- as.Date(charts[[i]], "%Y-%m-%d")
+  }
+  charts <- select_(charts, ~ id, ~ slug, ~ everything())
+  clean_estimates <- function(x) {
+    if (length(x[["estimates"]]) > 0) {
+      y <- map_df(x[["estimates"]], function(.) {
+        ret <- convert_df(.)
+        ret
+      })
+      y[["slug"]] <- x[["slug"]]
+      select_(y, ~slug, ~everything())
+    } else {
+      NULL
+    }
+  }
+  estimates <- map_df(.data, clean_estimates)
+
+  structure(list(charts = charts,
+                 estimates = estimates),
+            class = c("pollster_charts"))
 }
 
 #' Get list of available charts
 #'
+#' @param page Page to get. The API returns results in pages of 100.
 #' @param state Only include charts from a single state. Use 2-letter state abbreviations. "US" will return all national charts.
 #' @param topic Only include charts related to a specific topic. See \url{http://elections.huffingtonpost.com/pollster/api} for examples.
 #' @param showall logical Include charts for races that were once possible but didn't happen (e.g. Gingrich vs. Obama 2012)
 #' @param convert Rearrange the data returned by the API into easier to use data frames.
+#' @param max_pages Maximum number of pages to get.
 #'
 #' @references \url{http://elections.huffingtonpost.com/pollster/api}
-#' @return If \code{convert=TRUE}, a \code{"pollstr_charts"} object with elements
+#' @return If \code{convert=TRUE}, a \code{"pollster_charts"} object with elements
 #' \describe{
 #'   \item{\code{charts}}{Data frame with data on charts.}
 #'   \item{\code{estimates}}{Data frame with current estimates from each chart. The column \code{slug} matches this data frame to \code{charts}}
@@ -64,25 +61,41 @@ charts2df <- function(.data) {
 #' @examples
 #' \dontrun{
 #'  # Get charts related to Washington
-#'  wa <- pollstr_charts(state='WA')
+#'  pollster_charts(state = 'WA')
 #'  # Get national charts
-#'  us_charts <- pollstr_charts(state='US')
-#'  # Get charts in the topic '2016-president'
-#'  gov <- pollstr_charts(topic='2016-president')
+#'  pollster_charts(state='US')
+#'  # Get charts for the topic '2016-president'
+#'  pollster_charts(topic = '2016-president')
 #'  # Get all charts
-#'  allcharts <- pollstr_charts()
+#'  pollster_charts()
+#'  # By default, this only returns the first 100 charts, to get more
+#'  # set max_pages higher. Use Inf, to ensure you get all.
+#'  pollster_charts(topic = '2016-president', max_pages = Inf)
 #' }
 #' @export
-pollstr_charts <- function(topic = NULL, state = NULL, showall = NULL,
-                           convert = TRUE) {
-  .data <- get_url(pollstr_charts_url(topic, state, showall), as = "parsed")
-  if (convert) .data <- charts2df(.data)
+pollster_charts <- function(page = 1, topic = NULL, state = NULL, showall = NULL,
+                           convert = TRUE, max_pages = 1) {
+  get_page <- function(page) {
+    get_url(pollster_charts_url(page = page, topic, state, showall),
+            as = "parsed")
+  }
+  .data <- iterpages(get_page, page, max_pages)
+  if (convert) {
+    .data <- charts2df(.data)
+  }
   .data
 }
 
+#' @rdname pollster_charts
+#' @export
+pollstr_charts <- pollster_charts
 
 #' @export
-print.pollstr_charts <- function(x, ...) {
-  print(x$charts[,c('title','slug','state','poll_count','last_updated')])
+print.pollster_charts <- function(x, ...) {
+  # set to NULL to avoid global variable not in scope warning
+  one_of <- NULL
+  select(x[["charts"]],
+         one_of(c("title", "slug", "state",
+                  "poll_count", "last_updated")))
   return(invisible(x))
 }

@@ -1,0 +1,26 @@
+# API Overview
+
+The Pollster API has two primary data structures: charts and polls.
+
+*Polls* are individual, dated topline results for a single set of candidates in a single race.
+The poll data structure consists of (generally) named candidates and percentage support for each, along with additional information (e.g., polling house, sampling frame, sample size, margin of error, state, etc.).
+
+*Charts* aggregate polls for a particular race or topic (e.g., "2012-president" or "obama-job-approval".
+A chart reports aggregated survey estimates of support for the candidates in a given race and, possibly, daily estimates of support.
+Each chart is named, reports the number of aggregated polls it presents, a last-updated date, and a "slug" field. The "slug" identifies the chart both in the API and on the Pollster website.
+
+See the [Huffpost Pollster API](http://elections.huffingtonpost.com/pollster/api) for the full description and documentation of the API.
+
+The **pollstR** package has four main functions:
+
+- `pollster_charts`: Information about all charts available. [API](http://elections.huffingtonpost.com/pollster/api#charts)
+- `pollster_chart`:  Data on an individual chart, including the estimates by date. It does not include the poll data used to construct
+    those estimates. See `pollster_chart_data` for that. [API](http://elections.huffingtonpost.com/pollster/api#chart)
+- `pollster_chart_data`: The polls used in a chart. [API](http://elections.huffingtonpost.com/pollster/api#chart-csv)
+- `pollster_polls`: Query and retrieve all polls available through the Pollster API. [API](http://elections.huffingtonpost.com/pollster/api#polls)
+
+These **pollstR** functions have two main purposes: create the url to retrieve data, and 
+more importantly, convert the results returned by the API to into data structures more amenable to
+analysis in R. The API results are usually trees; the **pollstR** functions converts them 
+into data frames or lists of tidy data frames.
+

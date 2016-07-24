@@ -7,35 +7,27 @@ library("dplyr")
 })
 ```
 
+[![CRAN Version](http://www.r-pkg.org/badges/version/pollstR)](http://cran.r-project.org/package=pollstR)
+![Downloads](http://cranlogs.r-pkg.org/badges/pollstR)
 [![Build Status](https://travis-ci.org/rOpenGov/pollstR.svg?branch=master)](https://travis-ci.org/rOpenGov/pollstR)
 
 # pollstR: An R Client for the HuffPost Pollster API
 
-```{r intro, child = 'inst/vign-src/children/intro.Rmd'}
+```{r intro, child = 'vignettes/children/intro.Rmd'}
 ```
 
-```{r install, child = 'inst/vign-src/children/install.Rmd'}
+```{r install, child = 'vignettes/children/install.Rmd'}
 ```
 
-```{r install, child = 'inst/vign-src/children/bugs.Rmd'}
+```{r bugs, child = 'vignettes/children/bugs.Rmd'}
 ```
 
-```{r install, child = 'inst/vign-src/children/api-overview.Rmd'}
+```{r api, child = 'vignettes/children/api-overview.Rmd'}
 ```
 
-```{r install, child = 'inst/vign-src/children/example-obamas-approval.Rmd'}
+```{r example, child = 'vignettes/children/example.Rmd'}
 ```
 
-# Misc
+## License
 
-An earlier R interface was written by [Drew Linzer](https://github.com/dlinzer/pollstR/).
-
-<!--  LocalWords:  Huffpost API Huffington CRAN github devtools str
- -->
-<!--  LocalWords:  devools jrnold ggplot obama url aes favorability
- -->
-<!--  LocalWords:  Bararck suppressPackageStartupMessages eval
- -->
-<!-- -->
-<!--  LocalWords:  rOpenGov pollstR pollstr Linzer
- -->
+The package is released under GPL-2 and the API data it accesses is released under the [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US).

@@ -1,133 +1,78 @@
-#'@include pollstr-package.R
-NULL
-
 # Create URL for the charts API method
-pollstr_polls_url <- function(page, chart, state, topic, before, after,
-                              sort, showall) {
+pollster_polls_url <- function(page, chart, state, topic, question,
+                              before, after, sort, showall) {
   query <- list()
-  if (! is.null(page)) {
-    query[["page"]] <- as.character(page)[1]
+  query[["page"]] <- q_param_character(page)
+  if (!is.null(chart)) {
+    warning("The chart parameter is deprecated in the Pollster API")
+    query[["chart"]] <- q_param_character(chart)
   }
-  if (! is.null(chart)) {
-    query[["chart"]] <- as.character(chart)[1]
-  }
-  if (! is.null(state)) {
-    query[["state"]] <- as.character(state)[1]
-  }
-  if (! is.null(topic)) {
-    query[["topic"]] <- as.character(topic)[1]
-  }
-  if (! is.null(before)) {
-    before <- before[1]
-    if (inherits(before, "Date")) before <- format(before, "%Y-%m-%d")
-    query[["before"]] <- as.character(before)[1]
-  }
-  if (! is.null(after)) {
-    after <- after[1]
-    if (inherits(after, "Date")) after <- format(after, "%Y-%m-%d")
-    query[["after"]] <- as.character(after)[1]
-  }
+  query[["state"]] <- q_param_character(state)
+  query[["topic"]] <- q_param_character(topic)
+  query[["question"]] <- q_param_character(question)
+  query[["before"]] <- q_param_date(before)
+  query[["after"]] <- q_param_date(after)
   if (sort) {
     query[["sort"]] <- "updated"
   }
-  if (! is.null(showall)) {
-    query[["showall"]] <- if (showall) "true" else "false"
-  }
-  if (! length(query)) {
-    query <- NULL
-  }
-  modify_url(paste(.POLLSTR_API_URL, "polls", sep="/"), query = query)
+  query[["showall"]] <- q_param_logical(showall)
+  make_api_url("polls", query)
 }
 
 polls2df <- function(.data) {
-  polls <- ldply(.data,
-                 function(x) {
-                   y <- convert_df(x[setdiff(names(x),
-                                             c("questions", "survey_houses",
-                                               "sponsors"))])
-                   y[["start_date"]] <- as.Date(y[["start_date"]])
-                   y[["end_date"]] <- as.Date(y[["end_date"]])
-                   y[["last_updated"]] <- as.POSIXct(y[["last_updated"]],
-                                                     "%Y-%m-%dT%H:%M:%OSZ",
-                                                     tz = "GMT")
-                   y
-                 })
-  
-  # Convert polls
-  for (i in c("id")) {
-    polls[[i]] <- as.integer(polls[[i]])
+  extract_polls <- function(x) {
+    for (i in c("questions", "survey_houses", "sponsors")) {
+      x[[i]] <- NULL
+    }
+    convert_df(x)
   }
-  
-  clean_subpopulations <- function(x) {
-    merge(convert_df(x[c("name", "observations", "margin_of_error")]),
-          ldply(x[["responses"]], convert_df))
+  clean_subpop <- function(x) {
+    responses <- map_df(x[["responses"]], convert_df)
+    x[["responses"]] <- NULL
+    one_to_many(convert_df(x), responses)
   }
-  
   clean_questions <- function(x) {
-    subpops <- ldply(x[["subpopulations"]], clean_subpopulations)
-    subpops <- rename(subpops, c(name = "subpopulation"))
-    merge(convert_df(x[c("name", "chart", "topic", "state")]),
-          subpops)
+    subpop <- map_df(x[["subpopulations"]], clean_subpop)
+    x[["subpopulations"]] <- NULL
+    one_to_many(convert_df(x), subpop)
   }
-  
-  questions <-
-    ldply(.data,
-          function(x) {
-            ques <- rename(ldply(x[["questions"]], clean_questions),
-                           c(name = "question"))
-            ques[["id"]] <- x[["id"]]
-            ques
-          })
-  # convert
-  for (i in c("observations", "id")) {
-    questions[[i]] <- as.integer(questions[[i]])
+  extract_questions <- function(x) {
+    y <- map_df(x[["questions"]], clean_questions)
+    y[["id"]] <- x[["id"]]
+    select_(y, ~ id, ~ everything())
   }
-  
-  clean_sponsors <- function(x) {
-    sponsors <- x[["sponsors"]]
-    if (length(sponsors)) {
-      sponsors <- ldply(sponsors, convert_df)
-      sponsors[["id"]] <- x[["id"]]
-      sponsors
-    } else {
-      NULL
-    }
-  }   
-  sponsors <- ldply(.data, clean_sponsors)
-  
-  clean_survey_houses <- function(x) {
-    survey_houses <- x[["survey_houses"]]
-    if (length(survey_houses)) {
-      survey_houses <- ldply(survey_houses, convert_df)
-      survey_houses[["id"]] <- x[["id"]]
-      survey_houses
-    } else {
-      NULL
+  extract_sponsors <- function(x) {
+    if (length(x[["sponsors"]]) > 0) {
+      y <- map_df(x[["sponsors"]], convert_df)
+      y[["id"]] <- x[["id"]]
+      select_(y, ~ id, ~ everything())
+    } else NULL
+  }
+  extract_survey_houses <- function(x) {
+    if (length(x[["survey_houses"]]) > 0) {
+      y <- map_df(x[["survey_houses"]], convert_df)
+      y[["id"]] <- x[["id"]]
+      select_(y, ~ id, ~ everything())
     }
   }
-  survey_houses <- ldply(.data, clean_survey_houses)
-  
-  
+  polls <- map_df(.data, extract_polls)
+  questions <- map_df(.data, extract_questions)
+  survey_houses <- map_df(.data, extract_survey_houses)
+  sponsors <- map_df(.data, extract_sponsors)
   structure(list(polls = polls,
                  questions = questions,
                  survey_houses = survey_houses,
                  sponsors = sponsors),
-            class = "pollstr_polls")
-}
-
-get_poll <- function(page, chart, state, topic, before, after, sort, showall,
-                     as = "parsed") {
-  url <- pollstr_polls_url(page, chart, state, topic, before, after, sort,
-                           showall)
-  get_url(url, as = as)
+            class = "pollster_polls")
 }
 
 #' Get a list of polls
 #'
 #' @param page Return page number
-#' @param chart List polls related to the specified chart. Chart names are the \code{slug} returned by \code{pollstr_charts}.
+#' @param chart List polls related to the specified chart. Chart names are the \code{slug} returned by \code{pollster_charts}.
 #' @param state Only include charts from a single state. Use 2-letter pstate abbreviations. "US" will return all national charts.
 #' @param topic Only include charts related to a specific topic. See the \url{http://elections.huffingtonpost.com/pollster/api} for examples.
+#' @param question Only include charts that ask the specified question.
 #' @param before Only list polls that ended on or bfore the specified date.
 #' @param after Only list polls that ended on or bfore the specified date.
 #' @param sort If \code{TRUE}, then sort polls by the last updated time.
@@ -136,7 +81,7 @@ get_poll <- function(page, chart, state, topic, before, after, sort, showall,
 #' @param convert Rearrange the data returned by the API into easier to use data frames.
 #'
 #' @references \url{http://elections.huffingtonpost.com/pollster/api}
-#' @return If \code{convert=TRUE}, a \code{"pollstr_polls"} object with elements
+#' @return If \code{convert=TRUE}, a \code{"pollster_polls"} object with elements
 #' \describe{
 #' \item{\code{polls}}{A \code{data.frame} with entries for each poll.}
 #' \item{\code{questions}}{A \code{data.frame} with entries for each question asked in the polls.}
@@ -146,30 +91,37 @@ get_poll <- function(page, chart, state, topic, before, after, sort, showall,
 #' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 #' @examples
 #' \dontrun{
-#' # Get polls related to a chart pulled programmatically with
-#' # pollstr_charts()
-#' all_charts <- pollstr_charts()
-#' pollstr_polls(chart=all_charts$slug[1])
+#' # Get recent polls
+#' pollster_polls()
+#' # Get polls in a certain date range
+#' pollster_polls(before = '2017-03-01', after = '2016-01-01')
+#' # By default, this only returns the first page,
+#' # to get all pages use max_pages = Inf
+#' pollster_polls(topic ='2016-president', max_pages = Inf)
+#' # Get polls related to a state
+#' pollster_polls(topic = 'WA')
 #' # Lookup polls related to a specific topic
-#' pollstr_polls(topic='2016-president')
+#' pollster_polls(topic = '2016-president')
 #' }
 #' @export
-pollstr_polls <- function(page = 1, chart = NULL, state = NULL,
-                          topic = NULL, before = NULL, after = NULL,
+pollster_polls <- function(page = 1, chart = NULL, state = NULL,
+                          topic = NULL, question = NULL,
+                          before = NULL, after = NULL,
                           sort = FALSE, showall = NULL, max_pages = 1,
                           convert = TRUE) {
-  .data <- list()
-  i <- 0L
-  while (i < max_pages) {
-    newdata <- get_poll(page + i, chart, state, topic, before, after, sort,
-                        showall)
-    if (length(newdata)) {
-      .data <- append(.data, newdata)
-    } else {
-      break
-    }
-    i <- i + 1L
+  get_page <- function(page) {
+    get_url(pollster_polls_url(page = page,
+                              chart, state, topic, question,
+                              before, after, sort, showall),
+            as = "parsed")
   }
-  if (convert) .data <- polls2df(.data)
+  .data <- iterpages(get_page, page, max_pages)
+  if (convert) {
+    .data <- polls2df(.data)
+  }
   .data
 }
+
+#' @rdname pollster_polls
+#' @export
+pollstr_polls <- pollster_polls

@@ -1,0 +1,107 @@
+# Example Chart: 2016 General Election, Trump v. Clinton
+
+You can use **pollstR** and **ggplot2** to creates charts similar to those the Huffpost Pollster website.
+The Huffpost Pollster combines polls with similar questions into "charts".
+This is the current Huffpost Pollster chart for the [2016 General Election: Clinton vs. Trump](http://elections.huffingtonpost.com/pollster/2016-general-election-trump-vs-clinton).
+
+<script src="http://elections.huffingtonpost.com/pollster/2016-general-election-trump-vs-clinton/embed.js"></script>
+
+We will create a similar chart using R with date up to `r Sys.Date()`, when this vignette was built.
+This example will use the following packages,
+```{r message=FALSE}
+library("ggplot2")
+library("dplyr")
+library("tidyr")
+```
+
+The first thing to do is find the slug for the chart of interest, which we will need to pull data from the API.
+The slug 2016 General Election results chart is `2016-general-election-trump-vs-clinton`.
+In general, the chart slug the last segment of the chart's URL: `http://elections.huffingtonpost.com/pollster/2016-general-election-trump-vs-clinton`.
+```{r}
+slug <- "2016-general-election-trump-vs-clinton"
+```
+
+We will need two things for this plot: the poll results, and Pollster's smoothed estimates which aggregate the polls.
+To get the polls associated with a specific chart, we use `pollster_chart_tbl()`. 
+While the `pollster_polls()` function returns polls, and has a `chart` argument, it is now deprecated and unreliable, 
+When a poll had questions associated with multiple charts, the API would randomly assign a chart value.
+However, the `chart_tbl()` function correctly returns the poll data in a Pollster chart (see the [API docs](http://elections.huffingtonpost.com/pollster/api#chart-csv)).
+```{r elec_2016_polls_notrun, eval=FALSE}
+elec_2016_polls <- pollster_chart_data(slug)
+```
+```{r, elec_2016_polls_save, eval=FALSE, warning=FALSE, include=FALSE}
+# run this interactively to create the data file
+elec_2016_polls <- pollster_chart_data(slug)
+save(elec_2016_polls, file = "vignettes/children/elec_2016_polls.Rdata")
+```
+```{r elec_2016_polls_hide, include=FALSE}
+load("elec_2016_polls.Rdata")
+```
+```{r elec_2016_polls_glimpse}
+glimpse(elec_2016_polls)
+```
+It will be easier to deal with this data if it is tidy, with each row a (date, pollster, subpop, choice) combination, 
+and variables for the poll result, and sample size.
+Also, since each poll has a start and end date, calculate the median date for each poll so we have a single date to 
+use in the analysis.
+```{r tidy_elec_2016_polls}
+elec_2016_polls_tidy <-
+  elec_2016_polls %>%
+  gather(choice, value, one_of("Clinton", "Trump", "Undecided", "Other")) %>%
+  mutate(date = start_date +
+           difftime(end_date, start_date, units = "days") / 2) %>%
+  filter(!is.na(value))
+glimpse(elec_2016_polls_tidy)
+```
+
+Now we can plot these polls. There are four choices (Trump, Clinton, Other, and Undecided).
+In order to use a more semantically meaningful color scheme than the default color palettes in 
+**ggplot2** or other categorical palettes, we will use the color palette used by the [Sunlight Foundation](http://sunlightfoundation.com/blog/2014/03/12/datavizguide/),
+in which Republicans are red, Democrats are blue, and independents are green.
+```{r elect_2016_polls_plot1}
+choice_colours <- c("Trump" = "#9A3E25", "Clinton" = "#156B90", "Other" = "#708259", "Undecided" = "#978F80")
+scale_colour_elec_2016 <- function(...) {
+  scale_colour_manual(values = choice_colours)
+}
+scale_fill_elec_2016 <- function(...) {
+  scale_fill_manual(values = choice_colours)
+}
+
+plot_elec_2016_1 <-
+  ggplot(elec_2016_polls_tidy, aes(x = date, y = value, colour = choice)) +
+  geom_point() +
+  scale_colour_elec_2016() +
+  theme_minimal()
+plot_elec_2016_1
+```
+We can add our own smoothers through the data, such as a loess smoother:
+```{r plot_elec_2016_loess}
+plot_elec_2016_1 +
+  geom_smooth(aes(fill = choice), method = "loess") +
+  scale_fill_elec_2016()
+```
+
+The smoothed poll averages that Huffpost Pollster uses in their charts are available 
+through `pollster_chart`,
+```{r elec_2016_est_notrun, eval = FALSE}
+elec_2016_est <- pollster_chart(slug)
+```
+```{r elec_2016_est_save, eval=FALSE, include=FALSE}
+# run this interactively to create the data file
+elec_2016_est <- pollster_chart(slug)
+save(elec_2016_est, file = "vignettes/children/elec_2016_est.Rdata")
+```
+```{r elec_2016_est_hide, include = FALSE}
+load("elec_2016_est.Rdata")
+```
+```{r elec_2016_est}
+glimpse(elec_2016_est)
+```
+The object returned by `pollster_chart` contains elements with metadata about the chart (topic, state, ...),
+and two data frames: `estimates` (current estimate), `estimates_by_date` (historical estimates).
+However, the API does not return the uncertainty around the estimates (nor the different levels of smoothing available through their website):
+```{r plot_elec_2016_2}
+plot_elec_2016_1 +
+  geom_line(data = elec_2016_est[["estimates_by_date"]],
+            mapping = aes(x = date, y = value, colour = choice))
+```
