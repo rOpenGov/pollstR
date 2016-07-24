@@ -1,5 +1,5 @@
 # Create URL for the charts API method
-pollstr_polls_url <- function(page, chart, state, topic, question,
+pollster_polls_url <- function(page, chart, state, topic, question,
                               before, after, sort, showall) {
   query <- list()
   query[["page"]] <- q_param_character(page)
@@ -63,13 +63,13 @@ polls2df <- function(.data) {
                  questions = questions,
                  survey_houses = survey_houses,
                  sponsors = sponsors),
-            class = "pollstr_polls")
+            class = "pollster_polls")
 }
 
 #' Get a list of polls
 #'
 #' @param page Return page number
-#' @param chart List polls related to the specified chart. Chart names are the \code{slug} returned by \code{pollstr_charts}.
+#' @param chart List polls related to the specified chart. Chart names are the \code{slug} returned by \code{pollster_charts}.
 #' @param state Only include charts from a single state. Use 2-letter pstate abbreviations. "US" will return all national charts.
 #' @param topic Only include charts related to a specific topic. See the \url{http://elections.huffingtonpost.com/pollster/api} for examples.
 #' @param question Only include charts that ask the specified question.
@@ -81,7 +81,7 @@ polls2df <- function(.data) {
 #' @param convert Rearrange the data returned by the API into easier to use data frames.
 #'
 #' @references \url{http://elections.huffingtonpost.com/pollster/api}
-#' @return If \code{convert=TRUE}, a \code{"pollstr_polls"} object with elements
+#' @return If \code{convert=TRUE}, a \code{"pollster_polls"} object with elements
 #' \describe{
 #' \item{\code{polls}}{A \code{data.frame} with entries for each poll.}
 #' \item{\code{questions}}{A \code{data.frame} with entries for each question asked in the polls.}
@@ -92,25 +92,25 @@ polls2df <- function(.data) {
 #' @examples
 #' \dontrun{
 #' # Get recent polls
-#' pollstr_polls()
+#' pollster_polls()
 #' # Get polls in a certain date range
-#' pollstr_polls(before = '2017-03-01', after = '2016-01-01')
+#' pollster_polls(before = '2017-03-01', after = '2016-01-01')
 #' # By default, this only returns the first page,
 #' # to get all pages use max_pages = Inf
-#' pollstr_polls(topic ='2016-president', max_pages = Inf)
+#' pollster_polls(topic ='2016-president', max_pages = Inf)
 #' # Get polls related to a state
-#' pollstr_polls(topic = 'WA')
+#' pollster_polls(topic = 'WA')
 #' # Lookup polls related to a specific topic
-#' pollstr_polls(topic = '2016-president')
+#' pollster_polls(topic = '2016-president')
 #' }
 #' @export
-pollstr_polls <- function(page = 1, chart = NULL, state = NULL,
+pollster_polls <- function(page = 1, chart = NULL, state = NULL,
                           topic = NULL, question = NULL,
                           before = NULL, after = NULL,
                           sort = FALSE, showall = NULL, max_pages = 1,
                           convert = TRUE) {
   get_page <- function(page) {
-    get_url(pollstr_polls_url(page = page,
+    get_url(pollster_polls_url(page = page,
                               chart, state, topic, question,
                               before, after, sort, showall),
             as = "parsed")
@@ -121,3 +121,7 @@ pollstr_polls <- function(page = 1, chart = NULL, state = NULL,
   }
   .data
 }
+
+#' @rdname pollster_polls
+#' @export
+pollstr_polls <- pollster_polls

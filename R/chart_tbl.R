@@ -1,6 +1,6 @@
-chart_tbl_url <- function(slug) {
+chart_data_url <- function(slug) {
   slug <- as.character(slug[1])
-  paste(.POLLSTR_API_URL, "charts", paste0(slug, ".csv"), sep = "/")
+  paste(.POLLSTER_API_URL, "charts", paste0(slug, ".csv"), sep = "/")
 }
 
 #' Pollster Charts (table)
@@ -13,24 +13,11 @@ chart_tbl_url <- function(slug) {
 #' @export
 #' @examples 
 #' \dontrun{
-#' chart <- pollstr_chart_tbl()
+#' chart <- pollster_chart_data()
 #' chart
 #' }
-pollstr_chart_tbl <- function(slug) {
-  .data <- get_url(chart_tbl_url(slug), as = "parsed")
-  class(.data) <- c("pollstr_chart_tbl", class(.data))
-  .data
-}
-
-chart_house_effects_url <- function(slug) {
-  slug <- as.character(slug[1])
-  paste0("http://elections.huffingtonpost.com/pollster/",
-         slug, paste0(slug, "-house_effects.csv"), sep = "/")
-}
-
-# This is not officially part of the API
-pollstr_chart_house_effects <- function(slug) {
-  .data <- get_url(chart_house_effects_url(slug), as = "parsed")
-  class(.data) <- c("pollstr_chart_tbl", class(.data))
+pollster_chart_data <- function(slug) {
+  .data <- get_url(chart_data_url(slug), as = "parsed")
+  class(.data) <- c("pollster_chart_data", class(.data))
   .data
 }

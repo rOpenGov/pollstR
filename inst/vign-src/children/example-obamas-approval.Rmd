@@ -1,87 +1,80 @@
-# Example: Obama's Job Approval Rating
+# Example Chart: 2016 General Election, Trump v. Clinton
 
-This section shows how to use ``pollstr`` to create a chart similar to those displayed on the Huffpost Pollster website.
-I'll use Obama's job approval rating in this example.
+You can use **pollstR** and **ggplot2** to creates charts similar to those the Huffpost Pollster website.
+The Huffpost Pollster combines polls with similar questions into "charts".
+This is the current Huffpost Pollster chart for the [2016 General Election: Clinton vs. Trump](http://elections.huffingtonpost.com/pollster/2016-general-election-trump-vs-clinton).
 
-The slug or name of the chart is ``obama-job-approval``, which is derived from the chart's URL , http://elections.huffingtonpost.com/pollster/obama-job-approval.
-I'll focus on approval in 2013 in order to reduce the time necessary to run this code.
+<script src="http://elections.huffingtonpost.com/pollster/2016-general-election-trump-vs-clinton/embed.js"></script>
+
+We will create a similar chart using R with date up to `r Sys.date()`, when this vignette was built.
+The slug for this chart is `2016-general-election-trump-vs-clinton`, which is the last segment of the chart's URL:
+`http://elections.huffingtonpost.com/pollster/2016-general-election-trump-vs-clinton`.
 ```{r}
-slug <- "obama-job-approval"
-start_date <- as.Date("2013-1-1")
-end_date <- as.Date("2014-1-1")
+slug <- "2016-general-election-trump-vs-clinton"
 ```
-For the plot, I'll need both Pollster's model estimates and opinion poll estimates.
-I get the Pollster model estimates using ``polster_chart``,
+We will need two things for this plot: the poll results, and Pollster's smoothed estimates which aggregate the polls.
+To get the polls associated with a specific chart, we use `pollster_chart_tbl()`. 
+While the `pollster_polls()` function returns polls, and has a `chart` argument, it is now deprecated and unreliable, 
+When a poll had questions associated with multiple charts, the API would randomly assign a chart value.
+However, the `chart_tbl()` function correctly returns the poll data in a Pollster chart (see the [API docs](http://elections.huffingtonpost.com/pollster/api#chart-csv)).
+```{r elec_2016_polls}
+elec_2016_polls <- pollster_chart_data(slug)
+glimpse(elec_2016_polls)
+```
+It will be easier to deal with this data if it is tidy, with each row a (date, pollster, subpop, choice) combination, 
+and variables for the poll result, and sample size.
+Also, since each poll has a start and end date, calculate the median date for each poll so we have a single date to 
+use in the analysis.
+```{r tidy_elec_2016_polls}
+library("tidyr")
+library("dplyr")
+library("ggplot2")
+
+elec_2016_polls_tidy <-
+  elec_2016_polls %>%
+  gather(choice, value, one_of("Clinton", "Trump", "Undecided", "Other")) %>%
+  mutate(date = start_date +
+           difftime(end_date, start_date, units = "days") / 2) %>%
+  filter(!is.na(value))
+glimpse(elec_2016_polls_tidy)
+```
+
+We can plot these on their own,
+```{r elect_2016_polls_plot1}
+# https://horseradish.s3.amazonaws.com/photos/09/e9/d41fc7c747e2/SunlightFoundation%20Data%20Viz%20Colors.png
+choice_colours <- c("Trump" = "#9A3E25", "Clinton" = "#156B90", "Other" = "#708259", "Undecided" = "#978F80")
+scale_colour_elec_2016 <- function(...) {
+  scale_colour_manual(values = choice_colours)
+}
+scale_fill_elec_2016 <- function(...) {
+  scale_fill_manual(values = choice_colours)
+}
+
+plot_elec_2016_1 <-
+  ggplot(elec_2016_polls_tidy, aes(x = date, y = value, colour = choice)) +
+  geom_point() +
+  scale_colour_elec_2016() +
+  theme_minimal()
+plot_elec_2016_1
+```
+We can add our own smoothers through the data, such as a loess smoother:
+```{r plot_elec_2016_loess}
+plot_elec_2016_1 +
+  geom_smooth(aes(fill = choice), method = "loess") +
+  scale_fill_elec_2016()
+```
+
+The smoothed poll averages that Huffpost Pollster uses in their charts are available 
+through `pollster_chart`,
+```{r ex-chart_estimates}
+elec_2016_est <- pollster_chart(slug)
+glimpse(elec_2016_est)
+```
+The object returned by `pollster_chart` contains elements with metadata about the chart (topic, state, ...),
+and two data frames: `estimates` (current estimate), `estimates_by_date` (historical estimates).
+However, the API does not return the uncertainty around the estimates (nor the different levels of smoothing available through their website):
 ```{r}
-chart <- pollstr_chart(slug)
-estimates <- chart[["estimates_by_date"]]
-estimates <- estimates[estimates$date >= start_date 
-                       & estimates$date < end_date, ]
+plot_elec_2016_1 +
+  geom_line(data = elec_2016_est[["estimates_by_date"]],
+            mapping = aes(x = date, y = value, colour = choice))
 ```
-and the opinion poll results,
-```{r}
-polls <- pollstr_polls(chart = slug, 
-                        after = start_date, 
-                        before = end_date,
-                        max_pages = 1000000)
-```
-Note that in ``polster_poll`` I set the ``max_pages`` argument to a very large number in order to download all the polls available.
-This may take several minutes.
-
-Before continuing, we will need to clean up the opinion poll data.
-First, only keep results from national subpopulations ("Adults", "Likely Voters", "Registered Voters").
-This will drop subpopulations like Republicans, Democrats, and Independents.
-```{r}
-questions <-
-    subset(polls[["questions"]],
-           chart == slug
-           & subpopulation %in% c("Adults", "Likely Voters", "Registered Voters"))
-
-```
-Second, I will need to recode the choices into three categories, "Approve", "Disapprove", and "Undecided".
-```{r}
-approvalcat <- c("Approve" = "Approve",
-                 "Disapprove" = "Disapprove",
-                 "Undecided" = "Undecided",
-                 "Neither" = "Undecided",
-                 "Refused" = NA,
-                 "Neutral" = "Undecided",
-                 "Strongly Approve" = "Approve",
-                 "Somewhat Approve" = "Approve", 
-                 "Somewhat Disapprove" = "Disapprove",
-                 "Strongly Disapprove" = "Disapprove")
-
-questions2 <-
-    (questions
-     %.% mutate(choice = plyr::revalue(choice, approvalcat))
-     %.% group_by(id, subpopulation, choice)
-     %.% summarise(value = sum(value)))
-```
-Now merge the question data with the poll metadata,
-```{r}
-polldata <- merge(polls$polls, questions2, by = "id")
-```
-
-Now, I can plot the opinion poll results along with the Huffpost Pollster trend estimates,
-```{r obama-favorable-chart-2}
-(ggplot()
- + geom_point(data = polldata,
-              mapping = aes(y = value, x = end_date, color = choice),
-              alpha = 0.3)
- + geom_line(data = estimates,
-             mapping = aes(y = value, x = date, color = choice))
- + scale_x_date("date")
- + scale_color_manual(values = c("Approve" = "black", 
-                                 "Disapprove" = "red", 
-                                 "Undecided" = "blue"))
- )
-
-
-```
-
-<!--  LocalWords:  Huffpost API Huffington CRAN github devtools str
- -->
-<!--  LocalWords:  devools jrnold ggplot obama url aes favorability
- -->
-<!--  LocalWords:  Bararck
- -->

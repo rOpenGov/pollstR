@@ -16,7 +16,7 @@
 #' @importFrom stringr str_detect
 NULL
 
-.POLLSTR_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
+.POLLSTER_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
 
 get_url <- function(url, as = "parsed") {
     response <- GET(url)
@@ -64,7 +64,7 @@ make_api_url <- function(path, query) {
   if (!length(query)) {
     query <- NULL
   }
-  modify_url(paste(.POLLSTR_API_URL, path, sep = "/"), query = query)
+  modify_url(paste(.POLLSTER_API_URL, path, sep = "/"), query = query)
 }
 
 iterpages <- function(.f, page = 1, max_pages = 1) {

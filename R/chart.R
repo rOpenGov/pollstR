@@ -1,6 +1,6 @@
 # Create URL for the charts API method
-pollstr_chart_url <- function(slug) {
-  paste(.POLLSTR_API_URL, "charts", as.character(slug)[1], sep = "/")
+pollster_chart_url <- function(slug) {
+  paste(.POLLSTER_API_URL, "charts", as.character(slug)[1], sep = "/")
 }
 
 simplify_chart <- function(.data) {
@@ -8,7 +8,7 @@ simplify_chart <- function(.data) {
 }
 
 # clean up the objects returned by the API
-pollstr_chart_parse <- function(.data) {
+pollster_chart_parse <- function(.data) {
     # Convert
     estimates <- map_df(.data[["estimates"]], convert_df)
     .data[["estimates"]] <- estimates
@@ -19,7 +19,7 @@ pollstr_chart_parse <- function(.data) {
                   y[["date"]] <- as.Date(x[["date"]], "%Y-%m-%d")
                   select_(y, ~ date, ~ everything())
                })
-    structure(.data, class = "pollstr_chart")
+    structure(.data, class = "pollster_chart")
 }
 
 #' Return a single chart
@@ -29,7 +29,7 @@ pollstr_chart_parse <- function(.data) {
 #' @param slug The slug-name of the chart to be returned.
 #' @param convert Rearrange the data returned by the API into easier to use data frames.
 #' @references \url{http://elections.huffingtonpost.com/pollster/api}
-#' @return If \code{convert=TRUE}, then a \code{"pollstr_chart"} object with elements
+#' @return If \code{convert=TRUE}, then a \code{"pollster_chart"} object with elements
 #' \itemize{
 #' \item \code{id} ID number of the chart.
 #' \item \code{title} Title of the chart.
@@ -47,20 +47,24 @@ pollstr_chart_parse <- function(.data) {
 #' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 #' @examples
 #' \dontrun{
-#' chart <- pollstr_chart('2016-general-election-trump-vs-clinton')
+#' chart <- pollster_chart('2016-general-election-trump-vs-clinton')
 #' chart
 #' }
 #' @export
-pollstr_chart <- function(slug, convert = TRUE) {
-    .data <- get_url(pollstr_chart_url(slug), as = "parsed")
+pollster_chart <- function(slug, convert = TRUE) {
+    .data <- get_url(pollster_chart_url(slug), as = "parsed")
     if (convert) {
-      .data <- pollstr_chart_parse(.data)
+      .data <- pollster_chart_parse(.data)
     }
     .data
 }
 
+#' @rdname pollster_chart
 #' @export
-print.pollstr_chart <- function(x, ..., n = 6) {
+pollstr_chart <- pollster_chart
+
+#' @export
+print.pollster_chart <- function(x, ..., n = 6) {
     cat("Title:      ", x$title, "\n")
     cat("Chart Slug: ", x$slug, "\n")
     cat("Topic:      ", x$topic, "\n")

@@ -1,5 +1,5 @@
 # Create URL for the charts API method
-pollstr_charts_url <- function(page, topic, state, showall) {
+pollster_charts_url <- function(page, topic, state, showall) {
   query <- list()
   query[["topic"]] <- q_param_integer(page)
   query[["topic"]] <- q_param_character(topic)
@@ -39,7 +39,7 @@ charts2df <- function(.data) {
 
   structure(list(charts = charts,
                  estimates = estimates),
-            class = c("pollstr_charts"))
+            class = c("pollster_charts"))
 }
 
 #' Get list of available charts
@@ -52,7 +52,7 @@ charts2df <- function(.data) {
 #' @param max_pages Maximum number of pages to get.
 #'
 #' @references \url{http://elections.huffingtonpost.com/pollster/api}
-#' @return If \code{convert=TRUE}, a \code{"pollstr_charts"} object with elements
+#' @return If \code{convert=TRUE}, a \code{"pollster_charts"} object with elements
 #' \describe{
 #'   \item{\code{charts}}{Data frame with data on charts.}
 #'   \item{\code{estimates}}{Data frame with current estimates from each chart. The column \code{slug} matches this data frame to \code{charts}}
@@ -61,22 +61,22 @@ charts2df <- function(.data) {
 #' @examples
 #' \dontrun{
 #'  # Get charts related to Washington
-#'  pollstr_charts(state = 'WA')
+#'  pollster_charts(state = 'WA')
 #'  # Get national charts
-#'  pollstr_charts(state='US')
+#'  pollster_charts(state='US')
 #'  # Get charts for the topic '2016-president'
-#'  pollstr_charts(topic = '2016-president')
+#'  pollster_charts(topic = '2016-president')
 #'  # Get all charts
-#'  pollstr_charts()
+#'  pollster_charts()
 #'  # By default, this only returns the first 100 charts, to get more
 #'  # set max_pages higher. Use Inf, to ensure you get all.
-#'  pollstr_charts(topic = '2016-president', max_pages = Inf)
+#'  pollster_charts(topic = '2016-president', max_pages = Inf)
 #' }
 #' @export
-pollstr_charts <- function(page = 1, topic = NULL, state = NULL, showall = NULL,
+pollster_charts <- function(page = 1, topic = NULL, state = NULL, showall = NULL,
                            convert = TRUE, max_pages = 1) {
   get_page <- function(page) {
-    get_url(pollstr_charts_url(page = page, topic, state, showall),
+    get_url(pollster_charts_url(page = page, topic, state, showall),
             as = "parsed")
   }
   .data <- iterpages(get_page, page, max_pages)
@@ -86,8 +86,12 @@ pollstr_charts <- function(page = 1, topic = NULL, state = NULL, showall = NULL,
   .data
 }
 
+#' @rdname pollster_charts
 #' @export
-print.pollstr_charts <- function(x, ...) {
+pollstr_charts <- pollster_charts
+
+#' @export
+print.pollster_charts <- function(x, ...) {
   # set to NULL to avoid global variable not in scope warning
   one_of <- NULL
   select(x[["charts"]],
