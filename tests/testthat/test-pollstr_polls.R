@@ -2,6 +2,8 @@ context("pollstr_polls")
 
 test_that("pollstr_polls works", {
   skip_on_cran()
+  skip_if_offline()
+  
   polls <- pollstr_polls()
   expect_is(polls, "pollstr_polls")
   expect_named(polls, c("polls", "questions", "survey_houses", "sponsors"))
@@ -15,7 +17,7 @@ test_that("pollstr_polls works", {
   expect_named(polls[["questions"]], 
                c("id", "code", "name", "chart", "topic", 
                  "state", "observations", 
-                  "margin_of_error", "choice", "value", 
+                 "margin_of_error", "choice", "value", 
                  "first_name", "last_name", 
                  "party", "incumbent"))
   expect_named(polls[["survey_houses"]],
@@ -26,34 +28,46 @@ test_that("pollstr_polls works", {
 
 test_that("pollstr_polls arg page works", {
   skip_on_cran()
+  skip_if_offline()
+  
   polls <- pollstr_polls(page = 2)
   expect_is(polls, "pollstr_polls")
 })
 
 test_that("pollstr_polls arg chart works", {
   skip_on_cran()
+  skip_if_offline()
+  
   expect_warning(polls <- pollstr_polls(chart = "obama-job-approval"))
   expect_is(polls, "pollstr_polls")
 })
 test_that("pollstr_polls arg state works", {
   skip_on_cran()
+  skip_if_offline()
+  
   polls <- pollstr_polls(state = "WA")
   expect_is(polls, "pollstr_polls")
 })
+
 test_that("pollstr_polls arg topic works", {
   skip_on_cran()
+  skip_if_offline()
+  
   polls <- pollstr_polls(topic = "obama-job-approval")
   expect_is(polls, "pollstr_polls")
 })
 
 test_that("pollstr_polls arg question works", {
   skip_on_cran()
+  skip_if_offline()
+  
   polls <- pollstr_polls(question = "16-CO-Pres-GETrumpvClinton")
   expect_is(polls, "pollstr_polls")
 })
 
 test_that("pollstr_polls arg before works", {
   skip_on_cran()
+  skip_if_offline()
   .date <- as.Date("2016-06-01", format = "%Y-%m-%d")
   polls <- pollstr_polls(before = .date)
   expect_is(polls, "pollstr_polls") 
@@ -62,6 +76,7 @@ test_that("pollstr_polls arg before works", {
 
 test_that("pollstr_polls arg question works", {
   skip_on_cran()
+  skip_if_offline()
   .date <- as.Date("2016-06-01")
   polls <- pollstr_polls(after = .date)
   expect_is(polls, "pollstr_polls")
@@ -70,12 +85,14 @@ test_that("pollstr_polls arg question works", {
 
 test_that("pollstr_polls arg sort works", {
   skip_on_cran()
+  skip_if_offline()
   polls <- pollstr_polls(sort = TRUE)
   expect_is(polls, "pollstr_polls")
 })
 
 test_that("pollstr_polls arg showall works", {
   skip_on_cran()
+  skip_if_offline()
   polls <- pollstr_polls(showall = TRUE)
   expect_is(polls, "pollstr_polls")  
 })
