@@ -5,12 +5,12 @@ vers <- paste("R package version", meta$Version)
 
 citEntry(entry="Manual",
 		  title = "pollstR: R client for Pollster API",
-                  author = personList(as.person("Thomas J. Leeper"),
-                                      as.person("Jeffrey B. Arnold")),
+                  author = personList(as.person("Jeffrey B. Arnold"),
+                                      as.person("Thomas J. Leeper")),
 		  year = year,
 		  note = vers,
 		  textVersion =
-		  paste("Thomas J. Leeper and Jeffrey B. Arnold (",
+		  paste("Jeffrey B. Arnold and Thomas J. Leeper (",
 				year,
 				"). pollstR: R client for Pollster API. ",
 				vers, ".", sep=""))
