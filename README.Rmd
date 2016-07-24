@@ -7,6 +7,8 @@ library("dplyr")
 })
 ```
 
+[![CRAN Version](http://www.r-pkg.org/badges/version/pollstR)](http://cran.r-project.org/package=pollstR)
+![Downloads](http://cranlogs.r-pkg.org/badges/pollstR)
 [![Build Status](https://travis-ci.org/rOpenGov/pollstR.svg?branch=master)](https://travis-ci.org/rOpenGov/pollstR)
 
 # pollstR: An R Client for the HuffPost Pollster API
