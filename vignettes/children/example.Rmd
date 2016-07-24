@@ -56,7 +56,7 @@ glimpse(elec_2016_polls_tidy)
 
 Now we can plot these polls. There are four choices (Trump, Clinton, Other, and Undecided).
 In order to use a more semantically meaningful color scheme than the default color palettes in 
-**ggplot2** or other categorical palettes, we will use the Sunlight Foundations color palatte 
+**ggplot2** or other categorical palettes, we will use the color palette used by the [Sunlight Foundation](http://sunlightfoundation.com/blog/2014/03/12/datavizguide/),
 in which Republicans are red, Democrats are blue, and independents are green.
 ```{r elect_2016_polls_plot1}
 choice_colours <- c("Trump" = "#9A3E25", "Clinton" = "#156B90", "Other" = "#708259", "Undecided" = "#978F80")
