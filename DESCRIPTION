@@ -15,6 +15,8 @@ Imports:
   httr,
   jsonlite,
   purrr,
+  readr,
+  stringr,
   tibble
 Suggests:
   knitr,

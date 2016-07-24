@@ -27,15 +27,10 @@ charts2df <- function(.data) {
     if (length(x[["estimates"]]) > 0) {
       y <- map_df(x[["estimates"]], function(.) {
         ret <- convert_df(.)
-        # This is needed to avoid an error
-        # Error: Can not automatically convert from numeric to character in column "lead_confidence".
-        for (i in c("value", "lead_confidence")) {
-          ret[[i]] <- as.numeric(ret[[i]])
-        }
         ret
       })
       y[["slug"]] <- x[["slug"]]
-      select_(y, ~ slug, ~ everything())
+      select_(y, ~slug, ~everything())
     } else {
       NULL
     }

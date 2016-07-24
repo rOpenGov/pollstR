@@ -56,12 +56,6 @@ polls2df <- function(.data) {
     }
   }
   polls <- map_df(.data, extract_polls)  
-  for (i in c("start_date", "end_date")) {
-    polls[[i]] <- as.Date(polls[[i]], "%Y-%m-%d")
-  }
-  for (i in "last_updated") {
-    polls[[i]] <- as.POSIXct(polls[[i]], tz = "UCT")
-  }
   questions <- map_df(.data, extract_questions)
   survey_houses <- map_df(.data, extract_survey_houses)
   sponsors <- map_df(.data, extract_sponsors)

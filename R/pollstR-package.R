@@ -7,11 +7,13 @@
 #'
 #' @name pollstR
 #' @docType package
-#' @import httr
-#' @importFrom dplyr bind_rows bind_cols select_
-#' @import tibble
-#' @importFrom purrr map_df rerun
+#' 
 #' @importFrom utils head
+#' @importFrom dplyr bind_rows bind_cols select_
+#' @import httr
+#' @importFrom purrr map_df rerun
+#' @import tibble
+#' @importFrom stringr str_detect
 NULL
 
 .POLLSTR_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
@@ -81,14 +83,30 @@ iterpages <- function(.f, page = 1, max_pages = 1) {
   purrr::flatten(.data)
 }
 
-convert_df <- function(x) {
-  # need to drop NULL columns before as_data_frame
+clean_list <- function(x) {
+  regex_dt <- "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z"
+  regex_date <- "^\\d{4}-\\d{2}-\\d{2}$"
+  regex_num <- "^(\\d*\\.\\d+|\\d+\\.?)$"
   for (i in names(x)) {
     if (is.null(x[[i]])) {
       x[[i]] <- NA
+    } else if (is.character(x[[i]])) {
+      if (all(str_detect(x[[i]], regex_date))) {
+        x[[i]] <- as.Date(x[[i]], "%Y-%m-%d")
+      } else if (all(str_detect(x[[i]], regex_dt))) {
+        x[[i]] <- as.POSIXct(x[[i]], format = "%Y-%m-%dT%H:%M:%OSZ",
+                             tz = "UTC")
+      } else if (all(str_detect(x[[i]], regex_num))) {
+        x[[i]] <- as.numeric(x[[i]])
+      }
     }
   }
-  as_tibble(x)
+  x
+}
+
+convert_df <- function(x) {
+  # need to drop NULL columns before as_data_frame
+  as_tibble(clean_list(x))
 }
 
 # election date entry
