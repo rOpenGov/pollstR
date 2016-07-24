@@ -19,7 +19,6 @@ CHANGES IN 1.2.2
 
 * Add Drew Linzer as original author
 * Bugfix: Removes polls where questions are incomplete so as not to cause errors. #8 (Thanks @olliemcdonald)
->>>>>>> bbc1acc768251500664f7fe255b1dbc99d491d33
 
 CHANGES IN 1.2.1
 
