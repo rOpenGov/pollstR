@@ -1,6 +1,6 @@
-context("charts")
+context("pollstr_chart")
 
-test_that("charts works with no args", {
+test_that("pollstr_chart works with no args", {
   skip_on_cran()
   charts <- pollstr_chart("2016-general-election-trump-vs-clinton")
   expect_is(charts, "pollstr_chart")
@@ -15,12 +15,13 @@ test_that("charts works with no args", {
               "first_name", "last_name", 
               "party", "incumbent"))
   expect_is(charts[["estimates_by_date"]], "data.frame")
-  expect_named(charts[["estimates_by"]], 
-            c("date", "choice", "value"))
+  expect_named(charts[["estimates_by_date"]], 
+               c("date", "choice", "value"))    
 })
 
 test_that("pollstr_chart arg convert works", {
   skip_on_cran()
-  charts <- pollstr_chart("2016-general-election-trump-vs-clinton")
+  charts <- pollstr_chart("2016-general-election-trump-vs-clinton",
+                          convert = FALSE)
   expect_is(charts, "list")
 })

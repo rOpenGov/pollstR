@@ -14,10 +14,13 @@ pollstr_chart(slug, convert = TRUE)
 \value{
 If \code{convert=TRUE}, then a \code{"pollstr_chart"} object with elements
 \itemize{
+\item \code{id} ID number of the chart.
 \item \code{title} Title of the chart.
 \item \code{slug} Slug (URL-friendly title) of the chart.
 \item \code{topic} Topic of the chart.
+\item \code{state} State of the chart, if it relates to a state.
 \item \code{short_title} Short title of the chart.
+\item \code{election_date} Election date, if the chart relates to an election).
 \item \code{poll_count} Number of polls in the chart.
 \item \code{last_updated} Time the chart was last updated.
 \item \code{url} URL of the chart.
@@ -31,7 +34,8 @@ Return a single chart. This includes both current and historical estimates by da
 }
 \examples{
 \dontrun{
-chart1 <- pollstr_chart('2012-general-election-romney-vs-obama')
+chart <- pollstr_chart('2016-general-election-trump-vs-clinton')
+chart
 }
 }
 \references{

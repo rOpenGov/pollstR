@@ -61,13 +61,16 @@ charts2df <- function(.data) {
 #' @examples
 #' \dontrun{
 #'  # Get charts related to Washington
-#'  wa <- pollstr_charts(state='WA')
+#'  pollstr_charts(state = 'WA')
 #'  # Get national charts
-#'  us_charts <- pollstr_charts(state='US')
-#'  # Get charts in the topic '2016-president'
-#'  gov <- pollstr_charts(topic='2016-president')
+#'  pollstr_charts(state='US')
+#'  # Get charts for the topic '2016-president'
+#'  pollstr_charts(topic = '2016-president')
 #'  # Get all charts
-#'  allcharts <- pollstr_charts()
+#'  pollstr_charts()
+#'  # By default, this only returns the first 100 charts, to get more
+#'  # set max_pages higher. Use Inf, to ensure you get all.
+#'  pollstr_charts(topic = '2016-president', max_pages = Inf)
 #' }
 #' @export
 pollstr_charts <- function(page = 1, topic = NULL, state = NULL, showall = NULL,
@@ -85,6 +88,10 @@ pollstr_charts <- function(page = 1, topic = NULL, state = NULL, showall = NULL,
 
 #' @export
 print.pollstr_charts <- function(x, ...) {
-  print(x[["charts"]][ , c('title', 'slug', 'state', 'poll_count', 'last_updated')])
+  # set to NULL to avoid global variable not in scope warning
+  one_of <- NULL
+  select(x[["charts"]],
+         one_of(c('title', 'slug', 'state',
+                  'poll_count', 'last_updated')))
   return(invisible(x))
 }

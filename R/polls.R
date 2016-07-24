@@ -91,12 +91,17 @@ polls2df <- function(.data) {
 #' Otherwise, a \code{"list"} in the original structure of the json returned by the API.
 #' @examples
 #' \dontrun{
-#' # Get polls related to a chart pulled programmatically with
-#' # pollstr_charts()
-#' all_charts <- pollstr_charts()
-#' pollstr_polls(chart=all_charts$slug[1])
+#' # Get recent polls
+#' pollstr_polls()
+#' # Get polls in a certain date range
+#' pollstr_polls(before = '2017-03-01', after = '2016-01-01')
+#' # By default, this only returns the first page,
+#' # to get all pages use max_pages = Inf
+#' pollstr_polls(topic ='2016-president', max_pages = Inf)
+#' # Get polls related to a state
+#' pollstr_polls(topic = 'WA')
 #' # Lookup polls related to a specific topic
-#' pollstr_polls(topic='2016-president')
+#' pollstr_polls(topic = '2016-president')
 #' }
 #' @export
 pollstr_polls <- function(page = 1, chart = NULL, state = NULL,
