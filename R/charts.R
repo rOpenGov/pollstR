@@ -42,11 +42,6 @@ charts2df <- function(.data) {
             class = c("pollster_charts"))
 }
 
-get_charts_page <- function(page, topic, state, showall, as = "parsed") {
-  url <- pollster_charts_url(page, topic, state, showall)
-  get_url(url, as = as)
-}
-
 #' Get list of available charts
 #'
 #' @param page Page to get. The API returns results in pages of 100.
