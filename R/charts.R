@@ -12,7 +12,7 @@ pollstr_charts_url <- function(page, topic, state, showall) {
 charts2df <- function(.data) {
   clean_charts <- function(x) {
     x[["estimates"]] <- NULL
-    x <- convert_df(x)  
+    x <- convert_df(x)
   }
   charts <- map_df(.data, clean_charts)
   # Convert
@@ -37,7 +37,7 @@ charts2df <- function(.data) {
   }
   estimates <- map_df(.data, clean_estimates)
 
-  structure(list(charts = charts, 
+  structure(list(charts = charts,
                  estimates = estimates),
             class = c("pollstr_charts"))
 }
@@ -91,7 +91,7 @@ print.pollstr_charts <- function(x, ...) {
   # set to NULL to avoid global variable not in scope warning
   one_of <- NULL
   select(x[["charts"]],
-         one_of(c('title', 'slug', 'state',
-                  'poll_count', 'last_updated')))
+         one_of(c("title", "slug", "state",
+                  "poll_count", "last_updated")))
   return(invisible(x))
 }

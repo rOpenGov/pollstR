@@ -61,29 +61,29 @@ pollstr_chart <- function(slug, convert = TRUE) {
 
 #' @export
 print.pollstr_chart <- function(x, ..., n = 6) {
-    cat('Title:      ',x$title,'\n')
-    cat('Chart Slug: ',x$slug,'\n')
-    cat('Topic:      ',x$topic,'\n')
-    cat('State:      ',x$state,'\n')
-    cat('Polls:      ',x$poll_count,'\n')
-    cat('Updated:    ',x$last_updated,'\n')
-    cat('URL:        ',x$url,'\n')
-    if('estimates' %in% names(x)){
-        cat('Estimates:\n')
+    cat("Title:      ", x$title, "\n")
+    cat("Chart Slug: ", x$slug, "\n")
+    cat("Topic:      ", x$topic, "\n")
+    cat("State:      ", x$state, "\n")
+    cat("Polls:      ", x$poll_count, "\n")
+    cat("Updated:    ", x$last_updated, "\n")
+    cat("URL:        ", x$url, "\n")
+    if ("estimates" %in% names(x)) {
+        cat("Estimates:\n")
         print(x$estimates)
-        cat('\n')
+        cat("\n")
     }
-    if('estimates_by_date' %in% names(x)){
-        if(nrow(x[["estimates_by_date"]]) > n){
-            cat('First 6 (of ',
+    if ("estimates_by_date" %in% names(x)) {
+        if (nrow(x[["estimates_by_date"]]) > n) {
+            cat("First 6 (of ",
                 nrow(x$estimates_by_date),
-                ') daily estimates:\n', sep = '')
+                ") daily estimates:\n", sep = "")
             print(head(x$estimates_by_date))
         } else {
-            cat('All daily estimates:\n')
+            cat("All daily estimates:\n")
             print(x[["estimates_by_date"]])
         }
     }
-    cat('\n')
+    cat("\n")
     return(invisible(x))
 }

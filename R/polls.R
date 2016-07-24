@@ -5,7 +5,7 @@ pollstr_polls_url <- function(page, chart, state, topic, question,
   query[["page"]] <- q_param_character(page)
   if (!is.null(chart)) {
     warning("The chart parameter is deprecated in the Pollster API")
-    query[["chart"]] <- q_param_character(chart)  
+    query[["chart"]] <- q_param_character(chart)
   }
   query[["state"]] <- q_param_character(state)
   query[["topic"]] <- q_param_character(topic)
@@ -55,7 +55,7 @@ polls2df <- function(.data) {
       select_(y, ~ id, ~ everything())
     }
   }
-  polls <- map_df(.data, extract_polls)  
+  polls <- map_df(.data, extract_polls)
   questions <- map_df(.data, extract_questions)
   survey_houses <- map_df(.data, extract_survey_houses)
   sponsors <- map_df(.data, extract_sponsors)

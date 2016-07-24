@@ -3,7 +3,6 @@ context("pollstr_chart")
 test_that("pollstr_chart works with no args", {
   skip_on_cran()
   skip_if_offline()
-  
   charts <- pollstR::pollstr_chart("2016-general-election-trump-vs-clinton")
   expect_is(charts, "pollstr_chart")
   expect_named(charts,
@@ -24,7 +23,6 @@ test_that("pollstr_chart works with no args", {
 test_that("pollstr_chart arg convert works", {
   skip_on_cran()
   skip_if_offline()
-  
   charts <- pollstr_chart("2016-general-election-trump-vs-clinton",
                           convert = FALSE)
   expect_is(charts, "list")

@@ -64,7 +64,7 @@ make_api_url <- function(path, query) {
   if (!length(query)) {
     query <- NULL
   }
-  modify_url(paste(.POLLSTR_API_URL, path, sep = "/"), query = query)  
+  modify_url(paste(.POLLSTR_API_URL, path, sep = "/"), query = query)
 }
 
 iterpages <- function(.f, page = 1, max_pages = 1) {
@@ -79,7 +79,7 @@ iterpages <- function(.f, page = 1, max_pages = 1) {
       break
     }
     i <- i + 1L
-  }  
+  }
   purrr::flatten(.data)
 }
 

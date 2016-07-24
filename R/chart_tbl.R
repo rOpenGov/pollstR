@@ -25,7 +25,7 @@ pollstr_chart_tbl <- function(slug) {
 chart_house_effects_url <- function(slug) {
   slug <- as.character(slug[1])
   paste0("http://elections.huffingtonpost.com/pollster/",
-         slug, paste0(slug, '-house_effects.csv'), sep = "/")
+         slug, paste0(slug, "-house_effects.csv"), sep = "/")
 }
 
 # This is not officially part of the API
