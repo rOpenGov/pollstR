@@ -77,7 +77,7 @@ This is the current Huffpost Pollster chart for the [2016 General Election: Clin
 
 <script src="http://elections.huffingtonpost.com/pollster/2016-general-election-trump-vs-clinton/embed.js"></script>
 
-We will create a similar chart using R with date up to 2016-07-24, when this vignette was built.
+We will create a similar chart using R with date up to 2016-08-23, when this vignette was built.
 This example will use the following packages,
 
 ```r
