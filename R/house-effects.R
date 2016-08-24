@@ -13,7 +13,6 @@
 #' @export
 pollster_house_effects <- function(slug) {
   .data <- get_url(pollster_house_effects_url(slug), as = "parsed")
-  class(.data) <- c("pollster_chart_tbl", class(.data))
   .data
 }
 

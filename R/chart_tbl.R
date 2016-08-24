@@ -9,7 +9,7 @@ chart_data_url <- function(slug) {
 #' a convenient tabular form.
 #' 
 #' @param slug The slug of the chart, e.g. "012-general-election-romney-vs-obama.csv".
-#' @return A data frame with the chart data.
+#' @return A data frame. The columns vary with the chart.
 #' @export
 #' @examples 
 #' \dontrun{
@@ -18,6 +18,5 @@ chart_data_url <- function(slug) {
 #' }
 pollster_chart_data <- function(slug) {
   .data <- get_url(chart_data_url(slug), as = "parsed")
-  class(.data) <- c("pollster_chart_data", class(.data))
   .data
 }
