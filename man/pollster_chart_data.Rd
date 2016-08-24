@@ -10,7 +10,7 @@ pollster_chart_data(slug)
 \item{slug}{The slug of the chart, e.g. "012-general-election-romney-vs-obama.csv".}
 }
 \value{
-A data frame with the chart data.
+A data frame. The columns vary with the chart.
 }
 \description{
 This function returns the poll data from a Pollster chart in
