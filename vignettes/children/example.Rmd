@@ -22,10 +22,10 @@ slug <- "2016-general-election-trump-vs-clinton"
 ```
 
 We will need two things for this plot: the poll results, and Pollster's smoothed estimates which aggregate the polls.
-To get the polls associated with a specific chart, we use `pollster_chart_tbl()`. 
+To get the polls associated with a specific chart, we use `pollster_chart_data()`. 
 While the `pollster_polls()` function returns polls, and has a `chart` argument, it is now deprecated and unreliable, 
 When a poll had questions associated with multiple charts, the API would randomly assign a chart value.
-However, the `chart_tbl()` function correctly returns the poll data in a Pollster chart (see the [API docs](http://elections.huffingtonpost.com/pollster/api#chart-csv)).
+However, the `pollster_chart_data()` function correctly returns the poll data in a Pollster chart (see the [API docs](http://elections.huffingtonpost.com/pollster/api#chart-csv)).
 ```{r elec_2016_polls_notrun, eval=FALSE}
 elec_2016_polls <- pollster_chart_data(slug)
 ```
