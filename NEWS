@@ -1,9 +1,14 @@
+CHANGES IN 1.5.0
+
+* `pollster_chart_data` and `pollster_house_effects` return data frames without additional pollster specific classes.
+* Fix typos in documentation
+
 CHANGES IN 1.4.0
 
 * Renamed functions to start with `pollster_` since I kept misstyping them. However,
     the old function names beginnning with `pollstr_` still work.
 * Renamed the classes returned by pollster functions to start with `pollster_`.
-* Added function `pollster_chart_tbl` which returns all polls related to a chart.
+* Added function `pollster_chart_data` which returns all polls related to a chart.
 * Added function `pollster_house_effects` which returns the pollster house effects for a chart.
 * Pollster API changes: deprecated `topic` argument in `pollstr_polls` (#11);
   added `question` argument to `pollstr_polls` (#12)
