@@ -8,3 +8,4 @@
 ^.*\.Rcheck$
 ^.*\.tar\.gz$
 ^\.lintr$
+^docs$
