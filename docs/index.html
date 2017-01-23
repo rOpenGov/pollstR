@@ -69,9 +69,10 @@
 <a href="#install" class="anchor"> </a>Install</h2>
 <p>You can install the stable version on <a href="http://cran.r-project.org/package=pollstR">CRAN</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">'pollstR'</span>, <span class="dt">dependencies =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>To install the very latest version, since the CRAN version use <strong>devtools</strong>,</p>
+<p>To install the latest version:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"devtools"</span>)
 <span class="kw">install_github</span>(<span class="st">"rOpenGov/pollstR"</span>)</code></pre></div>
+<p><strong>NOTE: The current dev version is backwards incompatible. Huffpost Pollster upgraded their <a href="http://elections.huffingtonpost.com/pollster/api/v2">API</a> and pollstR was rewritten from scratch for it</strong></p>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">

@@ -23,11 +23,15 @@ You can install the stable version on
 
     install.packages('pollstR', dependencies = TRUE)
 
-To install the very latest version, since the CRAN version use
-**devtools**,
+To install the latest version:
 
     library("devtools")
     install_github("rOpenGov/pollstR")
+
+**NOTE: The current dev version is backwards incompatible. Huffpost
+Pollster upgraded their
+[API](http://elections.huffingtonpost.com/pollster/api/v2) and pollstR
+was rewritten from scratch for it**
 
 Usage
 -----
