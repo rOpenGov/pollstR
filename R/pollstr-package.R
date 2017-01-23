@@ -1,123 +1,286 @@
 #' R client for the Huffpost Pollster API
 #'
-#' This pacakge provides an R interface to the Huffington Post Pollster API.
-#' Pollster provides programmatic access to opinion polls collected by the Huffington Post.
-#'
-#' See \url{http://elections.huffingtonpost.com/pollster/api} for more details on the API.
+#' This pacakge provides an R interface to the Huffpost Pollster API v2.
+#' \href{http://elections.huffingtonpost.com/}{Huffpost Pollster} tracks and aggregates thousands of public polls on US elections and political opinions.
+#' The \href{http://elections.huffingtonpost.com/pollster/api/v2}{Huffpost Pollster API} provides programmatric access to that data.
+#' See \href{https://app.swaggerhub.com/api/huffpostdata/pollster-api/}{API Documentation} for the complete documentation of the API.
 #'
 #' @name pollstR
 #' @docType package
 #' 
-#' @importFrom utils head
-#' @importFrom dplyr bind_rows bind_cols select_ select everything
 #' @import httr
-#' @importFrom purrr map_df rerun
-#' @import tibble
-#' @importFrom stringr str_detect
+#' @importFrom utils str
+#' @importFrom purrr discard flatten
+#' @importFrom lubridate is.Date
+#' @importFrom stringr str_detect str_c str_split
 NULL
 
-.POLLSTER_API_URL <- "http://elections.huffingtonpost.com/pollster/api"
+BASE_URL <- "https://elections.huffingtonpost.com/"
 
-get_url <- function(url, as = "parsed") {
-    response <- GET(url)
-    stop_for_status(response)
-    content(response, as = as)
-}
+USER_AGENT <- user_agent("http://github.com/rOpenGov/pollstR")
 
-q_param_character <- function(x) {
+
+process_tags <- function(x) {
   if (!is.null(x)) {
-    as.character(x)[1]
-  } else {
-    NULL
-  }
-}
-q_param_logical <- function(x) {
-  if (is.null(x)) {
-    NULL
-  } else {
-    if (x[1]) "true" else "false"
+    str_c(x, collapse = ",")
+  }  else {
+    x
   }
 }
 
-q_param_date <- function(x) {
+
+process_date <- function(x) {
   if (is.null(x)) {
     NULL
+  } else if (is.Date(x)) {
+    format(x, "%Y-%m-%d")
   } else {
-    x <- x[1]
-    if (inherits(x, "Date")) {
-      format(x, "%Y-%m-%d")
+    as.character(x)
+  }
+}
+
+  
+pollster_api_url <- function(path, query = NULL, version = "v2") {
+  path <- str_c(c("pollster", "api", version, path), collapse = "/")
+  modify_url(BASE_URL, path = path, query = query)
+}
+
+
+#' Make Huffpost Poster API request
+#' 
+#' The function \code{pollster_api} is the lower-level function for making a request to the Huffpost Pollster API.
+#' There is also a function for each methods provided by the API.
+#' 
+#' @param path The API endpoint, as a character vector. If the length is greater than one, the elements will be collapsed and separated by \code{"/"}.
+#' @param query Query parameters as a \code{list}.
+#' @param version The API version.
+#' @param response_type Response content type. One of \code{"json"}, \code{"tsv"}, or \code{"xml"}. Some endpoints are json/xml, and some are tsv.
+#' @param as Passed to \code{\link[httr]{content}}.
+#' @param ... Arguments passed to \code{\link[httr]{GET}}.
+#' @param cursor Special string used to handle pagination.
+#' @param tags Character vector of tag names.
+#' @param question Question slug.
+#' @param sort Sort order of polls.
+#' @param slug Unique identifier for the poll or question or chart.
+#' @param election_date A date object or a string in "YYYY-MM-DD" format for the election date.
+#' 
+#' @return A \code{pollster_api} object which is a list with elements
+#' \itemize{
+#' \item{\code{content}:}{The parsed content of the response},
+#' \item{\code{url}:}{The URL of the request},
+#' \item{\code{response}:}{The request object returned by \code{\link{GET}}.}
+#' }
+#' @export
+pollster_api <- function(path, query = NULL, version = "v2", response_type = NULL, as = "parsed", ...) {
+  url <- pollster_api_url(path, query = query, version = version)
+  # Handle different content types
+  if (is.null(response_type)) {
+    if (str_detect(parse_url(url)$path, "\\.tsv$")) {
+      response_type <- "tsv"
     } else {
-      as.character(x)
+      response_type <- "json"
     }
   }
-}
-
-q_param_integer <- function(x) {
-  if (is.null(x)) {
-    NULL
-  } else {
-    as.character(as.integer(x[1]))
+  accept_header <- switch(
+    response_type,
+    # tsv header not needed, but makes the code cleaner
+    tsv = accept("text/tab-separated-values"),
+    json = accept_json(),
+    xml = accept_json()
+  )
+  content_type_ <- switch(
+    response_type,
+    tsv = "text/tab-separated-values",
+    json = "application/json",
+    xml = "application/xml"
+  )
+  resp <- GET(url, accept_header, USER_AGENT, ...)
+  if (http_type(resp) != content_type_) {
+    stop("API did not return ", response_type, ".", call. = FALSE)
   }
-}
-
-make_api_url <- function(path, query) {
-  if (!length(query)) {
-    query <- NULL
+  if (http_error(resp)) {
+    stop(
+      sprintf(
+        "GET %s failed wtith status code %s",
+        resp$request$url,
+        status_code(resp)
+      ),
+      call. = FALSE
+    )
   }
-  modify_url(paste(.POLLSTER_API_URL, path, sep = "/"), query = query)
+  structure(
+    list(
+      content = content(resp, as = as),
+      url = resp$request$url,
+      response = resp
+    ),
+    class = "pollster_api"
+  )
 }
 
-iterpages <- function(.f, page = 1, max_pages = 1) {
-  .data <- list()
-  i <- 0L
-  while (i < max_pages) {
-    newdata <- .f(page = page + i)
-    # Check if new results
-    if (length(newdata)) {
-      .data[[i + 1L]] <- newdata
-    } else {
+
+print.pollster_api <- function(x, ...) {
+  path <- parse_url(x$url)$path
+  cat("<Pollster ", "/", str_c(path[3:length(path)], collapse = "/"), ">\n", sep = "")
+  str(x$content, max.level = 1)
+  invisible(x)
+}
+
+
+#' @describeIn pollster_api Get polls. See \href{https://app.swaggerhub.com/swagger-ui/#!/default/get_polls}{API docs}.
+#' @export
+pollster_polls <- function(cursor = NULL, tags = NULL, question = NULL,    sort = c("created_at", "updated_at"), ...) {
+  sort <- match.arg(sort)
+  path <- c("polls")
+  query <- list(cursor = cursor,
+                tags = process_tags(tags),
+                question = question,
+                sort = sort)
+  pollster_api(path, query = query, ...)
+}
+
+
+#' @describeIn pollster_api Get a single poll. See \href{https://app.swaggerhub.com/swagger-ui/#!/default/get_polls_slug}{API docs}.
+#' @export
+pollster_polls_slug <- function(slug, ...) {
+  path <- c("polls", slug)
+  pollster_api(path, ...)
+}
+
+
+#' @describeIn pollster_api Get questions. See \href{https://app.swaggerhub.com/swagger-ui/#!/default/get_questions}{API docs}.
+#' @export
+pollster_questions <- function(cursor = NULL, tags = NULL, election_date = NULL, ...) {
+  path <- c("questions")
+  query <- list(cursor = cursor,
+                tags = process_tags(tags),
+                election_date = process_date(election_date))
+  pollster_api(path, query = query, ...)
+}
+
+
+#' @describeIn pollster_api Get a poll question. See \href{https://app.swaggerhub.com/swagger-ui/#!/default/get_questions_slug}{API Docs}.
+#' @export
+pollster_questions_slug <- function(slug, ...) {
+  path <- c("questions", slug)
+  pollster_api(path, ...)
+}
+
+
+#' @describeIn pollster_api Get a table where each row where each row is a single poll question + subpopulation and columns are response labels. See \href{https://app.swaggerhub.com/swagger-ui/#!/default/get_questions_slug_poll_responses_clean_tsv}{API Docs}.
+#' @export
+pollster_questions_responses_clean <- function(slug, ...) {
+  path <- c("questions", slug, "poll-responses-clean.tsv")
+  pollster_api(path, ...)
+}
+
+
+#' @describeIn pollster_api Get a table where each row is single poll question + subpopulation + response. See \href{https://app.swaggerhub.com/swagger-ui/#!/default/get_questions_slug_poll_responses_raw_tsv}{API Docs}.
+#' @export
+pollster_questions_responses_raw <- function(slug, ...) {
+  path <- c("questions", slug, "poll-responses-raw.tsv")
+  pollster_api(path, ...)
+}
+
+
+#' @describeIn pollster_api Return a list of charts. See href{https://app.swaggerhub.com/swagger-ui/#!/default/get_charts}{API Docs}.
+#' @export
+pollster_charts <- function(cursor = NULL, tags = NULL, election_date = NULL, ...) {
+  path <- c("charts")
+  pollster_api(path, query = list(
+    cursor = cursor,
+    tags = process_tags(tags),
+    election_date = process_date(election_date)
+  ), ...)
+}
+
+
+#' @describeIn pollster_api Get a chart. See href{https://app.swaggerhub.com/swagger-ui/#!/default/get_charts_slug}{API Docs}.
+#' @export
+pollster_charts_slug <- function(slug, ...) {
+  path <- c("charts", slug)
+  pollster_api(path, ...)
+}
+
+
+#' @describeIn pollster_api Get table with one row per poll used in a chart. See \href{https://app.swaggerhub.com/swagger-ui/#!/default/get_charts_slug_pollster_chart_poll_questions_tsv}{API Docs}.
+#' @export
+pollster_charts_polls <- function(slug, ...) {
+  path <- c("charts", slug, "pollster-chart-poll-questions.tsv")
+  pollster_api(path, ...)
+}
+
+
+#' @describeIn pollster_api Get table with the trendline estimates used in a chart. See \href{https://app.swaggerhub.com/swagger-ui/#!/default/get_charts_slug_pollster_trendlines_tsv}{API Docs}.
+#' @export
+pollster_charts_trendlines <- function(slug, ...) {
+  path <- c("charts", slug, "pollster-trendlines.tsv")
+  pollster_api(path, ...)
+}
+
+
+#' @describeIn pollster_api Return the list of tags used in polls, questions, and charts. See \href{https://app.swaggerhub.com/swagger-ui/#!/default/get_tags}{API Docs}.
+#' @export
+pollster_tags <- function(...) {
+  path <- "tags"
+  pollster_api(path, ...)
+}
+
+
+#' Fetch multiple pages
+#' 
+#' For Pollster methods that return results in pages (those with a \code{cursor} argument), iterate over multiple pages.
+#' 
+#' @param .f A pollster function for an endpoint that uses a \code{cursor}.
+#' @param ... Arguments for \code{.f}
+#' @param .max_pages The maximum number of pages to fetch.
+#' @param .debug If \code{TRUE} prints the url and cursor number while fetching the pages.
+#' @inheritParams pollster_api
+#' @return A list of the results.
+#' @export
+pollster_iter <- function(.f, ..., cursor = NULL, .max_pages = 1, .debug = FALSE) {
+  ret <- vector("list", .max_pages)
+  page <- 1
+  cursor = NULL
+  while (page <= .max_pages) {
+    current <- .f(..., cursor = cursor)
+    ret[[page]] <- current[["content"]][["items"]]
+    cursor <- current[["content"]][["next_cursor"]]
+    if (.debug) {
+      cat("page = ", page, ", cursor = ", cursor, "\n")  
+    }
+    if (current[["content"]][["next_cursor"]] == "") {
       break
-    }
-    i <- i + 1L
-  }
-  purrr::flatten(.data)
-}
-
-clean_list <- function(x) {
-  regex_dt <- "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z"
-  regex_date <- "^\\d{4}-\\d{2}-\\d{2}$"
-  regex_num <- "^(\\d*\\.\\d+|\\d+\\.?)$"
-  for (i in names(x)) {
-    if (is.null(x[[i]])) {
-      x[[i]] <- NA
-    } else if (is.character(x[[i]])) {
-      if (all(str_detect(x[[i]], regex_date))) {
-        x[[i]] <- as.Date(x[[i]], "%Y-%m-%d")
-      } else if (all(str_detect(x[[i]], regex_dt))) {
-        x[[i]] <- as.POSIXct(x[[i]], format = "%Y-%m-%dT%H:%M:%OSZ",
-                             tz = "UTC")
-      } else if (all(str_detect(x[[i]], regex_num))) {
-        x[[i]] <- as.numeric(x[[i]])
-      }
+    } else {
+      page <- page + 1
     }
   }
-  x
+  flatten(discard(ret, is.null))
 }
 
-convert_df <- function(x) {
-  # need to drop NULL columns before as_data_frame
-  as_tibble(clean_list(x))
+
+#' @describeIn pollster_iter Return a list of charts. See href{https://app.swaggerhub.com/swagger-ui/#!/default/get_charts}{API Docs}. This is the paginated version of \code{pollster_charts}.
+#' @export
+pollster_charts_iter <- function(cursor = NULL, tags = NULL, election_date = NULL, .max_pages = 1, ...) {
+  pollster_iter(pollster_charts,
+                cursor = cursor, tags = tags, election_date = election_date,
+                .max_pages = .max_pages, ...)
 }
 
-# election date entry
-electiondate2date <- function(x) {
-  if (is.null(x)) {
-    as.Date(NA_character_)
-  } else {
-    as.Date(x, "%Y-%m-%d")
-  }
+
+#' @describeIn pollster_iter Get a question. This is the paginated form of \code{\link{pollster_questions}}.
+#' @export
+pollster_questions_iter <- function(cursor = NULL, tags = NULL, election_date = NULL, .max_pages = 1, ...) {
+  pollster_iter(pollster_questions, 
+                cursor = cursor, tags = tags, 
+                election_date = election_date, .max_pages = .max_pages, ...)
 }
 
-one_to_many <- function(x, y) {
-  bind_cols(bind_rows(rerun(nrow(y), x)), y)
+
+#' @describeIn pollster_iter Get polls. This function is the paginated version of \code{\link{pollster_polls}}.
+#' @export
+pollster_polls_iter <- function(cursor = NULL, tags = NULL, question = NULL, sort = c("created_at", "updated_at"), .max_pages = 1, ...) {
+  pollster_iter(pollster_polls, 
+                cursor = cursor, tags = tags,
+                question = question, .max_pages = .max_pages, ...) 
 }

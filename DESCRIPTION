@@ -12,19 +12,16 @@ Authors@R: c(person("Jeffrey B.", "Arnold", email = "jeffrey.arnold@gmail.com",
 Depends:
     R (>= 3.0.3)
 Imports:
-    dplyr,
     httr,
+    lubridate,
     purrr,
-    stringr,
-    tibble
+    stringr
 Suggests:
     jsonlite,
-    ggplot2,
     knitr,
-    rmarkdown,
     readr,
-    testthat,
-    tidyr
+    rmarkdown,
+    xml2    
 URL: https://github.com/rOpenGov/pollstR
 BugReports: https://github.com/rOpenGov/pollstR/issues
 VignetteBuilder: knitr
