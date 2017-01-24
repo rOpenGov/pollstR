@@ -1,32 +1,127 @@
-```{r,echo=FALSE,results='hide'}
-opts_chunk[["set"]](fig.path='README-figures/', errors = FALSE)
-suppressPackageStartupMessages({
-library("ggplot2")
-library("pollstR")
-library("dplyr")
-})
-```
-
+---
+output: md_document
+---
 [![CRAN Version](http://www.r-pkg.org/badges/version/pollstR)](http://cran.r-project.org/package=pollstR)
 ![Downloads](http://cranlogs.r-pkg.org/badges/pollstR)
 [![Build Status](https://travis-ci.org/rOpenGov/pollstR.svg?branch=master)](https://travis-ci.org/rOpenGov/pollstR)
 
 # pollstR: An R Client for the HuffPost Pollster API
 
-```{r intro, child = 'vignettes/children/intro.Rmd'}
+The **pollster** package provides an R client for the Huffpost Pollster API.
+[Huffpost Pollster](http://elections.huffingtonpost.com/pollster) tracks and aggregates US public polls on elections and political opinions.
+The [API](http://elections.huffingtonpost.com/pollster/api) provides programmatic access to the data.
+
+This package is part of the [ROpenGov](http://ropengov.github.io/) project.
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, results = 'hide', eval = FALSE)
 ```
 
-```{r install, child = 'vignettes/children/install.Rmd'}
+## Install
+
+You can install the stable version on [CRAN](http://cran.r-project.org/package=pollstR):
+
+```{r eval=FALSE}
+install.packages('pollstR', dependencies = TRUE)
 ```
 
-```{r bugs, child = 'vignettes/children/bugs.Rmd'}
+To install the latest version:
+```{r eval=FALSE}
+library("devtools")
+install_github("rOpenGov/pollstR")
 ```
 
-```{r api, child = 'vignettes/children/api-overview.Rmd'}
+**NOTE: The current dev version is backwards incompatible. Huffpost Pollster upgraded their [API]( http://elections.huffingtonpost.com/pollster/api/v2) and pollstR was rewritten from scratch for it**
+
+## Usage
+
+```{r}
+library("pollstR")
 ```
 
-```{r example, child = 'vignettes/children/example.Rmd'}
+The function `pollster_api` provides a thin wrapper to the make requests of the API:
+```{r}
+pollster_api("polls")
 ```
+
+For more information, see full documentation for the [API](https://app.swaggerhub.com/api/huffpostdata/pollster-api/2.0.0).
+
+### API Methods
+
+There is also a function for each API method.
+
+Return a list of polls:
+```{r}
+pollster_polls()
+```
+Get a specific poll by its identifier
+```{r}
+pollster_polls_slug("gallup-26892")
+```
+Return a list of questions:
+```{r}
+pollster_questions()
+```
+Return a specific question by its identifier
+```{r}
+pollster_questions_slug("17-VA-Gov-GE-SvP")
+```
+Return a table with one row of response values per poll question + subpopulation of a given question and columns are responses:
+```{r}
+pollster_questions_responses_clean("17-VA-Gov-GE-SvP")
+```
+Return a table with one row of response values per poll question + subpopulation + response of a given question
+```{r}
+pollster_questions_responses_raw("17-VA-Gov-GE-SvP")
+```
+Return a list of charts
+```{r}
+pollster_charts()
+```
+Return a chart
+```{r}
+pollster_charts_slug("2016-general-election-trump-vs-clinton")
+```
+Return a table with one row per poll for the chart
+```{r}
+pollster_charts_polls("2016-general-election-trump-vs-clinton")
+```
+Return a table with the trendline for a chart
+```{r}
+pollster_charts_trendlines("2016-general-election-trump-vs-clinton")
+```
+Return a list of tags used in charts, polls, and questions
+```{r}
+pollster_tags()
+```
+
+### Pagination
+
+Several of the Pollster API methods are paginated, with limits the the number or results returned with each request.
+The paginated methods are ones with a `cursor` argument.
+The function `pollster_iter` iterates over multiple pages of API results,
+```{r}
+pollster_iter(pollster_charts, .max_pages = 2)
+```
+There are wrappers for the paginated API methods:
+```{r}
+pollster_charts_iter(.max_pages = 2)
+```
+```{r}
+pollster_polls_iter(.max_pages = 2)
+```
+```{r}
+pollster_questions_iter(.max_pages = 2)
+```
+
+## Bugs
+
+If you encounter an error when using one of the functions it is likely that there was an error in converting the data as returned by the API into data structures more usable in R.
+This may happen when the Huffpost Pollster API changes, and **pollstR** has not been updated yet.
+
+1. Install the latest version of **pollstR** from github and see if the bug has been fixed.
+2. Open a new issue on [github](https://github.com/rOpenGov/pollstR/issues)
+
 
 ## License
 

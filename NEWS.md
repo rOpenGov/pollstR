@@ -1,9 +1,20 @@
-CHANGES IN 1.4.0
+# pollstR 1.5.0.9000
+
+* Complete rewrite of the package for new Pollster API v2
+* Added `pkgdown` documentation
+* Converted `NEWS` to `NEWS.md`
+
+# pollstR 1.5.0
+
+* `pollster_chart_data` and `pollster_house_effects` return data frames without additional pollster specific classes.
+* Fix typos in documentation
+
+# pollstR 1.4.0
 
 * Renamed functions to start with `pollster_` since I kept misstyping them. However,
     the old function names beginnning with `pollstr_` still work.
 * Renamed the classes returned by pollster functions to start with `pollster_`.
-* Added function `pollster_chart_tbl` which returns all polls related to a chart.
+* Added function `pollster_chart_data` which returns all polls related to a chart.
 * Added function `pollster_house_effects` which returns the pollster house effects for a chart.
 * Pollster API changes: deprecated `topic` argument in `pollstr_polls` (#11);
   added `question` argument to `pollstr_polls` (#12)
@@ -11,47 +22,47 @@ CHANGES IN 1.4.0
     between Clinton and Trump.
 * Miscellaneous non-user facing rewrites to code to make it more robust.
 
-CHANGES IN 1.3.0
+# pollstR 1.3.0
 
 * Add `page` and `max_pages` arguments to `pollster_charts` function since the charts method in the API now takes a page argument. #10
 
-CHANGES IN 1.2.2
+# pollstR 1.2.2
 
 * Add Drew Linzer as original author
 * Bugfix: Removes polls where questions are incomplete so as not to cause errors. #8 (Thanks @olliemcdonald)
 
-CHANGES IN 1.2.1
+# pollstR 1.2.1
 
 * Bugfix: fix R CMD check notes due to change in how it handles non-base default packages: http://developer.r-project.org/blosxom.cgi/R-devel/2015/06/29#n2015-06-29
 
-CHANGES IN 1.2.0
+# pollstR1.2.0
 
 * Add showall argument to pollstr_charts and pollstr_polls
 
-CHANGES IN 1.1.1
+# pollstR 1.1.1
 
 * Bugfix: ensure that character vectors do not get converted to factors
 * Added section in documentation on errors in functions
 
-CHANGES IN 1.1.0
+# pollstR 1.1.0
 
-* Bugfix: Update to new API changes in polls.
+* Bugfix: Update to new API # pollstR polls.
 * Move testthat tests to inst
 
-CHANGES IN 1.0.2
+# pollstR 1.0.2
 
 * Bugfix: fix test failures due to API change.
 * Remove tests brittle to API changes so fewer CRAN check failures
 
-CHANGES IN 1.0.1
+# pollstR 1.0.1
 
 * Bugfix: did not convert some election date fields
 
-CHANGES IN 1.0.0
+# pollstR 1.0.0
 
 * submit to CRAN
 
-CHANGES IN 0.2.0
+# pollstR 0.2.0
 
 Merge with http://github.com/jrnold/pollster. This is a complete rewrite of the client.
 
@@ -60,6 +71,8 @@ Merge with http://github.com/jrnold/pollster. This is a complete rewrite of the 
 * ``getpolls`` replaced with ``pollstr_polls``. Returns class ``pollstr_polls``.
 * ``xml`` API access no longer available.
 
-CHANGES IN 0.1
+# # pollstR 0.1
 
 * Initial package release
+
+

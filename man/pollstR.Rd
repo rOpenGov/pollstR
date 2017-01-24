@@ -6,10 +6,9 @@
 \alias{pollstR-package}
 \title{R client for the Huffpost Pollster API}
 \description{
-This pacakge provides an R interface to the Huffington Post Pollster API.
-Pollster provides programmatic access to opinion polls collected by the Huffington Post.
-}
-\details{
-See \url{http://elections.huffingtonpost.com/pollster/api} for more details on the API.
+This pacakge provides an R interface to the Huffpost Pollster API v2.
+\href{http://elections.huffingtonpost.com/}{Huffpost Pollster} tracks and aggregates thousands of public polls on US elections and political opinions.
+The \href{http://elections.huffingtonpost.com/pollster/api/v2}{Huffpost Pollster API} provides programmatric access to that data.
+See \href{https://app.swaggerhub.com/api/huffpostdata/pollster-api/}{API Documentation} for the complete documentation of the API.
 }
 

@@ -1,3 +1,0 @@
-This R package is an interface to the Huffington Post [Pollster API](http://elections.huffingtonpost.com/pollster/api), which provides access to opinion polls collected by the Huffington Post.  
-
-This package is part of the [ROpenGov](http://ropengov.github.io/) project.
