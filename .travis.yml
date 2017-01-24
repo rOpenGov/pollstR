@@ -1,6 +1,23 @@
-language: r
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+# derived travis.yml from https://github.com/tidyverse/tidyverse/blob/287bba27da3c506b8981d78441e83414134bdeaa/.travis.yml
+language: R
+sudo: false
+cache: packages
 
-warnings_are_errors: true
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.9
+      - g++-4.9
+
+before_install: |
+  mkdir ~/.R
+  cat <<EOF > ~/.R/Makevars
+  CXX=g++-4.9
+  CXX1X=g++-4.9
+  CXX1XSTD=-std=c++11
 
 notifications:
   email:
