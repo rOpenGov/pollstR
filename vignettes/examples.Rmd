@@ -1,0 +1,93 @@
+---
+title: "Pollster Examples"
+author: "Jeffrey Arnold"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This document provides a few examples that use the **pollstR** package.
+```{r}
+library("pollstR")
+library("tidyverse")
+```
+
+# Produce a Plot of Chart
+
+The **pollstR** package can be used to reproduce plots in the charts.
+This will use the Donald Trump favorable rating as the example.
+This chart has the slug [donald-trump-favorable-rating](http://elections.huffingtonpost.com/pollster/donald-trump-favorable-rating)
+```{r message=FALSE}
+slug <- "donald-trump-favorable-rating"
+polls <- pollster_charts_polls(slug)[["content"]]
+trendlines <- pollster_charts_trendlines(slug)[["content"]]
+```
+Plot the points for each response (Favorable, Unfavorable, and Undecided) and fit a loess smoother through them:
+```{r}
+.data <- gather(polls, response, value,
+                Favorable, Unfavorable, Undecided) %>%
+  mutate(value = if_else(is.na(value), 0, value))
+ggplot() +
+  geom_point(data = .data,
+             aes(x = end_date, y = value, color = response),
+             alpha = 0.5) +
+  geom_smooth(data = .data, method = "loess", se = FALSE,
+              aes(x = end_date, y = value, color = response))
+  
+```
+Plot the points with the Pollster trendlines:
+```{r}
+ggplot() +
+  geom_point(data = .data,
+             mapping = aes(x = end_date, y = value, color = response),
+             alpha = 0.5) +
+  geom_line(data = trendlines,
+            mapping = aes(x = date, y = value, color = label), size = 1.5)
+```
+
+For each of the subpopulations (Likely Voter, Registered Voters, Adults), plot the favorability rating:
+```{r}
+ggplot(data = filter(.data, response == "Favorable"),
+       mapping = aes(x = end_date, y = value, color = sample_subpopulation)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "loess", se = FALSE)
+```
+
+
+# Questions
+
+An example of a single question item:
+```{r}
+questions <- pollster_questions()
+questions$content$items[[1]]
+```
+
+# Charts
+
+An example of a single chart item:
+```{r}
+charts <- pollster_charts()
+charts$content$items[[1]]
+```
+
+# Polls
+
+An example of a single poll item:
+```{r}
+polls <- pollster_polls()
+polls$content$items[[1]]
+```
+
+# Tags
+
+Get all available tags for use as the `tag` parameter with charts, polls, and questions:
+```{r}
+map_chr(pollster_tags()$content, "slug")
+```
+
