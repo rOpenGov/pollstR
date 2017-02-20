@@ -1,6 +1,7 @@
-# pollstR 1.5.0.9000
+# pollstR 2.0.0
 
-* Complete rewrite of the package for new Pollster API v2
+* This is complete rewrite of the package for new Pollster API v2. It is new 
+    API and backwards incompatible with previous verions of `PollstR`.
 * Added `pkgdown` documentation
 * Converted `NEWS` to `NEWS.md`
 
