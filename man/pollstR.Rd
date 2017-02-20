@@ -11,4 +11,3 @@ This pacakge provides an R interface to the Huffpost Pollster API v2.
 The \href{http://elections.huffingtonpost.com/pollster/api/v2}{Huffpost Pollster API} provides programmatric access to that data.
 See \href{https://app.swaggerhub.com/api/huffpostdata/pollster-api/}{API Documentation} for the complete documentation of the API.
 }
-

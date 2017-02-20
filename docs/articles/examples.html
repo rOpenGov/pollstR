@@ -68,6 +68,17 @@
 <p>This document provides a few examples that use the <strong>pollstR</strong> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">"pollstR"</span>)
 <span class="kw">library</span>(<span class="st">"tidyverse"</span>)</code></pre></div>
+<pre><code>## Loading tidyverse: ggplot2
+## Loading tidyverse: tibble
+## Loading tidyverse: tidyr
+## Loading tidyverse: readr
+## Loading tidyverse: purrr
+## Loading tidyverse: dplyr</code></pre>
+<pre><code>## Conflicts with tidy packages ----------------------------------------------</code></pre>
+<pre><code>## filter():  dplyr, stats
+## is_null(): purrr, testthat
+## lag():     dplyr, stats
+## matches(): dplyr, testthat</code></pre>
 <div id="produce-a-plot-of-chart" class="section level1">
 <h1 class="hasAnchor">
 <html><body><a href="#produce-a-plot-of-chart" class="anchor"> </a></body></html>Produce a Plot of Chart</h1>
@@ -107,7 +118,7 @@ trendlines &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">questions &lt;-<span class="st"> </span><span class="kw"><a href="../reference/pollster_api.html">pollster_questions</a></span>()
 questions$content$items[[<span class="dv">1</span>]]</code></pre></div>
 <pre><code>## $slug
-## [1] "17-VA-Gov-GE-SvP"
+## [1] "17-VA-Gov-GE-RvP"
 ## 
 ## $name
 ## [1] "2017 Virginia Gubernatorial GE"
@@ -125,15 +136,15 @@ questions$content$items[[<span class="dv">1</span>]]</code></pre></div>
 ## [1] 1
 ## 
 ## $created_at
-## [1] "2017-01-17T14:09:48.000Z"
+## [1] "2017-02-16T18:23:56.000Z"
 ## 
 ## $responses
 ## $responses[[1]]
 ## $responses[[1]]$label
-## [1] "Stewart"
+## [1] "Riggleman"
 ## 
 ## $responses[[1]]$name
-## [1] "Corey Stewart"
+## [1] "Denver Riggleman"
 ## 
 ## $responses[[1]]$party
 ## [1] "Republican"
@@ -199,13 +210,53 @@ charts$content$items[[<span class="dv">1</span>]]</code></pre></div>
 ## [1] "http://elections.huffingtonpost.com/pollster/trump-job-approval"
 ## 
 ## $created_at
-## [1] "2017-01-24T00:01:11.000Z"
+## [1] "2017-02-17T20:12:19.000Z"
 ## 
 ## $tags
 ## list()
 ## 
 ## $pollster_estimates
-## list()
+## $pollster_estimates[[1]]
+## $pollster_estimates[[1]]$algorithm
+## [1] "lowess"
+## 
+## $pollster_estimates[[1]]$created_at
+## [1] "2017-02-20T04:41:11.673Z"
+## 
+## $pollster_estimates[[1]]$datetime
+## [1] "2017-02-17T20:12:19.000Z"
+## 
+## $pollster_estimates[[1]]$values
+## $pollster_estimates[[1]]$values$item_name
+## [1] "value"
+## 
+## $pollster_estimates[[1]]$values$key_name
+## [1] "label"
+## 
+## $pollster_estimates[[1]]$values$hash
+## $pollster_estimates[[1]]$values$hash$Approve
+## [1] 44.6073
+## 
+## $pollster_estimates[[1]]$values$hash$Disapprove
+## [1] 50.5299
+## 
+## $pollster_estimates[[1]]$values$hash$Undecided
+## [1] 5.4944
+## 
+## 
+## 
+## $pollster_estimates[[1]]$lowess_parameters
+## $pollster_estimates[[1]]$lowess_parameters$f
+## [1] 0.7
+## 
+## $pollster_estimates[[1]]$lowess_parameters$iter
+## [1] 3
+## 
+## $pollster_estimates[[1]]$lowess_parameters$delta
+## [1] 0.01
+## 
+## 
+## 
 ## 
 ## $pollster_estimate_summary
 ## NULL
@@ -229,7 +280,7 @@ charts$content$items[[<span class="dv">1</span>]]</code></pre></div>
 ## NULL
 ## 
 ## $question$n_polls
-## [1] 1
+## [1] 69
 ## 
 ## $question$created_at
 ## [1] "2017-01-10T18:32:55.000Z"
@@ -283,28 +334,28 @@ charts$content$items[[<span class="dv">1</span>]]</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">polls &lt;-<span class="st"> </span><span class="kw"><a href="../reference/pollster_api.html">pollster_polls</a></span>()
 polls$content$items[[<span class="dv">1</span>]]</code></pre></div>
 <pre><code>## $slug
-## [1] "perryundem-27041"
+## [1] "gallup-27126"
 ## 
 ## $start_date
-## [1] "2016-12-09"
+## [1] "2017-02-14"
 ## 
 ## $end_date
-## [1] "2016-12-27"
+## [1] "2017-02-16"
 ## 
 ## $created_at
-## [1] "2017-01-24T02:23:52.000Z"
+## [1] "2017-02-17T23:54:51.000Z"
 ## 
 ## $updated_at
-## [1] "2017-01-23T21:25:30.000Z"
+## [1] "2017-02-17T18:54:51.000Z"
 ## 
 ## $survey_house
-## [1] "PerryUndem"
+## [1] "Gallup"
 ## 
 ## $mode
-## [1] "Live Phone/Online"
+## [1] "Live Phone"
 ## 
 ## $url
-## [1] "https://www.scribd.com/document/336802189/Post-Election-Gender-Equality-Topline-FINAL-0116?content=10079&amp;ad_group=Online+Tracking+Link&amp;campaign=Skimbit%2C+Ltd.&amp;keyword=ft500noi&amp;source=impactradius&amp;medium=affiliate&amp;irgwc=1"
+## [1] "http://www.gallup.com/poll/201617/gallup-daily-trump-job-approval.aspx"
 ## 
 ## $partisanship
 ## [1] "Nonpartisan"
@@ -319,35 +370,35 @@ polls$content$items[[<span class="dv">1</span>]]</code></pre></div>
 ## 
 ## $poll_questions[[1]]$question
 ## $poll_questions[[1]]$question$slug
-## [1] "00c -US-Trump-Donald-Favorable"
+## [1] "00c -Pres-45-Trump - Job Approval - National"
 ## 
 ## $poll_questions[[1]]$question$name
-## [1] "Trump, Donald - US - Favorable Rating"
+## [1] "Trump, Donald - USPres - Job Approval"
 ## 
 ## $poll_questions[[1]]$question$tags
 ## list()
 ## 
 ## $poll_questions[[1]]$question$charts
 ## $poll_questions[[1]]$question$charts[[1]]
-## [1] "donald-trump-favorable-rating"
+## [1] "trump-job-approval"
 ## 
 ## 
 ## $poll_questions[[1]]$question$election_date
 ## NULL
 ## 
 ## $poll_questions[[1]]$question$n_polls
-## [1] 505
+## [1] 69
 ## 
 ## $poll_questions[[1]]$question$created_at
-## [1] "2015-07-16T00:57:55.000Z"
+## [1] "2017-01-10T18:32:55.000Z"
 ## 
 ## $poll_questions[[1]]$question$responses
 ## $poll_questions[[1]]$question$responses[[1]]
 ## $poll_questions[[1]]$question$responses[[1]]$label
-## [1] "Favorable"
+## [1] "Approve"
 ## 
 ## $poll_questions[[1]]$question$responses[[1]]$name
-## [1] "Favorable"
+## [1] "Approve"
 ## 
 ## $poll_questions[[1]]$question$responses[[1]]$party
 ## NULL
@@ -358,10 +409,10 @@ polls$content$items[[<span class="dv">1</span>]]</code></pre></div>
 ## 
 ## $poll_questions[[1]]$question$responses[[2]]
 ## $poll_questions[[1]]$question$responses[[2]]$label
-## [1] "Unfavorable"
+## [1] "Disapprove"
 ## 
 ## $poll_questions[[1]]$question$responses[[2]]$name
-## [1] "Unfavorable"
+## [1] "Disapprove"
 ## 
 ## $poll_questions[[1]]$question$responses[[2]]$party
 ## NULL
@@ -392,207 +443,32 @@ polls$content$items[[<span class="dv">1</span>]]</code></pre></div>
 ## [1] "Adults"
 ## 
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$observations
-## [1] 1302
+## [1] 1500
 ## 
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$margin_of_error
-## [1] 3.4
+## [1] 3
 ## 
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$responses
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[1]]
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[1]]$text
-## [1] "Favorable"
+## [1] "Approve"
 ## 
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[1]]$pollster_label
-## [1] "Favorable"
+## [1] "Approve"
 ## 
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[1]]$value
-## [1] 42
+## [1] 38
 ## 
 ## 
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[2]]
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[2]]$text
-## [1] "Unfavorable"
+## [1] "Disapprove"
 ## 
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[2]]$pollster_label
-## [1] "Unfavorable"
+## [1] "Disapprove"
 ## 
 ## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[2]]$value
-## [1] 55
-## 
-## 
-## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[3]]
-## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[3]]$text
-## [1] "Don't know/refused"
-## 
-## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[3]]$pollster_label
-## [1] "Undecided"
-## 
-## $poll_questions[[1]]$sample_subpopulations[[1]]$responses[[3]]$value
-## [1] 3
-## 
-## 
-## 
-## 
-## 
-## 
-## $poll_questions[[2]]
-## $poll_questions[[2]]$text
-## [1] ""
-## 
-## $poll_questions[[2]]$question
-## $poll_questions[[2]]$question$slug
-## [1] "00c -US-Party ID"
-## 
-## $poll_questions[[2]]$question$name
-## [1] "Party ID"
-## 
-## $poll_questions[[2]]$question$tags
-## list()
-## 
-## $poll_questions[[2]]$question$charts
-## $poll_questions[[2]]$question$charts[[1]]
-## [1] "party-identification"
-## 
-## $poll_questions[[2]]$question$charts[[2]]
-## [1] "party-identification-adults"
-## 
-## $poll_questions[[2]]$question$charts[[3]]
-## [1] "party-identification-voters"
-## 
-## 
-## $poll_questions[[2]]$question$election_date
-## NULL
-## 
-## $poll_questions[[2]]$question$n_polls
-## [1] 1488
-## 
-## $poll_questions[[2]]$question$created_at
-## [1] "2009-04-30T10:51:56.000Z"
-## 
-## $poll_questions[[2]]$question$responses
-## $poll_questions[[2]]$question$responses[[1]]
-## $poll_questions[[2]]$question$responses[[1]]$label
-## [1] "Democrat"
-## 
-## $poll_questions[[2]]$question$responses[[1]]$name
-## [1] "Democrat"
-## 
-## $poll_questions[[2]]$question$responses[[1]]$party
-## NULL
-## 
-## $poll_questions[[2]]$question$responses[[1]]$incumbent
-## [1] FALSE
-## 
-## 
-## $poll_questions[[2]]$question$responses[[2]]
-## $poll_questions[[2]]$question$responses[[2]]$label
-## [1] "Republican"
-## 
-## $poll_questions[[2]]$question$responses[[2]]$name
-## [1] "Republican"
-## 
-## $poll_questions[[2]]$question$responses[[2]]$party
-## NULL
-## 
-## $poll_questions[[2]]$question$responses[[2]]$incumbent
-## [1] FALSE
-## 
-## 
-## $poll_questions[[2]]$question$responses[[3]]
-## $poll_questions[[2]]$question$responses[[3]]$label
-## [1] "Independent"
-## 
-## $poll_questions[[2]]$question$responses[[3]]$name
-## [1] "Independent"
-## 
-## $poll_questions[[2]]$question$responses[[3]]$party
-## NULL
-## 
-## $poll_questions[[2]]$question$responses[[3]]$incumbent
-## [1] FALSE
-## 
-## 
-## $poll_questions[[2]]$question$responses[[4]]
-## $poll_questions[[2]]$question$responses[[4]]$label
-## [1] "Undecided"
-## 
-## $poll_questions[[2]]$question$responses[[4]]$name
-## [1] "Undecided"
-## 
-## $poll_questions[[2]]$question$responses[[4]]$party
-## NULL
-## 
-## $poll_questions[[2]]$question$responses[[4]]$incumbent
-## [1] FALSE
-## 
-## 
-## 
-## 
-## $poll_questions[[2]]$sample_subpopulations
-## $poll_questions[[2]]$sample_subpopulations[[1]]
-## $poll_questions[[2]]$sample_subpopulations[[1]]$name
-## [1] "Adults"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$observations
-## [1] 1302
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$margin_of_error
-## [1] 3.4
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[1]]
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[1]]$text
-## [1] "Republican"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[1]]$pollster_label
-## [1] "Republican"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[1]]$value
-## [1] 25
-## 
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[2]]
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[2]]$text
-## [1] "Democrat"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[2]]$pollster_label
-## [1] "Democrat"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[2]]$value
-## [1] 34
-## 
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[3]]
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[3]]$text
-## [1] "independent"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[3]]$pollster_label
-## [1] "Independent"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[3]]$value
-## [1] 28
-## 
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[4]]
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[4]]$text
-## [1] "Other"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[4]]$pollster_label
-## [1] "Undecided"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[4]]$value
-## [1] 11
-## 
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[5]]
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[5]]$text
-## [1] "Don't know/refused"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[5]]$pollster_label
-## [1] "Undecided"
-## 
-## $poll_questions[[2]]$sample_subpopulations[[1]]$responses[[5]]$value
-## [1] 2</code></pre>
+## [1] 56</code></pre>
 </div>
 <div id="tags" class="section level1">
 <h1 class="hasAnchor">

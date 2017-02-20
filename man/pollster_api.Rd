@@ -2,16 +2,16 @@
 % Please edit documentation in R/pollstr.R
 \name{pollster_api}
 \alias{pollster_api}
-\alias{pollster_charts}
-\alias{pollster_charts_polls}
-\alias{pollster_charts_slug}
-\alias{pollster_charts_trendlines}
 \alias{pollster_polls}
 \alias{pollster_polls_slug}
 \alias{pollster_questions}
+\alias{pollster_questions_slug}
 \alias{pollster_questions_responses_clean}
 \alias{pollster_questions_responses_raw}
-\alias{pollster_questions_slug}
+\alias{pollster_charts}
+\alias{pollster_charts_slug}
+\alias{pollster_charts_polls}
+\alias{pollster_charts_trendlines}
 \alias{pollster_tags}
 \title{Make Huffpost Poster API request}
 \usage{
