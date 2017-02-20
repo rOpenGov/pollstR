@@ -9,3 +9,4 @@
 ^.*\.tar\.gz$
 ^\.lintr$
 ^docs$
+^revdep$
