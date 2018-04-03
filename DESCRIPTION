@@ -16,12 +16,13 @@ Imports:
     purrr,
     stringr
 Suggests:
+    dplyr,
+    ggplot2,
     jsonlite,
     knitr,
     readr,
     rmarkdown,
-    tidyverse,
-    xml2    
+    tidyr
 URL: https://github.com/rOpenGov/pollstR
 BugReports: https://github.com/rOpenGov/pollstR/issues
 VignetteBuilder: knitr

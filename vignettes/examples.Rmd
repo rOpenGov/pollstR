@@ -13,9 +13,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 This document provides a few examples that use the **pollstR** package.
-```{r}
+```{r message=FALSE}
 library("pollstR")
-library("tidyverse")
+library("ggplot2")
+library("dplyr")
+library("tidyr")
+library("purrr")
 ```
 
 # Produce a Plot of Chart
