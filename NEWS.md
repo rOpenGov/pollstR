@@ -1,3 +1,7 @@
+# pollstR 2.0.1
+
+* Remove `tidyverse` from `Suggests:`. Only suggest necessary packages.
+
 # pollstR 2.0.0
 
 * This is complete rewrite of the package for new Pollster API v2. It is new 
