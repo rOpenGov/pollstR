@@ -3,6 +3,8 @@ Version](http://www.r-pkg.org/badges/version/pollstR)](http://cran.r-project.org
 ![Downloads](http://cranlogs.r-pkg.org/badges/pollstR) [![Build
 Status](https://travis-ci.org/rOpenGov/pollstR.svg?branch=master)](https://travis-ci.org/rOpenGov/pollstR)
 
+**IMPORANT:** The Pollster API is no longer actively maintained. As of now, no new polls are being added to it. See this [Google Group message](https://groups.google.com/d/msg/pollster-users/9ECuy8AG5TA/eiCNMutfCQAJ) for more information. This package should still work to retrieve any historical polls that had been entered.
+
 pollstR: An R Client for the HuffPost Pollster API
 ==================================================
 
